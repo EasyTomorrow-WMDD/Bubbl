@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, ActivityIndicator } from 'react-native';
 import FaceAuth from './../../AUTH/FaceAuth';
 
 export default function ProtectedFeatureScreen() {
@@ -15,7 +15,17 @@ export default function ProtectedFeatureScreen() {
 
   return (
     <View style={{ flex:1, alignItems:'center', justifyContent:'center' }}>
-      <Text>¡Welcome to the Protected Feature!</Text>
+      <Text style={styles.text}>¡Welcome to the Protected Feature!</Text>
     </View>
   );
 }
+
+
+const styles = StyleSheet.create({
+  text: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: 'blue',
+  },
+});
