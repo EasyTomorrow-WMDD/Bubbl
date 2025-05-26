@@ -13,7 +13,12 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "Allow Face ID authentication to protect your account.",
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "bundleIdentifier": "yoac"
     },
     "android": {
       "adaptiveIcon": {
@@ -24,6 +29,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "fe2e0393-680f-4ed9-a75b-a190e1d5e392"
+      }
     }
   }
 }
