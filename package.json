@@ -12,7 +12,10 @@
     "expo": "~53.0.10",
     "expo-status-bar": "~2.2.3",
     "react": "19.0.0",
-    "react-native": "0.79.3"
+    "react-native": "0.79.3",
+    "react-native-dnd": "^0.2.3",
+    "react-native-gesture-handler": "^2.25.0",
+    "react-native-reanimated": "^3.18.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
