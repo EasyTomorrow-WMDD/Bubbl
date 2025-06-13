@@ -5,6 +5,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import WelcomeScreen from './frontend/src/screens/WelcomeScreen';
 import LoginScreen from './frontend/src/screens/LoginScreen';
 import SignupScreen from './frontend/src/screens/SignupScreen';
 import OnboardingScreen from './frontend/src/screens/OnboardingScreen';
@@ -17,7 +18,8 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Signup" component={SignupScreen} />
         <Stack.Screen name="Onboarding" component={OnboardingScreen} />
@@ -30,14 +32,6 @@ export default function App() {
 }
 
 
-// export default function App() {
-//   return (
-//     <View style={styles.container}>
-//       <Text>Open up App.js to start working on your app!</Text>
-//       <StatusBar style="auto" />
-//     </View>
-//   );
-// }
 
 
 const styles = StyleSheet.create({
