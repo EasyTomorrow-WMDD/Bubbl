@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button, Alert, TouchableOpacity } from 'react-native';
 import supabase from '../services/supabase'; 
 
 export default function SignupScreen({ navigation }) {
@@ -60,7 +60,14 @@ const validate = async () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Create account</Text>
+
+      <View style={styles.headerRow}>
+        <TouchableOpacity onPress={() => navigation.replace('Welcome')}>
+          <Text style={styles.backButton}>{'\u2190'}</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Create account</Text>
+        <View style={{ width: 24 }} /> {/* Spacer to balance back button space */}
+      </View>
 
       <Text style={styles.label}>User Name</Text>
       <TextInput
@@ -126,6 +133,23 @@ const styles = StyleSheet.create({
     padding: 20,
     flex: 1,
     backgroundColor: '#fff',
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  backButton: {
+    fontSize: 24,
+    color: '#1e90ff',
+    paddingHorizontal: 8,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    flex: 1,
   },
   heading: {
     fontSize: 24,

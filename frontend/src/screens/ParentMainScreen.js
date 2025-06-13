@@ -6,7 +6,7 @@ export default function ParentMainScreen({ navigation }) {
       <Text>Welcome Parent!</Text>
       <Text>You are in the parent portal!</Text>
       <Button title="Back to Profile" onPress={() => navigation.replace('Profile')} />
-      <Button title="Logout" onPress={() => navigation.replace('Login')} />
+      <Button title="Logout" onPress={() => navigation.replace('Welcome')} />
     </View>
   );
 }
