@@ -27,6 +27,16 @@ export default function OnboardingScreen({ navigation }) {
 
   const [userAuthId, setUserAuthId] = useState(null);
 
+  // Helper function to generate a random 10-character invitation code
+  const generateInviteCode = (length = 10) => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }
+  
   // Fetch user auth ID on component mount
   useEffect(() => {
     (async () => {
@@ -49,18 +59,43 @@ export default function OnboardingScreen({ navigation }) {
     if (Object.keys(newErrors).length > 0) return;
 
     if (isCreatingAccount) {
-      // Generate 10-char random invitation code
-      const invitation = Array.from({ length: 10 }, () =>
-        Math.random().toString(36).toUpperCase().replace(/[^A-Z0-9]/g, '')[0]
-      ).join('');
 
-      const { data: accountData, error: accountError } = await supabase
-        .from('account')
-        .insert({ account_name: accountName, account_invitation: invitation })
-        .select()
-        .single();
+      let accountData = null;
+      let accountError = null;
+      let attempt = 0;
 
-      if (accountError) return Alert.alert('Account Error', accountError.message);
+      while (attempt < 5 && !accountData) {
+        const invitation = generateInviteCode(); // Generate a new invitation code
+        console.log(`Attempt ${attempt + 1}: Generated invitation code: ${invitation}`);
+
+        const { data, error } = await supabase
+          .from('account')
+          .insert({
+            account_name: accountName,
+            account_invitation: invitation,
+          })
+          .select()
+          .single();
+
+        if (!error) {
+          accountData = data;
+          break;
+        }
+
+        if (error.code === '23505') {
+          // Duplicate key
+          attempt++;
+          continue;
+        }
+
+        accountError = error;
+        break;
+      }
+
+      if (accountError || !accountData) {
+        Alert.alert('Account Error', accountError?.message || 'Could not create account. Please try again.');
+        return;
+      }
 
       const { data: userData, error: userError } = await supabase
         .from('user')
@@ -80,6 +115,7 @@ export default function OnboardingScreen({ navigation }) {
 
       await supabase.from('account').update({ account_owner: userData.user_id }).eq('account_id', accountData.account_id);
       navigation.replace('Profile');
+
     } else {
       const { data: accountRecord, error: fetchError } = await supabase
         .from('account')

@@ -12,6 +12,7 @@ import OnboardingScreen from './frontend/src/screens/OnboardingScreen';
 import ProfileScreen from './frontend/src/screens/ProfileScreen';
 import ParentMainScreen from './frontend/src/screens/ParentMainScreen';
 import ChildMainScreen from './frontend/src/screens/ChildMainScreen';
+import AddProfile from './frontend/src/screens/AddProfile';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,7 @@ export default function App() {
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="ParentMain" component={ParentMainScreen} />
         <Stack.Screen name="ChildMain" component={ChildMainScreen} />
+        <Stack.Screen name="AddProfile" component={AddProfile} />
       </Stack.Navigator>
     </NavigationContainer>
   );
