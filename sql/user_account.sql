@@ -55,3 +55,74 @@ CREATE TRIGGER set_updated_at_user
 BEFORE UPDATE ON "user"
 FOR EACH ROW
 EXECUTE PROCEDURE update_updated_at_column();
+
+-- ==================================================================
+-- Row level security policy for user table.
+-- Ensure only signed-in users can access
+-- Only authenticated users can read and write their own user data
+ALTER TABLE public.user ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Authenticated can read and write user data in their account"
+  ON public.user
+  FOR ALL
+  USING (
+    auth.uid() IS NOT NULL AND
+    EXISTS (
+      SELECT 1
+      FROM public.user AS parent
+      WHERE parent.user_auth_id = auth.uid()
+        AND parent.account_id = user.account_id
+    )
+  );
+
+-- ==================================================================
+-- Row level security policy for account table.
+-- Ensure only signed-in users can access
+-- Only authenticated users can read and write their own account data
+ALTER TABLE public.account ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Authenticated can read and write account data of their own"
+  ON public.account
+  FOR ALL
+  USING (
+    auth.uid() IS NOT NULL AND
+    EXISTS (
+      SELECT 1
+      FROM public.user AS parent
+      WHERE parent.user_auth_id = auth.uid()
+        AND parent.account_id = account.account_id
+    )
+  );
+
+-- temporary template for other tables -- Replace 'SOME_TABLE' with actual table name
+-- ==================================================================
+-- Row level security policy for SOME_TABLE table.
+-- Ensure only signed-in users can access
+-- Only authenticated users can read and write their own SOME_TABLE data
+ALTER TABLE public.SOME_TABLE ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Can access SOME_TABLE of same account"
+  ON public.SOME_TABLE
+  FOR ALL
+  USING (
+    EXISTS (
+      SELECT 1
+      FROM public.user AS parent
+      WHERE parent.user_auth_id = auth.uid()
+        AND parent.account_id = (
+          SELECT u.account_id FROM public.user AS u WHERE u.id = SOME_TABLE.user_id
+        )
+    )
+  );
+
+-- temporary template for reference(master) tables -- Replace 'REF_TABLE' with actual table name
+-- ==================================================================
+-- Row level security policy for REF_TABLE table.
+-- Ensure read (select) access for all authenticated users
+-- Only authenticated users can read REF_TABLE data
+ALTER TABLE REF_TABLE ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Authenticated users can read REF_TABLE data"
+  ON REF_TABLE
+  FOR SELECT
+  USING (
+    auth.uid() IS NOT NULL
+  );
+
