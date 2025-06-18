@@ -1,18 +1,15 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
 import Header from './frontend/src/components/layout/Header';
+import ChildHome from './frontend/src/screens/child_homeScreen';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Header></Header>
-    </View>
+    <SafeAreaProvider>
+      <NavigationContainer>
+      <Header/>
+      <ChildHome/>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-});
