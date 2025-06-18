@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, ImageBackground, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import StatsPanel from '../components/containers/StatCards';
@@ -8,22 +9,47 @@ import Module from '../components/containers/ModulesDashboard';
 export default function ChildHome() {
   const [user, setUser] = useState(null);
   const [modules, setModules] = useState([]);
-  console.log('These are the modules', modules)
+  const [nickname, setNickname] = useState('');
+  const [userId, setUserId] = useState('');
 
+  // ================= Load profile info from AsyncStorage ====================
   useEffect(() => {
-    axios.get('http://localhost:3000/api/childProgress/dashboard')
-      .then(response => setUser(response.data))
-      .catch(error => console.error('Error fetching user data:', error));
+    const loadProfileInfo = async () => {
+      try {
+        const storedNickname = await AsyncStorage.getItem('selected_user_nickname');
+        const storedUserId = await AsyncStorage.getItem('selected_user_id');
+        if (storedNickname) setNickname(storedNickname);
+        if (storedUserId) setUserId(storedUserId);
+      } catch (error) {
+        console.error('Error loading profile info:', error);
+      }
+    };
+
+    loadProfileInfo();
   }, []);
 
+  // ================= Fetch user data from backend ====================
   useEffect(() => {
-    axios.get('http://localhost:3000/api/childProgress/modules')
-      .then(response => setModules(response.data))
-      .catch(error => console.error('Error fetching user data:', error));
-  }, [])
+    if (!userId) return;
+
+    axios
+      .get(`http://localhost:3000/api/childProgress/dashboard?userId=${userId}`)
+      .then((response) => setUser(response.data))
+      .catch((error) => console.error('Error fetching user data:', error));
+  }, [userId]);
+
+  // ================= Fetch modules data ====================
+  useEffect(() => {
+    if (!userId) return;
+
+    axios
+      .get(`http://localhost:3000/api/childProgress/modules?userId=${userId}`)
+      .then((response) => setModules(response.data))
+      .catch((error) => console.error('Error fetching modules:', error));
+  }, [userId]);
 
   return (
-    <View >
+    <View>
       <ScrollView contentContainerStyle={{ paddingBottom: 140 }}>
         <View style={{ flex: 1, gap: 10 }}>
           <StatusBar style="auto" />
@@ -34,7 +60,7 @@ export default function ChildHome() {
           >
             <View style={styles.container}>
               <Image source={require('../assets/images/yellow_bubbl.png')} style={styles.img} />
-              <Text style={styles.title}>Welcome, {user ? user.user_nickname : '...'}!</Text>
+              <Text style={styles.title}>Welcome, {user ? user.user_nickname : '...'}</Text>
               <StatsPanel user={user} />
               <Text style={styles.text}>Next HP refill in:</Text>
             </View>
@@ -59,9 +85,8 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
     padding: 0,
-    margin: 0
+    margin: 0,
   },
-
   container: {
     alignItems: 'center',
     padding: 30,
@@ -92,7 +117,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'white',
   },
-
   playTopic: {
     backgroundColor: '#FFC670',
     width: '95%',
@@ -101,7 +125,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    bottom: 160
-  }
-
+    bottom: 160,
+  },
 });

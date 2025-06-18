@@ -6,7 +6,7 @@ const { height } = Dimensions.get('window');
 export const globalStyles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    // backgroundColor: BubblColors.BubblWhite,
+    backgroundColor: BubblColors.BubblePurple,
   },
   welcomeContainer: {
     padding: 20,
