@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import supabase from '../../services/supabase';
 import axios from 'axios';
 import BubblConfig from '../../config/BubblConfig';
@@ -9,6 +9,7 @@ import BubblTextInput from '../forms/BubblTextInput';
 import BubblDatePicker from '../forms/BubblDatePicker';
 import BubblPicker from '../forms/BubblPicker';
 import BubblButton from '../forms/BubblButton';
+
 
 
 const AuthOnboardingContainer = ({ navigation }) => {
@@ -46,6 +47,8 @@ const AuthOnboardingContainer = ({ navigation }) => {
       } = await supabase.auth.getSession();
 
       const accessToken = session?.access_token;
+            // -- Add this
+      console.log(`accessToken: ${accessToken}`);
 
       // Set payload for registration
       const payload = {
@@ -80,7 +83,7 @@ const AuthOnboardingContainer = ({ navigation }) => {
   // ==========================================================================
   // Render the onboarding screen
   return (
-    <View style={globalStyles.container}>
+    <ScrollView contentContainerStyle={globalStyles.scrollContainer}>
 
       {/* Heading Row */}
       <PageHeading title="Setup account" onBackPress={null} />
@@ -162,7 +165,7 @@ const AuthOnboardingContainer = ({ navigation }) => {
         />
 
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
