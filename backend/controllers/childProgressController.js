@@ -1,12 +1,14 @@
 const supabase = require('../utils/supabaseClient');
 
 exports.getDashboard = async (req, res) => {
+
+  const userId = req.params.userId;
   
   try {
     const { data, error } = await supabase
       .from("user")   
       .select('*')     
-      .eq('user_nickname', 'Andres');       
+      .eq('user_id', userId);       
 
     if (error) throw error;
 
