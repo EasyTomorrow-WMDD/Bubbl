@@ -1,7 +1,10 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity,  ImageBackground } from 'react-native';
 import { globalStyles } from '../../styles/BubblStyles';
 import BubblButton from '../forms/BubblButton';
 import DividerWithText from '../layout/DividerWithText';
+import AuthLoginAnimation from './AuthLoginAnimation';
+import AuthLoginWhiteCard from './AuthLoginWhiteCard';
+// import LottieView from 'lottie-react-native';
 
 const AuthWelcomeContainer = ({navigation}) => {
 
@@ -11,30 +14,19 @@ const AuthWelcomeContainer = ({navigation}) => {
   // ==========================================================================
   // Render the welcome screen
   return (
-    <View style={globalStyles.welcomeContainer}>
-      <Image
-        source={require('../../assets/images/welcome.png')} 
-        style={globalStyles.image}
-      />
-      <Text style={globalStyles.title}>Bubbl is happy to see you!</Text>
-      <Text style={globalStyles.subtitle}>Let's go on a fun adventure to learn how to stay safe!</Text>
 
-      {/* Login button */}
-      <BubblButton 
-        label="Login" 
-        onPress={() => navigation.replace('Login')} 
-      />
+    <ImageBackground
+      source={require('../../assets/images/Login/Background.png')}
+        style={globalStyles.backgroundLogin}
+      // resizeMode="cover"
+    >
+      <View style={globalStyles.animationContainer}>
+        <AuthLoginAnimation/>
+      </View>
 
-      {/* Divider with text */}
-      <DividerWithText text="or" />
-      
-      {/* Signup button */}
-      <BubblButton 
-        label="Don't have an account?" 
-        onPress={() => navigation.replace('Signup')} 
-      />
+      <AuthLoginWhiteCard navigation={navigation} />
 
-    </View>
+    </ImageBackground>
   );
 
 };

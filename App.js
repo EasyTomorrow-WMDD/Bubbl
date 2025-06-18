@@ -20,7 +20,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <SafeAreaView style={globalStyles.safeArea}>
+    // <SafeAreaView style={globalStyles.safeArea}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Welcome" component={AuthWelcomeScreen} />
@@ -33,7 +33,7 @@ export default function App() {
           <Stack.Screen name="ChildMain" component={ChildMainScreen} />
         </Stack.Navigator>
       </NavigationContainer>
-    </SafeAreaView>
+    // </SafeAreaView>
   );
 }
 

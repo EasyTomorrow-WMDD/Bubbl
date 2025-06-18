@@ -1,17 +1,19 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import BubblColors from './BubblColors';
+
+const { height } = Dimensions.get('window');
 
 export const globalStyles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: BubblColors.BubblWhite,
+    // backgroundColor: BubblColors.BubblWhite,
   },
   welcomeContainer: {
     padding: 20,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: BubblColors.BubblWhite,
+    // backgroundColor: BubblColors.BubblWhite,
   },
   container: {
     padding: 20,
@@ -41,12 +43,14 @@ export const globalStyles = StyleSheet.create({
     fontSize: 24,
     color: '#1e90ff',
     paddingHorizontal: 8,
+    marginTop: 40,
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
     flex: 1,
+    marginTop: 40,
   },
   heading: {
     fontSize: 24,
@@ -116,7 +120,7 @@ export const globalStyles = StyleSheet.create({
   dividerContainer: {    
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 24,
+    marginVertical: 8,
     width: '80%',
     maxWidth: 350,
     alignSelf: 'center',
@@ -152,7 +156,6 @@ export const globalStyles = StyleSheet.create({
     backgroundColor: BubblColors.BubblWhite,
     width: '100%',
   },
-
   subheading: {
     fontSize: 20,
     fontWeight: '600',
@@ -188,5 +191,74 @@ export const globalStyles = StyleSheet.create({
   },  
   // Profile page specific styles -- END
 
+  //Loging 
+    backgroundLogin: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'flex-end',
+  },
+    animationContainer: {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 100,
+    zIndex: 0,
+  },
+loginWrapper: {
+    position: 'absolute',
+    //  bottom: '1%',
+    width: '100%',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  loginCard:{
+    width: '112%',
+    // maxWidth: 360,
+    backgroundColor: 'white',
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+    padding: 57,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: -4 },
+    shadowRadius: 12,
+    elevation: 5, // Android shadow
+    alignItems: 'center',
+  },
+ buttonLogin: {
+  backgroundColor: BubblColors.BubblePurple,
+  width: '100%',
+  maxWidth: 300,
+  paddingVertical: 12,
+  paddingHorizontal: 40,
+  borderRadius: 10,
+  marginVertical: 6,  // smaller spacing
+},
+buttonLoginOutline: {
+  backgroundColor: BubblColors.BubblWhite,
+  borderWidth: 2,
+  borderColor: BubblColors.BubblePurple,
+  width: '100%',
+  maxWidth: 300,
+  paddingVertical: 12,
+  paddingHorizontal: 40,
+  borderRadius: 10,
+  marginVertical: 6, // smaller spacing
+},
+  buttonLoginText: {
+    color: BubblColors.BubblWhite,
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  buttonLoginTextOutline: {
+    color: BubblColors.BubblePurple, // purple text
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
 
 });
