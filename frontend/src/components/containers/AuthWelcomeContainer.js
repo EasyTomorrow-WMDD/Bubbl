@@ -2,8 +2,8 @@ import { View, Text, Image, TouchableOpacity,  ImageBackground } from 'react-nat
 import { globalStyles } from '../../styles/BubblStyles';
 import BubblButton from '../forms/BubblButton';
 import DividerWithText from '../layout/DividerWithText';
-import AuthLoginAnimation from './AuthLoginAnimation';
-import AuthLoginWhiteCard from './AuthLoginWhiteCard';
+import AuthLoginAnimation from './AuthLoginAnimationContainer';
+import AuthLoginWhiteCard from './AuthLoginWhiteCardContainer';
 // import LottieView from 'lottie-react-native';
 
 const AuthWelcomeContainer = ({navigation}) => {

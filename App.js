@@ -20,6 +20,8 @@ import ParentChildProgressScreen from './frontend/src/screens/ParentChildProgres
 import ParentSettingsScreen from './frontend/src/screens/ParentSettingsScreen';
 import ParentNotificationsScreen from './frontend/src/screens/ParentNotificationsScreen';
 import ChildMainScreen from './frontend/src/screens/ChildMainScreen';
+import ChildMoodScreen from './frontend/src/screens/ChildMoodScreen';
+import ChildMoodDrawingScreen from './frontend/src/screens/ChildMoodDrawingScreen';
 import ChildHome from './frontend/src/screens/child_homeScreen';
 
 const Stack = createNativeStackNavigator();
@@ -39,6 +41,8 @@ export default function App() {
           <Stack.Screen name="ParentStory" component={ParentStoryScreen} />
 
           <Stack.Screen name="ChildMain" component={ChildMainScreen} />
+          <Stack.Screen name="ChildMood" component={ChildMoodScreen} />
+          <Stack.Screen name="ChildDrawing" component={ChildMoodDrawingScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     // </SafeAreaView>
