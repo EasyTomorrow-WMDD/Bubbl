@@ -36,7 +36,7 @@ export default function MoodScreenDone({ navigation }) {
 
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate('Mood')}
+              onPress={() => navigation.navigate('ChildMain')}
             >
               <Text style={styles.buttonText}>Back to journey</Text>
             </TouchableOpacity>
