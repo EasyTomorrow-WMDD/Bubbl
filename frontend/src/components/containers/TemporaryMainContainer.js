@@ -8,10 +8,11 @@ import Module from './ModulesDashboard';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { globalStyles } from '../../styles/BubblStyles';
 import Header from '../layout/Header';
+import ChildNavbar from '../layout/ChildNavbar';
 
 
 
-export default function ChildHome() {
+export default function ChildHome({navigation}) {
   const [user, setUser] = useState(null);
   const [modules, setModules] = useState([]);
   const [nickname, setNickname] = useState('');
@@ -77,6 +78,7 @@ return (
         </View>
       </View>
     </ScrollView>
+    <ChildNavbar navigation={navigation} />
     <View style={styles.playTopic}>
       <Text>Keep Playing</Text>
     </View>
