@@ -22,6 +22,7 @@ import ParentNotificationsScreen from './frontend/src/screens/ParentNotification
 import ChildMainScreen from './frontend/src/screens/ChildMainScreen';
 import ChildMoodScreen from './frontend/src/screens/ChildMoodScreen';
 import ChildMoodDrawingScreen from './frontend/src/screens/ChildMoodDrawingScreen';
+import ChildMoodDrawingConfirmationScreen from './frontend/src/screens/ChildMoodDrawingConfirmationScreen';
 import ChildHome from './frontend/src/screens/child_homeScreen';
 
 const Stack = createNativeStackNavigator();
@@ -43,6 +44,7 @@ export default function App() {
           <Stack.Screen name="ChildMain" component={ChildMainScreen} />
           <Stack.Screen name="ChildMood" component={ChildMoodScreen} />
           <Stack.Screen name="ChildDrawing" component={ChildMoodDrawingScreen} />
+          <Stack.Screen name="ChildDrawingConfirmation" component={ChildMoodDrawingConfirmationScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     // </SafeAreaView>

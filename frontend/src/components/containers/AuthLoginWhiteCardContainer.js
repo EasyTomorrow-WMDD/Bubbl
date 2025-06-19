@@ -21,6 +21,12 @@ export default function AuthLoginWhiteCard({ navigation }) {
           onPress={() => navigation.replace('Login')}
         />
 
+          {/* TEMP TO TEST MOOD AND DRAWING */}
+          {/* <BubblButtonLogin
+          label="ChildDrawing"
+          onPress={() => navigation.replace('ChildDrawing')}
+        /> */}
+
         {/* Divider with text */}
         <DividerWithText text="or" />
 
