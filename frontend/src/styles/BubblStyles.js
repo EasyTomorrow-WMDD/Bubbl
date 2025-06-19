@@ -6,7 +6,7 @@ const { height } = Dimensions.get('window');
 export const globalStyles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: BubblColors.BubblePurple,
+    // backgroundColor: BubblColors.BubblePurple,
   },
   welcomeContainer: {
     padding: 20,
@@ -225,7 +225,7 @@ loginWrapper: {
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: -4 },
     shadowRadius: 12,
-    elevation: 5, // Android shadow
+    elevation: 5,
     alignItems: 'center',
   },
  buttonLogin: {
@@ -235,7 +235,7 @@ loginWrapper: {
   paddingVertical: 12,
   paddingHorizontal: 40,
   borderRadius: 10,
-  marginVertical: 6,  // smaller spacing
+  marginVertical: 6,  
 },
 buttonLoginOutline: {
   backgroundColor: BubblColors.BubblWhite,
@@ -246,7 +246,7 @@ buttonLoginOutline: {
   paddingVertical: 12,
   paddingHorizontal: 40,
   borderRadius: 10,
-  marginVertical: 6, // smaller spacing
+  marginVertical: 6, 
 },
   buttonLoginText: {
     color: BubblColors.BubblWhite,
@@ -255,7 +255,7 @@ buttonLoginOutline: {
     textAlign: 'center',
   },
   buttonLoginTextOutline: {
-    color: BubblColors.BubblePurple, // purple text
+    color: BubblColors.BubblePurple,
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
