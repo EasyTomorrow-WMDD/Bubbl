@@ -1,3 +1,4 @@
+import 'react-native-reanimated'; // Reanimated must be imported at the top
 import { registerRootComponent } from 'expo';
 
 import App from './App';

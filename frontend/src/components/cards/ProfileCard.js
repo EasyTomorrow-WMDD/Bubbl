@@ -9,9 +9,20 @@ const ProfileCard = ({ profile, type, navigation }) => {
   // ==========================================================================
   // Method to store selected profile in AsyncStorage (user_id, user_nickname, avatar_id)
   const storeProfile = async () => {
-    await AsyncStorage.setItem('selected_user_id', profile.user_id);
-    await AsyncStorage.setItem('selected_user_nickname', profile.user_nickname);
-    await AsyncStorage.setItem('selected_avatar_id', profile.avatar_id ?? '');
+    try {
+      await AsyncStorage.setItem('selected_user_id', profile.user_id);
+      await AsyncStorage.setItem('selected_user_nickname', profile.user_nickname);
+      await AsyncStorage.setItem('selected_avatar_id', profile.avatar_id ?? '');
+      await AsyncStorage.setItem('selected_account_id', profile.account_id);
+
+      console.log('[INFO][ProfileCard] Stored profile:', {
+        user_id: profile.user_id,
+        account_id: profile.account_id,
+      });
+
+    } catch (err) {
+      console.error('[ERROR][ProfileCard] Failed to store profile:', err);
+    }
   };
 
   // ==========================================================================

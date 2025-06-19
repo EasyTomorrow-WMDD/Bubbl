@@ -188,14 +188,17 @@ exports.getUserProfiles = async (req, res) => {
   }
 
   // Step 2: Get all profiles associated with the current user's account
-  const { data: profiles, error: profilesErr } = await supabase
+    const { data: profiles, error: profilesErr } = await supabase
     .from('user')
-    .select('*')
+        // .select('*')
+    //Jaime Change to get the Id to save on drawings and create the folder
+    .select('user_id, user_type, user_nickname, avatar_id, user_dob, account_id')
     .eq('account_id', currentUser.account_id);
 
   if (profilesErr) {
     return res.status(500).json({ error: 'Could not fetch profiles' });
   }
+
 
   // Step 3: Get account owner
   const { data: accountData, error: accountError } = await supabase
@@ -218,6 +221,7 @@ exports.getUserProfiles = async (req, res) => {
     children, 
     current_user_id: currentUser.user_id,
     current_user_type: currentUser.user_type,
+    account_id: currentUser.account_id,
     account_owner_id: accountData.account_owner,
   });
 };
