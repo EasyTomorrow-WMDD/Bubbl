@@ -1,17 +1,17 @@
+// controllers/drawingController.js
 const supabase = require('../utils/supabaseClient');
 
 exports.uploadDrawing = async (req, res) => {
   try {
-    const { imageBase64, user_profile_id, account_id } = req.body;
+    const { imageBase64, user_profile_id, account_id, mood } = req.body;
 
-    if (!imageBase64 || !user_profile_id || !account_id) {
-      return res.status(400).json({ error: 'Missing image or profile ID or account ID' });
+    if (!imageBase64 || !user_profile_id || !account_id || !mood) {
+      return res.status(400).json({ error: 'Missing image, profile ID, account ID, or mood' });
     }
 
     const buffer = Buffer.from(imageBase64, 'base64');
     const filename = `drawing-${Date.now()}.jpg`;
-
-    const path = `${account_id}/${user_profile_id}/${filename}`;
+    const path = `${account_id}/${user_profile_id}/${mood}-${filename}`;
 
     const { error: uploadError } = await supabase.storage
       .from('drawings')
