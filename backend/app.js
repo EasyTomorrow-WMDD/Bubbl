@@ -6,7 +6,8 @@ const dashboardRoutes = require('./routes/childProgressRoutes');
 const userRoutes = require('./routes/userRoutes');
 const drawingRoutes = require('./routes/drawingRoutes');
 
-app.use(express.json());
+//Increase img size to upload
+app.use(express.json({ limit: '5mb' }));
 app.use('/api/childProgress', dashboardRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/drawings', drawingRoutes);
