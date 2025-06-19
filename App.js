@@ -15,6 +15,9 @@ import ProfileScreen from './frontend/src/screens/ProfileScreen';
 import ParentMainScreen from './frontend/src/screens/ParentMainScreen';
 import ChildMainScreen from './frontend/src/screens/ChildMainScreen';
 import ProfileAddScreen from './frontend/src/screens/ProfileAddScreen';
+import ChildMoodScreen from './frontend/src/screens/ChildMoodScreen';
+import ChildMoodDrawingScreen from './frontend/src/screens/ChildMoodDrawingScreen';
+import ChildMoodDrawingConfirmationScreen from './frontend/src/screens/ChildMoodDrawingConfirmationScreen';
 import ChildHome from './frontend/src/screens/child_homeScreen';
 
 const Stack = createNativeStackNavigator();
@@ -32,6 +35,9 @@ export default function App() {
           <Stack.Screen name="AddProfile" component={ProfileAddScreen} />
           <Stack.Screen name="ParentMain" component={ParentMainScreen} />
           <Stack.Screen name="ChildMain" component={ChildMainScreen} />
+          <Stack.Screen name="ChildMood" component={ChildMoodScreen} />
+          <Stack.Screen name="ChildDrawing" component={ChildMoodDrawingScreen} />
+          <Stack.Screen name="ChildDrawingConfirmation" component={ChildMoodDrawingConfirmationScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     // </SafeAreaView>
