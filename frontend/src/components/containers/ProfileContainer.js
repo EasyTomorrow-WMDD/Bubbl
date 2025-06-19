@@ -40,6 +40,8 @@ const ProfileContainer = ({ navigation }) => {
         setCurrentUserType(response.data.current_user_type);
         setAccountOwnerId(response.data.account_owner_id);
 
+        // await AsyncStorage.setItem('account_id', response.data.account_id);
+
       } catch (err) {
         console.error('[ERROR][Profile] Failed to load profiles:', err);
       } finally {
