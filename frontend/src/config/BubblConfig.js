@@ -8,7 +8,8 @@ const BubblConfig = {
     // ? 'http://192.168.1.81:3000' // Local IP address #1
     // ? 'http://10.100.1.67:3000' // Local IP address #2
     // ? 'http://10.100.2.107:3000' // Local IP address #3
-    // ? 'http://10.128.229.169:3000' // Local IP address in T building
+    // ? 'http://10.128.230.78:3000' // Loacl IP address #4
+    // ? 'http://10.128.229.169:3000' // Local IP address #5
     : 'https://some-url-in-aws-to-be-created.com',
 
   // Supabase URL
