@@ -11,6 +11,7 @@ import { globalStyles } from '../../styles/BubblStyles';
 import Header from '../layout/Header';
 import ChildNavbar from '../layout/ChildNavbar';
 
+
 export default function TemporaryMainContainer({ navigation }) {
   const [user, setUser] = useState(null);
   const [modules, setModules] = useState([]);
@@ -38,7 +39,7 @@ export default function TemporaryMainContainer({ navigation }) {
     if (!userId) return;
 
     axios
-      .get(`http://10.100.2.107:3000/api/childProgress/dashboard/${userId}`)
+      .get(`http://10.128.230.78:3000/api/childProgress/dashboard/${userId}`)
       .then((response) => setUser(response.data))
       .catch((error) => console.error('Error fetching user data:', error));
   }, [userId]);
@@ -48,7 +49,7 @@ export default function TemporaryMainContainer({ navigation }) {
     if (!userId) return;
 
     axios
-      .get(`http://10.100.2.107:3000/api/childProgress/modules?userId=${userId}`)
+      .get(`http://10.128.230.78:3000/api/childProgress/modules?userId=${userId}`)
       .then((response) => setModules(response.data))
       .catch((error) => console.error('Error fetching modules:', error));
   }, [userId]);
@@ -66,7 +67,7 @@ export default function TemporaryMainContainer({ navigation }) {
           >
             <View style={styles.container}>
               <Image source={require('../../assets/images/yellow_bubbl.png')} style={styles.img} />
-              <Text style={styles.title}>Welcome, {user ? user.user_nickname : '...'}</Text>
+              <Text style={styles.title}>Hi, {user ? user.user_nickname : '...'}</Text>
               <StatsPanel user={user} />
               <Text style={styles.text}>Next HP refill in:</Text>
             </View>
