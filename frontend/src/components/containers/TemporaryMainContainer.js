@@ -17,6 +17,8 @@ export default function TemporaryMainContainer({ navigation }) {
   const [modules, setModules] = useState([]);
   const [nickname, setNickname] = useState('');
   const [userId, setUserId] = useState('');
+  const [progress, setProgress] = useState([]);
+  console.log('progress list: ', progress);
 
   // ================= Load profile info from AsyncStorage ====================
   useEffect(() => {
@@ -38,20 +40,49 @@ export default function TemporaryMainContainer({ navigation }) {
   useEffect(() => {
     if (!userId) return;
 
-    axios
-      .get(`http://10.128.230.78:3000/api/childProgress/dashboard/${userId}`)
-      .then((response) => setUser(response.data))
-      .catch((error) => console.error('Error fetching user data:', error));
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`http://10.100.2.107:3000/api/childProgress/dashboard/${userId}`);
+        setUser(response.data);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUser();
   }, [userId]);
 
   // ================= Fetch modules data ====================
   useEffect(() => {
     if (!userId) return;
 
-    axios
-      .get(`http://10.128.230.78:3000/api/childProgress/modules?userId=${userId}`)
-      .then((response) => setModules(response.data))
-      .catch((error) => console.error('Error fetching modules:', error));
+    const fetchModules = async () => {
+      try {
+        const response = await axios.get(`http://10.100.2.107:3000/api/childProgress/modules`);
+        setModules(response.data);
+      } catch (error) {
+        console.error('Error fetching modules:', error);
+      }
+    };
+
+    fetchModules();
+  }, [userId]);
+
+
+  useEffect(() => {
+    if (!userId) return;
+
+    const fetchChildProgress = async () => {
+      try {
+        const response = await axios.get(`http://10.100.2.107:3000/api/childProgress/userProgress/${userId}`);
+        console.log('Full response:', response)
+        setProgress(response.data);
+      } catch (error) {
+        console.error('Error fetching child progress:', error);
+      }
+    }
+
+    fetchChildProgress();
   }, [userId]);
 
   return (
@@ -74,7 +105,7 @@ export default function TemporaryMainContainer({ navigation }) {
           </ImageBackground>
 
           <View style={styles.cardContainer}>
-            <Module modules={modules} />
+            <Module modules={modules} progress={progress} />
           </View>
         </View>
       </ScrollView>
