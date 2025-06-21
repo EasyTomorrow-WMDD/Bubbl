@@ -1,4 +1,3 @@
-
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, ImageBackground, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,17 +9,17 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { globalStyles } from '../../styles/BubblStyles';
 import Header from '../layout/Header';
 import ChildNavbar from '../layout/ChildNavbar';
+import { useNavigation } from '@react-navigation/native';
+import { BASE_URL } from '../../utils/config';
 
 
-export default function TemporaryMainContainer({ navigation }) {
+export default function TemporaryMainContainer() {
   const [user, setUser] = useState(null);
   const [modules, setModules] = useState([]);
   const [nickname, setNickname] = useState('');
   const [userId, setUserId] = useState('');
-  const [progress, setProgress] = useState([]);
-  console.log('progress list: ', progress);
+  const navigation = useNavigation();
 
-  // ================= Load profile info from AsyncStorage ====================
   useEffect(() => {
     const loadProfileInfo = async () => {
       try {
@@ -36,54 +35,28 @@ export default function TemporaryMainContainer({ navigation }) {
     loadProfileInfo();
   }, []);
 
-  // ================= Fetch user data from backend ====================
   useEffect(() => {
     if (!userId) return;
 
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get(`http://10.100.2.107:3000/api/childProgress/dashboard/${userId}`);
-        setUser(response.data);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-
-    fetchUser();
+    axios
+      .get(`${BASE_URL}/api/childProgress/dashboard/${userId}`)
+      .then((response) => setUser(response.data))
+      .catch((error) => console.error('Error fetching user data:', error));
   }, [userId]);
-
-  // ================= Fetch modules data ====================
-  useEffect(() => {
-    if (!userId) return;
-
-    const fetchModules = async () => {
-      try {
-        const response = await axios.get(`http://10.100.2.107:3000/api/childProgress/modules`);
-        setModules(response.data);
-      } catch (error) {
-        console.error('Error fetching modules:', error);
-      }
-    };
-
-    fetchModules();
-  }, [userId]);
-
 
   useEffect(() => {
     if (!userId) return;
 
-    const fetchChildProgress = async () => {
-      try {
-        const response = await axios.get(`http://10.100.2.107:3000/api/childProgress/userProgress/${userId}`);
-        console.log('Full response:', response)
-        setProgress(response.data);
-      } catch (error) {
-        console.error('Error fetching child progress:', error);
-      }
-    }
-
-    fetchChildProgress();
+    axios
+      .get(`${BASE_URL}/api/childProgress/modules?userId=${userId}`)
+      .then((response) => setModules(response.data))
+      .catch((error) => console.error('Error fetching modules:', error));
   }, [userId]);
+
+  const handleTopicPress = (topic) => {
+    navigation.navigate('TopicScreen', { topicId: topic.topic_id });
+  };
+  
 
   return (
     <View style={{ flex: 1 }}>
@@ -105,17 +78,15 @@ export default function TemporaryMainContainer({ navigation }) {
           </ImageBackground>
 
           <View style={styles.cardContainer}>
-            <Module modules={modules} progress={progress} />
+            <Module modules={modules} onTopicPress={handleTopicPress} />
           </View>
         </View>
       </ScrollView>
 
-      {/* Keep Playing button */}
       <View style={styles.playTopic}>
         <Text>Keep Playing</Text>
       </View>
 
-      {/* Child Navbar */}
       <ChildNavbar navigation={navigation} childProfileId={userId} />
     </View>
   );
@@ -168,7 +139,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    bottom: 80, // Show above the navbar
+    bottom: 80,
     zIndex: 10,
     borderRadius: 12,
   },
