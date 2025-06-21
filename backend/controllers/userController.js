@@ -285,3 +285,28 @@ exports.addProfile = async (req, res) => {
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+// ==========================================================================
+// getChildById
+// Route: GET /api/users/:userId
+// Description: Fetches public child profile data by user_id
+exports.getChildById = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const { data, error } = await supabase
+      .from('user')
+      .select('user_nickname, avatar_id, user_xp, user_star, user_energy')
+      .eq('user_id', userId)
+      .single();
+
+    if (error || !data) {
+      return res.status(404).json({ error: 'Child not found' });
+    }
+
+    return res.status(200).json(data);
+  } catch (err) {
+    console.error('[getChildById] ❌ Error:', err);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
