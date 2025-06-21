@@ -4,7 +4,7 @@ const BubblConfig = {
   // Backend API
   // For development, check the local IP address with `ifconfig` or `ipconfig` command and replace the IP address in the URL with the IP address of localhost.
   BACKEND_URL: isDev
-    ? 'http://10.128.230.78:3000'
+    ? 'http://10.100.2.107:3000'
     : 'https://some-url-in-aws-to-be-created.com',
 
   // Supabase URL
