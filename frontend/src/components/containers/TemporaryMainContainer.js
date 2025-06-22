@@ -12,14 +12,15 @@ import ChildNavbar from '../layout/ChildNavbar';
 import { useNavigation } from '@react-navigation/native';
 import { BASE_URL } from '../../utils/config';
 
-
 export default function TemporaryMainContainer() {
   const [user, setUser] = useState(null);
   const [modules, setModules] = useState([]);
   const [nickname, setNickname] = useState('');
   const [userId, setUserId] = useState('');
+  const [progress, setProgress] = useState([]);
   const navigation = useNavigation();
 
+  // ================= Load profile info from AsyncStorage ====================
   useEffect(() => {
     const loadProfileInfo = async () => {
       try {
@@ -35,15 +36,23 @@ export default function TemporaryMainContainer() {
     loadProfileInfo();
   }, []);
 
+  // ================= Fetch user data from backend ====================
   useEffect(() => {
     if (!userId) return;
 
-    axios
-      .get(`${BASE_URL}/api/childProgress/dashboard/${userId}`)
-      .then((response) => setUser(response.data))
-      .catch((error) => console.error('Error fetching user data:', error));
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/childProgress/dashboard/${userId}`);
+        setUser(response.data);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUser();
   }, [userId]);
 
+  // ================= Fetch modules data ====================
   useEffect(() => {
     if (!userId) return;
 
@@ -53,10 +62,26 @@ export default function TemporaryMainContainer() {
       .catch((error) => console.error('Error fetching modules:', error));
   }, [userId]);
 
+  // ================= Fetch progress ====================
+  useEffect(() => {
+    if (!userId) return;
+
+    const fetchChildProgress = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/childProgress/userProgress/${userId}`);
+        console.log('Full response:', response)
+        setProgress(response.data);
+      } catch (error) {
+        console.error('Error fetching child progress:', error);
+      }
+    }
+
+    fetchChildProgress();
+  }, [userId]);
+  
   const handleTopicPress = (topic) => {
     navigation.navigate('TopicScreen', { topicId: topic.topic_id });
   };
-  
 
   return (
     <View style={{ flex: 1 }}>
@@ -71,22 +96,24 @@ export default function TemporaryMainContainer() {
           >
             <View style={styles.container}>
               <Image source={require('../../assets/images/yellow_bubbl.png')} style={styles.img} />
-              <Text style={styles.title}>Welcome, {user ? user.user_nickname : '...'}</Text>
+              <Text style={styles.title}>Hi, {user ? user.user_nickname : '...'}</Text>
               <StatsPanel user={user} />
               <Text style={styles.text}>Next HP refill in:</Text>
             </View>
           </ImageBackground>
 
           <View style={styles.cardContainer}>
-            <Module modules={modules} onTopicPress={handleTopicPress} />
+            <Module modules={modules} progress={progress} onTopicPress={handleTopicPress} />
           </View>
         </View>
       </ScrollView>
 
+      {/* Keep Playing button */}
       <View style={styles.playTopic}>
         <Text>Keep Playing</Text>
       </View>
 
+      {/* Child Navbar */}
       <ChildNavbar navigation={navigation} childProfileId={userId} />
     </View>
   );
@@ -139,8 +166,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    bottom: 80,
+    bottom: 80, // Show above the navbar
     zIndex: 10,
     borderRadius: 12,
   },
 });
+
