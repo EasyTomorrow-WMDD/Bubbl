@@ -23,6 +23,13 @@ import ChildMainScreen from './frontend/src/screens/ChildMainScreen';
 import ChildMoodScreen from './frontend/src/screens/ChildMoodScreen';
 import ChildMoodDrawingScreen from './frontend/src/screens/ChildMoodDrawingScreen';
 import ChildMoodDrawingConfirmationScreen from './frontend/src/screens/ChildMoodDrawingConfirmationScreen';
+import ParentLayout from './frontend/src/components/layout/ParentLayout';
+import ParentMainScreen from './frontend/src/screens/ParentMainScreen';
+import ParentStoryScreen from './frontend/src/screens/ParentStoryScreen';
+import ParentChildProgressScreen from './frontend/src/screens/ParentChildProgressScreen';
+import ParentSettingsScreen from './frontend/src/screens/ParentSettingsScreen';
+import ParentNotificationsScreen from './frontend/src/screens/ParentNotificationsScreen';
+import ChildMainScreen from './frontend/src/screens/ChildMainScreen';
 import ChildHome from './frontend/src/screens/child_homeScreen';
 import TopicContainer from './frontend/src/components/containers/TopicContainer';
 import { ChildProvider } from './frontend/src/context/ChildContext';
@@ -73,6 +80,8 @@ export default function App() {
           <Stack.Screen name="ParentMain" component={ParentLayout} />
           <Stack.Screen name="ParentStory" component={ParentStoryScreen} />
           <Stack.Screen name="ParentMainScreen" component={ParentMainScreen} />
+          <Stack.Screen name="ParentMain" component={ParentLayout} />
+          <Stack.Screen name="ParentStory" component={ParentStoryScreen} />
           <Stack.Screen name="ChildMain" component={ChildMainScreen} />
           <Stack.Screen name="ChildMood" component={ChildMoodScreen} />
           <Stack.Screen name="ChildDrawing" component={ChildMoodDrawingScreen} />
