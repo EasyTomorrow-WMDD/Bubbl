@@ -138,7 +138,7 @@ const AuthLoginContainer = ({ navigation }) => {
 
       if (exists) {
         console.log('[INFO][Login] User exists, navigating to ParentMainScreen');
-        navigation.replace('ParentMainScreen');
+        navigation.replace('Profile');
       } else {
         console.log('[INFO][Login] New user, navigating to Onboarding');
         navigation.replace('Onboarding');
