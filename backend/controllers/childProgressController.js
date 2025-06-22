@@ -3,12 +3,12 @@ const supabase = require('../utils/supabaseClient');
 exports.getDashboard = async (req, res) => {
 
   const userId = req.params.userId;
-  
+
   try {
     const { data, error } = await supabase
-      .from("user")   
-      .select('*')     
-      .eq('user_id', userId);       
+      .from("user")
+      .select('*')
+      .eq('user_id', userId);
 
     if (error) throw error;
 
@@ -20,7 +20,7 @@ exports.getDashboard = async (req, res) => {
 };
 
 exports.getAllModulesAndTopics = async (req, res) => {
-    
+
   try {
     const { data, error } = await supabase
       .from('ref_module')
@@ -49,7 +49,8 @@ exports.getAllModulesAndTopics = async (req, res) => {
 };
 
 exports.getChildProgress = async (req, res) => {
-  const userId = req.headers['x-user-id'];
+  const userId = req.params.userId;
+
   if (!userId) return res.status(400).json({ error: 'Missing user ID' });
 
   try {
@@ -60,11 +61,10 @@ exports.getChildProgress = async (req, res) => {
         user_topic_completed,
         user_topic_available,
         user_last_attempted,
-        user_topic_fail_count,
+        user_topic_fail_count
       `)
       .eq('user_id', userId)
-      .order('ref_topic.module_id')
-      .order('ref_topic.topic_number');
+
 
     if (error) throw error;
 
