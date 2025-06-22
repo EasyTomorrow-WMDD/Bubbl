@@ -19,12 +19,15 @@ import ChildMoodScreen from './frontend/src/screens/ChildMoodScreen';
 import ChildMoodDrawingScreen from './frontend/src/screens/ChildMoodDrawingScreen';
 import ChildMoodDrawingConfirmationScreen from './frontend/src/screens/ChildMoodDrawingConfirmationScreen';
 import ChildHome from './frontend/src/screens/child_homeScreen';
+import TopicContainer from './frontend/src/components/containers/TopicContainer';
+import { ChildProvider } from './frontend/src/context/ChildContext';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     // <SafeAreaView style={globalStyles.safeArea}>
+      <ChildProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Welcome" component={AuthWelcomeScreen} />
@@ -38,8 +41,10 @@ export default function App() {
           <Stack.Screen name="ChildMood" component={ChildMoodScreen} />
           <Stack.Screen name="ChildDrawing" component={ChildMoodDrawingScreen} />
           <Stack.Screen name="ChildDrawingConfirmation" component={ChildMoodDrawingConfirmationScreen} />
+          <Stack.Screen name="TopicScreen" component={TopicContainer} />
         </Stack.Navigator>
       </NavigationContainer>
+    </ChildProvider>
     // </SafeAreaView>
   );
 }
