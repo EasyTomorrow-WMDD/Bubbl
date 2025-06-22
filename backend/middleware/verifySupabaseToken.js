@@ -6,7 +6,7 @@ const verifySupabaseToken = (req, res, next) => {
 
   if (!token) return res.status(401).json({ error: 'No token provided' });
 
-console.log(`token: ${token}`);
+  // console.log(`token: ${token}`);
 
   try {
 
