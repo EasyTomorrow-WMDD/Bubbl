@@ -4,7 +4,6 @@ import axios from 'axios';
 import { useCurrentChild } from '../context/ChildContext';
 import { BASE_URL } from '../utils/config';
 
-
 export default function TopicComplete({ route, navigation }) {
   const { heading, text, topicId } = route.params;
   const { currentChild } = useCurrentChild();
@@ -12,10 +11,11 @@ export default function TopicComplete({ route, navigation }) {
   useEffect(() => {
     const saveProgress = async () => {
       try {
-        await axios.post(`${BASE_URL}/api/progress`, {
+        const response = await axios.post(`${BASE_URL}/api/progress`, {
           user_id: currentChild.user_id,
           topic_id: topicId,
         });
+        console.log('Progress saved:', response.data);
       } catch (err) {
         console.error('Error saving progress:', err);
         Alert.alert('Error', 'Unable to save progress.');
@@ -31,7 +31,6 @@ export default function TopicComplete({ route, navigation }) {
     <View style={styles.container}>
       <Text style={styles.heading}>{heading}</Text>
       <Text style={styles.text}>{text}</Text>
-
       <Button title="Back to Topics" onPress={() => navigation.navigate('Topics')} />
     </View>
   );
