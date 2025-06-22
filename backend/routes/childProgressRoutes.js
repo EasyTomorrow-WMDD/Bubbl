@@ -5,6 +5,6 @@ const controller = require('../controllers/childProgressController');
 
 router.get('/dashboard/:userId', controller.getDashboard);
 router.get('/modules', controller.getAllModulesAndTopics);
-router.get('/userProgress', controller.getAllModulesAndTopics);
+router.get('/userProgress/:userId', controller.getChildProgress);
 
 module.exports = router;

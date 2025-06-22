@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 
-const CircularProgress = ({module_numer, completed}) => {
+const CircularProgress = ({topic_number, completed}) => {
   const radius = 30;
   const strokeWidth = 10;
   const normalizedRadius = radius - strokeWidth / 2;
@@ -39,7 +39,7 @@ const CircularProgress = ({module_numer, completed}) => {
       </Svg>
 
       <View style={styles.center}>
-        <Text style={styles.text}>{module_numer}</Text>
+        <Text style={styles.text}>{topic_number}</Text>
       </View>
     </View>
   );
