@@ -6,47 +6,80 @@ import { useCurrentChild } from '../../context/ChildContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_URL } from '../../utils/config';
 
-
 export default function TopicScreen({ route, navigation }) {
   const { topicId } = route.params;
-  const { currentChild } = useCurrentChild();
+  const { currentChild, isLoadingChild } = useCurrentChild();
 
   const [topic, setTopic] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [energy, setEnergy] = useState(null);
+  const [energy, setEnergy] = useState(0);
   const [timeToNext, setTimeToNext] = useState(null);
   const [countdown, setCountdown] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+
+  const [isLoadingTopic, setIsLoadingTopic] = useState(true);
+  const [isLoadingEnergy, setIsLoadingEnergy] = useState(true);
+
   const [testReset, setTestReset] = useState(false);
 
+  console.log('[TopicScreen] isLoadingChild:', isLoadingChild);
+  console.log('[TopicScreen] currentChild:', currentChild);
+  console.log('[TopicScreen] topicId:', topicId);
+
+  if (isLoadingChild) {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" />
+        <Text>Loading child profile...</Text>
+      </View>
+    );
+  }
+
+  if (!currentChild?.user_id) {
+    console.log('[TopicScreen] No child profile available');
+    return (
+      <View style={styles.loaderContainer}>
+        <Text>No child profile available.</Text>
+      </View>
+    );
+  }
+
   useEffect(() => {
-    if (topicId) fetchTopicData();
+    if (topicId) {
+      console.log('[TopicScreen] Fetching topic:', topicId);
+      fetchTopicData();
+    }
   }, [topicId]);
 
   const fetchTopicData = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/api/topics/${topicId}`);
+      console.log('[TopicScreen] Fetched topic:', res.data);
       setTopic(res.data);
     } catch (err) {
-      console.error('Error loading topic:', err);
+      console.error('[TopicScreen] Error loading topic:', err);
       Alert.alert('Error', 'Could not load topic data.', [
         { text: 'Back', onPress: () => navigation.goBack() }
       ]);
+    } finally {
+      setIsLoadingTopic(false);
     }
   };
 
   useEffect(() => {
     if (currentChild?.user_id && topic) {
+      console.log('[TopicScreen] Fetching energy for child:', currentChild.user_id);
       fetchEnergy();
     }
-  }, [topic]);
+  }, [topic, currentChild]);
 
   const fetchEnergy = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/api/energy/status`, {
         params: { user_id: currentChild.user_id }
       });
+
+      console.log('[TopicScreen] Fetched energy:', res.data);
 
       const userEnergy = res.data.user_energy;
       const timeRemaining = res.data.time_to_next_recharge_ms;
@@ -60,16 +93,17 @@ export default function TopicScreen({ route, navigation }) {
         await loadQuestions();
       }
     } catch (err) {
-      console.error('Error fetching energy:', err);
+      console.error('[TopicScreen] Error fetching energy:', err);
       Alert.alert('Error', 'Unable to fetch your energy status.', [
         { text: 'Back', onPress: () => navigation.goBack() }
       ]);
     } finally {
-      setIsLoading(false);
+      setIsLoadingEnergy(false);
     }
   };
 
   const startCountdown = (ms) => {
+    console.log('[TopicScreen] Starting countdown:', ms);
     if (!ms || ms <= 0) return;
     let remaining = ms;
 
@@ -87,6 +121,7 @@ export default function TopicScreen({ route, navigation }) {
   };
 
   const loadQuestions = async () => {
+    console.log('[TopicScreen] Loading questions...');
     const allQuestions = topic?.topic_activities || [];
     const savedKey = `correctAnswers_${currentChild.user_id}_${topic.topic_id}`;
 
@@ -100,25 +135,22 @@ export default function TopicScreen({ route, navigation }) {
       const correctIds = saved ? JSON.parse(saved) : [];
       const filtered = allQuestions.filter(q => !correctIds.includes(q.id));
       setQuestions(filtered);
+      console.log('[TopicScreen] Loaded questions:', filtered.length);
     } catch (err) {
-      console.error('Error loading saved questions:', err);
+      console.error('[TopicScreen] Error loading saved questions:', err);
       setQuestions(allQuestions);
     }
   };
 
   const handleWrongAnswer = async () => {
     try {
-      //console.log('Sending to /api/energy/reduce with user_id:', currentChild.user_id);
-  
       const res = await axios.post(`${BASE_URL}/api/energy/reduce`, {
         user_id: currentChild.user_id,
       });
-  
-      //console.log('Energy response:', res.data);
-  
+
       const newEnergy = res.data.user_energy;
       setEnergy(newEnergy);
-  
+
       if (newEnergy === 0) {
         setTimeout(() => {
           Alert.alert('Energy depleted', 'You must wait 30 minutes to continue.', [
@@ -133,10 +165,9 @@ export default function TopicScreen({ route, navigation }) {
         setCurrentIndex(0);
       }
     } catch (err) {
-      console.error('Error reducing energy:', err.response?.data || err.message);
+      console.error('[TopicScreen] Error reducing energy:', err.response?.data || err.message);
     }
   };
-  
 
   const handleAnswer = async (isCorrect, message) => {
     Alert.alert(isCorrect ? 'Correct!' : 'Wrong!', message);
@@ -153,7 +184,7 @@ export default function TopicScreen({ route, navigation }) {
           const updatedIds = [...savedIds, answered.id];
           await AsyncStorage.setItem(key, JSON.stringify(updatedIds));
         } catch (err) {
-          console.error(' Error saving correct answer:', err);
+          console.error('[TopicScreen] Error saving correct answer:', err);
         }
       }
 
@@ -173,13 +204,15 @@ export default function TopicScreen({ route, navigation }) {
   };
 
   const resetTopicForTest = async () => {
+    console.log('[TopicScreen] Resetting topic for test');
     const key = `correctAnswers_${currentChild.user_id}_${topic.topic_id}`;
     await AsyncStorage.removeItem(key);
     setTestReset(true);
     await loadQuestions();
   };
 
-  if (isLoading || energy === null || !topic) {
+  if (isLoadingTopic || isLoadingEnergy || !topic) {
+    console.log('[TopicScreen] Loading topic/energy...');
     return (
       <View style={styles.loaderContainer}>
         <ActivityIndicator size="large" />
@@ -188,6 +221,7 @@ export default function TopicScreen({ route, navigation }) {
   }
 
   if (energy === 0) {
+    console.log('[TopicScreen] Energy is 0, countdown running');
     return (
       <View style={styles.container}>
         <Text style={styles.energyZero}>Energy: 0</Text>
@@ -200,6 +234,7 @@ export default function TopicScreen({ route, navigation }) {
 
   const currentQuestion = questions[currentIndex];
   if (!currentQuestion) {
+    console.log('[TopicScreen] No more questions');
     return (
       <View style={styles.container}>
         <Text>No more questions available.</Text>
@@ -207,6 +242,8 @@ export default function TopicScreen({ route, navigation }) {
       </View>
     );
   }
+
+  console.log('[TopicScreen] Showing question:', currentQuestion);
 
   return (
     <View style={styles.container}>
