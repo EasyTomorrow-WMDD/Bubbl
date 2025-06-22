@@ -1,6 +1,0 @@
-module ExpoLocalAuthentication {
-  umbrella header "ExpoLocalAuthentication-umbrella.h"
-
-  export *
-  module * { export * }
-}
