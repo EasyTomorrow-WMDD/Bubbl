@@ -12,9 +12,14 @@ import AuthLoginScreen from './frontend/src/screens/AuthLoginScreen';
 import AuthSignupScreen from './frontend/src/screens/AuthSignupScreen';
 import AuthOnboardingScreen from './frontend/src/screens/AuthOnboardingScreen';
 import ProfileScreen from './frontend/src/screens/ProfileScreen';
-import ParentMainScreen from './frontend/src/screens/ParentMainScreen';
-import ChildMainScreen from './frontend/src/screens/ChildMainScreen';
 import ProfileAddScreen from './frontend/src/screens/ProfileAddScreen';
+import ParentLayout from './frontend/src/components/layout/ParentLayout';
+import ParentMainScreen from './frontend/src/screens/ParentMainScreen';
+import ParentStoryScreen from './frontend/src/screens/ParentStoryScreen';
+import ParentChildProgressScreen from './frontend/src/screens/ParentChildProgressScreen';
+import ParentSettingsScreen from './frontend/src/screens/ParentSettingsScreen';
+import ParentNotificationsScreen from './frontend/src/screens/ParentNotificationsScreen';
+import ChildMainScreen from './frontend/src/screens/ChildMainScreen';
 import ChildHome from './frontend/src/screens/child_homeScreen';
 
 const Stack = createNativeStackNavigator();
@@ -30,7 +35,9 @@ export default function App() {
           <Stack.Screen name="Onboarding" component={AuthOnboardingScreen} />
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="AddProfile" component={ProfileAddScreen} />
-          <Stack.Screen name="ParentMain" component={ParentMainScreen} />
+          <Stack.Screen name="ParentMain" component={ParentLayout} />
+          <Stack.Screen name="ParentStory" component={ParentStoryScreen} />
+
           <Stack.Screen name="ChildMain" component={ChildMainScreen} />
         </Stack.Navigator>
       </NavigationContainer>
