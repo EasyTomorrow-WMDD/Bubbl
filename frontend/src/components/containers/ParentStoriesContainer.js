@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Divider } from '@rneui/themed';
 import LoadProfileInfo from '../../utils/LoadProfileInfo'; 
 import ParentStoryEssentialsList from '../lists/ParentStoryEssentialsList';
 import ParentStoriesSearchForm from '../forms/ParentStoriesSearchForm';
@@ -44,7 +43,7 @@ const ParentStoriesContainer = ( {navigation} ) => {
         </View>
       </View>
 
-      <Divider width={1} color="#ccc" style={styles.divider} />
+      <Text style={styles.divider}>-----------------------</Text>
 
       {/* Section 2: Essential stories - render list */}
       {profile && <ParentStoryEssentialsList userId={profile.user_id}  navigation={navigation} />}
