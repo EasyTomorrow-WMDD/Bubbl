@@ -61,8 +61,7 @@ export default function App() {
   };
 
   return (
-    // <SafeAreaView style={globalStyles.safeArea}>
-      <ChildProvider>
+    <ChildProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Welcome" component={AuthWelcomeScreen} />
@@ -73,7 +72,7 @@ export default function App() {
           <Stack.Screen name="AddProfile" component={ProfileAddScreen} />
           <Stack.Screen name="ParentMain" component={ParentLayout} />
           <Stack.Screen name="ParentStory" component={ParentStoryScreen} />
-
+          <Stack.Screen name="ParentMainScreen" component={ParentMainScreen} />
           <Stack.Screen name="ChildMain" component={ChildMainScreen} />
           <Stack.Screen name="ChildMood" component={ChildMoodScreen} />
           <Stack.Screen name="ChildDrawing" component={ChildMoodDrawingScreen} />
@@ -82,25 +81,8 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
     </ChildProvider>
-    // </SafeAreaView>
-
-    // <SafeAreaView style={styles.container}>
-    //   <StatusBar barStyle="dark-content" />
-    //   {isGameEnd ? (
-    //     <GameOverScreen score={score} onRestart={handleRestart} />
-    //   ) : (
-    //     <GameScreen
-    //       currentPhrase={currentPhrase}
-    //       score={score}
-    //       onCorrectAnswer={handleCorrectAnswer}
-    //       onNextPhrase={handleNextPhrase}
-    //     />
-    //   )}
-    // </SafeAreaView>
-
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
