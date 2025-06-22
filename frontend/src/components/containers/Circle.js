@@ -4,7 +4,6 @@ import { View, Text, StyleSheet } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 
 const CircularProgress = ({topic_number, completed}) => {
-
   const radius = 30;
   const strokeWidth = 10;
   const normalizedRadius = radius - strokeWidth / 2;
