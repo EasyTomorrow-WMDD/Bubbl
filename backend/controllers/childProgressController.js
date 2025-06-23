@@ -1,7 +1,6 @@
 const supabase = require('../utils/supabaseClient');
 
 exports.getDashboard = async (req, res) => {
-
   const userId = req.params.userId;
 
   try {
@@ -20,7 +19,6 @@ exports.getDashboard = async (req, res) => {
 };
 
 exports.getAllModulesAndTopics = async (req, res) => {
-
   try {
     const { data, error } = await supabase
       .from('ref_module')
@@ -75,3 +73,83 @@ exports.getChildProgress = async (req, res) => {
   }
 };
 
+
+exports.saveProgress = async (req, res) => {
+  const { user_id, topic_id } = req.body;
+
+  if (!user_id || !topic_id) {
+    return res.status(400).json({ error: 'Missing user_id or topic_id' });
+  }
+
+  try {
+    const { data: existing, error: fetchError } = await supabase
+      .from('user_progress')
+      .select('*')
+      .eq('user_id', user_id)
+      .eq('topic_id', topic_id);
+
+    if (fetchError) throw fetchError;
+
+    const currentTime = new Date().toISOString();
+    const isFirstCompletion = existing.length === 0;
+
+    if (isFirstCompletion) {
+      const { error: insertError } = await supabase
+        .from('user_progress')
+        .insert([{
+          user_id,
+          topic_id,
+          user_topic_completed: true,
+          user_last_attempted: currentTime
+        }]);
+
+      if (insertError) throw insertError;
+    } else {
+      const { error: updateError } = await supabase
+        .from('user_progress')
+        .update({
+          user_topic_completed: true,
+          user_last_attempted: currentTime
+        })
+        .eq('user_id', user_id)
+        .eq('topic_id', topic_id);
+
+      if (updateError) throw updateError;
+    }
+
+    // ///////////////////// TESTING ONLY ////////////////////////
+    // Comented only if we don't want to add XP/Stars multiple times
+
+    // const isFirstCompletion = existing.length === 0;
+    // if (isFirstCompletion) {
+
+    // always add XP/Stars for testing purposes
+    const { data: topicData, error: topicError } = await supabase
+      .from('ref_topic')
+      .select('topic_xp, topic_star')
+      .eq('topic_id', topic_id)
+      .single();
+
+    if (topicError) throw topicError;
+
+    const { topic_xp, topic_star } = topicData;
+
+    const { error: xpError } = await supabase.rpc('add_xp_and_stars', {
+      p_user_id: user_id,
+      p_xp: topic_xp,
+      p_star: topic_star
+    });
+
+    if (xpError) throw xpError;
+
+    // } // ← close - if (isFirstCompletion)
+
+    /////////////////////////////////////////////////////////////
+
+    res.json({ message: 'Progress saved!' });
+
+  } catch (err) {
+    console.error('Save progress error:', err);
+    res.status(500).json({ error: 'Failed to save progress' });
+  }
+};
