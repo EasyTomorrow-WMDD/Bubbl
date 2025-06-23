@@ -19,7 +19,7 @@ const AuthLoginContainer = ({ navigation }) => {
   const isDev = process.env.NODE_ENV === 'development';
 
   // State variables for form inputs
-  const [email, setEmail] = useState( isDev ? 'test5@bubbl.com' : '');
+  const [email, setEmail] = useState( isDev ? 'test6@bubbl.com' : '');
   const [password, setPassword] = useState( isDev ? '123456' : '');
   const [errors, setErrors] = useState({});
   const [authError, setAuthError] = useState('');
