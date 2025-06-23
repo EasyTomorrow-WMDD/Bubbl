@@ -3,10 +3,14 @@ const jwt = require('jsonwebtoken');
 const verifySupabaseToken = (req, res, next) => {
   const authHeader = req.headers.authorization || '';
   const token = authHeader.replace('Bearer ', '');
+  console.log('[DEBUG] Incoming token:', token);
+5
 
   if (!token) return res.status(401).json({ error: 'No token provided' });
+  console.log('[DEBUG] JWT_SECRET from .env:', process.env.SUPABASE_JWT_SECRET);
 
-console.log(`token: ${token}`);
+
+  // console.log(`token: ${token}`);
 
   try {
 
