@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import CircularProgress from './Circle';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Module({ modules, progress = [], onTopicPress }) {
   //console.log('progress one:', JSON.stringify(progress, null, 2));
@@ -45,6 +46,7 @@ export default function Module({ modules, progress = [], onTopicPress }) {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   title: {
