@@ -1,33 +1,28 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, SafeAreaView } from 'react-native';
-
-import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-import { globalStyles } from './frontend/src/styles/BubblStyles';
+import { StyleSheet, View, Text } from 'react-native';
 
 import AuthWelcomeScreen from './frontend/src/screens/AuthWelcomeScreen';
 import AuthLoginScreen from './frontend/src/screens/AuthLoginScreen';
 import AuthSignupScreen from './frontend/src/screens/AuthSignupScreen';
 import AuthOnboardingScreen from './frontend/src/screens/AuthOnboardingScreen';
 import ProfileScreen from './frontend/src/screens/ProfileScreen';
-import ParentMainScreen from './frontend/src/screens/ParentMainScreen';
-import ChildMainScreen from './frontend/src/screens/ChildMainScreen';
 import ProfileAddScreen from './frontend/src/screens/ProfileAddScreen';
+import ParentLayout from './frontend/src/components/layout/ParentLayout';
+import ParentStoryScreen from './frontend/src/screens/ParentStoryScreen';
+import ChildMainScreen from './frontend/src/screens/ChildMainScreen';
 import ChildMoodScreen from './frontend/src/screens/ChildMoodScreen';
 import ChildMoodDrawingScreen from './frontend/src/screens/ChildMoodDrawingScreen';
 import ChildMoodDrawingConfirmationScreen from './frontend/src/screens/ChildMoodDrawingConfirmationScreen';
-import ChildHome from './frontend/src/screens/child_homeScreen';
 import TopicContainer from './frontend/src/components/containers/TopicContainer';
+import InventoryScreen from './frontend/src/screens/InventoryScreen';
 import { ChildProvider } from './frontend/src/context/ChildContext';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    // <SafeAreaView style={globalStyles.safeArea}>
-      <ChildProvider>
+    <ChildProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Welcome" component={AuthWelcomeScreen} />
@@ -36,21 +31,19 @@ export default function App() {
           <Stack.Screen name="Onboarding" component={AuthOnboardingScreen} />
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="AddProfile" component={ProfileAddScreen} />
-          <Stack.Screen name="ParentMain" component={ParentMainScreen} />
+          <Stack.Screen name="ParentMain" component={ParentLayout} />
+          <Stack.Screen name="ParentStory" component={ParentStoryScreen} />
           <Stack.Screen name="ChildMain" component={ChildMainScreen} />
           <Stack.Screen name="ChildMood" component={ChildMoodScreen} />
           <Stack.Screen name="ChildDrawing" component={ChildMoodDrawingScreen} />
           <Stack.Screen name="ChildDrawingConfirmation" component={ChildMoodDrawingConfirmationScreen} />
           <Stack.Screen name="TopicScreen" component={TopicContainer} />
+          <Stack.Screen name="InventoryScreen" component={InventoryScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </ChildProvider>
-    // </SafeAreaView>
   );
 }
-
-
-
 
 const styles = StyleSheet.create({
   container: {
