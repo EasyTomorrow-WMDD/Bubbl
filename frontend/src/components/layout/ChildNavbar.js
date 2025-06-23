@@ -17,7 +17,7 @@ const ChildNavbar = ({ navigation, childProfileId }) => {
         <Text style={styles.navText}>Mood Draw</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('InventoryScreen', {childProfileId: childProfileId})}>
+      <TouchableOpacity onPress={() =>  navigation.navigate('InventoryScreen', {childProfileId: childProfileId})}>
         <Text style={styles.navText}>Quest</Text>
       </TouchableOpacity>
     </View>

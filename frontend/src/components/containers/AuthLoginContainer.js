@@ -15,8 +15,12 @@ import BubblButton from '../forms/BubblButton';
 import DividerWithText from '../layout/DividerWithText';
 
 const AuthLoginContainer = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+
+  const isDev = process.env.NODE_ENV === 'development';
+
+  // State variables for form inputs
+  const [email, setEmail] = useState( isDev ? 'test5@bubbl.com' : '');
+  const [password, setPassword] = useState( isDev ? '123456' : '');
   const [errors, setErrors] = useState({});
   const [authError, setAuthError] = useState('');
 
@@ -118,10 +122,12 @@ const AuthLoginContainer = ({ navigation }) => {
   const handleNavigation = async () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
+      // console.log('[INFO][Login] Current session:', session);
 
       const accessToken = session?.access_token;
 
       console.log('[INFO][Login] Access Token:', accessToken);
+      
       console.log(`[INFO][Login] Calling ${BubblConfig.BACKEND_URL}/api/users/exists`);
 
       const response = await axios.get(`${BubblConfig.BACKEND_URL}/api/users/exists`, {
