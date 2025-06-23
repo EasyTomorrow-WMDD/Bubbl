@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet, Image } from 'react-native';
+import MultiCorrectQuiz from './MultiCorrectQuiz';
 
 export default function QuizQuestion({ data, onAnswer }) {
   const { type, text, quiz } = data;
@@ -49,11 +50,11 @@ export default function QuizQuestion({ data, onAnswer }) {
             ))
           : <Text>No images provided</Text>;
 
-      case 'drag_drop':
-        return <Text>Drag and drop not implemented</Text>;
+      case 'select_correct':
+        return <MultiCorrectQuiz data={data} onAnswer={onAnswer} />;
 
       default:
-          return <Text> Unsupported question type</Text>;
+        return <Text>Unsupported question type</Text>;
     }
   };
 
