@@ -20,6 +20,7 @@ import ChildMoodDrawingScreen from './frontend/src/screens/ChildMoodDrawingScree
 import ChildMoodDrawingConfirmationScreen from './frontend/src/screens/ChildMoodDrawingConfirmationScreen';
 import ChildHome from './frontend/src/screens/child_homeScreen';
 import TopicContainer from './frontend/src/components/containers/TopicContainer';
+import InventoryScreen from './frontend/src/screens/InventoryScreen';
 import { ChildProvider } from './frontend/src/context/ChildContext';
 
 const Stack = createNativeStackNavigator();
@@ -35,12 +36,13 @@ export default function App() {
           <Stack.Screen name="Onboarding" component={AuthOnboardingScreen} />
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="AddProfile" component={ProfileAddScreen} />
-          <Stack.Screen name="ParentMainScreen" component={ParentMainScreen} />
+          <Stack.Screen name="ParentMain" component={ParentMainScreen} />
           <Stack.Screen name="ChildMain" component={ChildMainScreen} />
           <Stack.Screen name="ChildMood" component={ChildMoodScreen} />
           <Stack.Screen name="ChildDrawing" component={ChildMoodDrawingScreen} />
           <Stack.Screen name="ChildDrawingConfirmation" component={ChildMoodDrawingConfirmationScreen} />
           <Stack.Screen name="TopicScreen" component={TopicContainer} />
+          <Stack.Screen name="InventoryScreen" component={InventoryScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </ChildProvider>
