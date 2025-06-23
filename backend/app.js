@@ -4,6 +4,7 @@ const app = express();
 
 const dashboardRoutes = require('./routes/childProgressRoutes');
 const userRoutes = require('./routes/userRoutes');
+const storyRoutes = require('./routes/storyRoutes');
 const drawingRoutes = require('./routes/drawingRoutes');
 const topicsRoutes = require('./routes/topicsRoutes');
 const energyRoutes = require('./routes/energyRoutes');
@@ -13,6 +14,7 @@ const modulesRoutes = require('./routes/modulesRoutes');
 app.use(express.json({ limit: '5mb' }));
 app.use('/api/childProgress', dashboardRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/stories', storyRoutes);
 app.use('/api/drawings', drawingRoutes);
 
 /////////////Topics//////////////////
