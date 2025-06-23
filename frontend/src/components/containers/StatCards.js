@@ -27,6 +27,18 @@ export default function StatsPanel({user}) {
     );
 
 }
+
+export function StatsInventory({user}){
+       if (!user) return null;
+    console.log(user);
+    return (
+        <View style={styles.container}>
+            <StatCard label="Total Stars" icon={require('../../assets/icons/star.png')} value={user.user_star} />
+            <StatCard label="Badges" icon={require('../../assets/icons/badge.png')} value={user.user_badge} />
+        </View>
+    )
+}
+
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',

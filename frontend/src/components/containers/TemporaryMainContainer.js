@@ -19,6 +19,7 @@ export default function TemporaryMainContainer() {
   const [userId, setUserId] = useState('');
   const [progress, setProgress] = useState([]);
   const navigation = useNavigation();
+  console.log('USER ID:', userId);
 
   // ================= Load profile info from AsyncStorage ====================
   useEffect(() => {
