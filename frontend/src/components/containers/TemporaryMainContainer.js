@@ -11,6 +11,7 @@ import Header from '../layout/Header';
 import ChildNavbar from '../layout/ChildNavbar';
 import { useNavigation } from '@react-navigation/native';
 import { BASE_URL } from '../../utils/config';
+import Avatar from './Avatar';
 
 export default function TemporaryMainContainer() {
   const [user, setUser] = useState(null);
@@ -97,6 +98,7 @@ export default function TemporaryMainContainer() {
           >
             <View style={styles.container}>
               <Image source={require('../../assets/images/yellow_bubbl.png')} style={styles.img} />
+              {/* <Avatar userId={userId} userLevel={user ? user.user_level : null} /> */}
               <Text style={styles.title}>Hi, {user ? user.user_nickname : '...'}</Text>
               <StatsPanel user={user} />
               <Text style={styles.text}>Next HP refill in:</Text>
