@@ -9,8 +9,8 @@ exports.getAllSkinsByLevel = async (req, res) => {
 
   try {
     const { data, error } = await supabase
-  .from('ref_asset_variation_level')
-  .select(`
+      .from('ref_asset_variation_level')
+      .select(`
     asset_image_url,
     user_level,
     ref_asset_variation (
@@ -21,7 +21,7 @@ exports.getAllSkinsByLevel = async (req, res) => {
       )
     )
   `)
-  .eq('user_level', userLevel);
+      .eq('user_level', userLevel);
 
     if (error) {
       console.error('Error fetching skins:', error);
@@ -34,3 +34,31 @@ exports.getAllSkinsByLevel = async (req, res) => {
     return res.status(500).json({ error: 'An unexpected error occurred' });
   }
 };
+
+
+exports.getAllAccessories = async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('ref_asset_variation_level')
+      .select(`
+        asset_image_url,
+        ref_asset_variation (
+          asset_variation_name,
+          asset_variation_price,
+          ref_asset (
+            asset_type
+          )
+        )
+      `)
+    if (error) throw error;
+
+    const accessories = data.filter(item =>
+      item.ref_asset_variation?.ref_asset?.asset_type !== 'skin'
+    );
+
+    return res.json(accessories);
+  } catch (err) {
+    console.error('Unexpected error:', err);
+    return res.status(500).json({ error: 'Failed to get accessories' });
+  }
+}

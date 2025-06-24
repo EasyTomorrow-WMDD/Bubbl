@@ -1,13 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, ImageBackground, ScrollView, Pressable } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect, createContext } from 'react';
 import axios from 'axios';
 import Header from '../components/layout/Header';
 import { BASE_URL } from '../utils/config';
 import { StatsInventory } from '../components/containers/StatCards';
 import Avatar from '../components/containers/Avatar';
-import Skins from '../components/containers/Skins';
+import Store from '../components/containers/Store';
+import ChildNavbar from '../components/layout/ChildNavbar';
 
 
 const InventoryScreen = ({ navigation, route }) => {
@@ -55,12 +55,13 @@ const InventoryScreen = ({ navigation, route }) => {
       {section === 'assets' ? <Pressable>
         <View>
           <Avatar userId={user.user_id} userLevel={user.user_level}/>
-          <Skins userId={user.user_id} userLevel={user.user_level}/>
+          <Store userId={user.user_id} userLevel={user.user_level} userStars={user.user_star}/>
         </View>
       </Pressable> : <Text>Badges</Text>}
 
 
     </View>
+    <ChildNavbar navigation={navigation} />
     </ScrollView>
   )
 }
