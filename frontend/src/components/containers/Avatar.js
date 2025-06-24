@@ -4,6 +4,7 @@ import axios from 'axios';
 import { BASE_URL } from '../../utils/config';
 
 
+
 const Avatar = ({ userId, userLevel }) => {
     const [assets, setAssets] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -76,7 +77,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 300,
         position: 'relative',
-        backgroundColor: 'gray',
     },
     skin: {
         width: 200,
