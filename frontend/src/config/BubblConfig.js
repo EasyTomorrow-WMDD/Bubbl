@@ -4,7 +4,7 @@ const BubblConfig = {
   // Backend API
   // For development, check the local IP address with `ifconfig | grep inet` or `ipconfig` command and replace the IP address in the URL with the IP address of localhost.
   BACKEND_URL: isDev
-    ? 'http://10.100.1.1:3000'
+    ? 'http://192.168.1.72:3000'
     // ? 'http://192.168.1.81:3000' // Local IP address #1
     // ? 'http://10.100.1.67:3000' // Local IP address #2
     // ? 'http://10.100.2.107:3000' // Local IP address #3
