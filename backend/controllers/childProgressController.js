@@ -75,3 +75,32 @@ exports.getChildProgress = async (req, res) => {
   }
 };
 
+exports.getChildAvatar = async (req, res) => {
+  const userId = req.params.userId;
+
+  if (!userId) return res.status(400).json({ error: 'Missing user ID' });
+
+  try {
+    const { data, error } = await supabase
+      .from('user_asset')
+      .select(`
+        ref_asset(asset_type, asset_priority),
+        ref_asset_variation (
+          asset_variation_name,
+          ref_asset_variation_level (user_level, asset_image_url)
+        )
+      `)
+      .eq('user_id', userId)
+      .eq('user_asset_active', true)
+      .order('ref_asset(asset_priority)', { ascending: true });
+
+    if (error) throw error;
+
+    res.json(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
