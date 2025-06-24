@@ -1,10 +1,8 @@
 import { Text } from 'react-native';
-import ParentLayout from '../components/layout/ParentLayout';
+import ParentChildProgressContainer from '../components/containers/ParentChildProgressContainer';
 
-const ParentChildProgress = ({ navigation }) => (
-  <ParentLayout navigation={navigation} activeTab="Progress">
-    <Text style={{ fontSize: 18 }}>Child Progress Here</Text>
-  </ParentLayout>
+const ParentChildProgressScreen = ({ navigation }) => (
+    <ParentChildProgressContainer navigation={navigation} />
 );
 
-export default ParentChildProgress;
+export default ParentChildProgressScreen;

@@ -4,7 +4,7 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { globalStyles } from '../../styles/BubblStyles';
 
-const ProfileCard = ({ profile, type, navigation }) => {
+const ProfileCard = ({ profile, type, onPress, navigation }) => {
 
   // ==========================================================================
   // Method to store selected profile in AsyncStorage (user_id, user_nickname, avatar_id)
@@ -28,6 +28,12 @@ const ProfileCard = ({ profile, type, navigation }) => {
   // ==========================================================================
   // Method to handle profile card press
   const handlePress = async () => {
+    // If a custom handler is provided, call it. (e.g., for child progress profile selection) 
+    if (typeof onPress === 'function') {
+      console.log('[DUMMY][ProfileCard] Custom onPress handler called');
+      return onPress();
+    }
+    // Otherwise, proceed with the default handler (navigation to parent or child main screen)
     if (type === 'parent') {
       const authResult = await LocalAuthentication.authenticateAsync({
         promptMessage: 'Authenticate to continue',
