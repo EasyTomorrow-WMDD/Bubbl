@@ -33,7 +33,6 @@ export default function MultiCorrectQuiz({ data, onAnswer }) {
 
   return (
     <View style={styles.container}>
-      {quiz.image && <Image source={{ uri: quiz.image }} style={styles.image} />}
       <Text style={styles.question}>{quiz.question}</Text>
 
       <View style={styles.optionsRow}>
