@@ -39,6 +39,7 @@ yarn-error.*
 # env files
 .env
 **/.env*
+backend/.env
 
 # ios / android
 ios/
