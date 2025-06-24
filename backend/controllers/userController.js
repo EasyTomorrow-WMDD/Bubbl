@@ -310,3 +310,51 @@ exports.getChildById = async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+// ==========================================================================
+// getChildProfiles
+// Route: GET /api/users/getChildProfiles
+// Description: Fetches all child profiles for the authenticated user
+// Returns: List of child profiles (user_id, user_nickname, avatar_id)
+exports.getChildProfiles = async (req, res) => {
+
+  console.log('[DEBUG] /getChildProfiles hit');
+
+  try {
+    const userAuthId = req.user.sub; // get authenticated user's ID from JWT token
+
+    // Step 1: Get the requesting user's account_id
+    const { data: userData, error: userError } = await supabase
+      .from('user')
+      .select('account_id')
+      .eq('user_auth_id', userAuthId)
+      .single();
+
+    if (userError || !userData) {
+      console.error('[ERROR][getChildProfiles] User fetch error:', userError?.message);
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const accountId = userData.account_id;
+
+    // Step 2: Get all child profiles for that account
+    const { data: children, error: childrenError } = await supabase
+      .from('user')
+      .select('user_id, user_nickname, avatar_id')
+      .eq('account_id', accountId)
+      .eq('user_type', 'kid')
+      .order('user_nickname', { ascending: true });
+
+    if (childrenError) {
+      console.error('[ERROR][getChildProfiles] Child fetch error:', childrenError.message);
+      return res.status(500).json({ error: 'Error retrieving child profiles' });
+    }
+
+    return res.status(200).json({ success: true, children });
+
+  } catch (err) {
+    console.error('[ERROR][getChildProfiles] Unexpected error:', err.message);
+    return res.status(500).json({ error: 'Server error' });
+  }
+};
+

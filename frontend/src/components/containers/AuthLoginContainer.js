@@ -17,10 +17,12 @@ import DividerWithText from '../layout/DividerWithText';
 const AuthLoginContainer = ({ navigation }) => {
 
   const isDev = process.env.NODE_ENV === 'development';
+  const dummyUser = BubblConfig.DUMMY_USER_EMAIL || '';
+  const dummyPassword = BubblConfig.DUMMY_USER_PASSWORD || '';
 
   // State variables for form inputs
-  const [email, setEmail] = useState( isDev ? 'test6@bubbl.com' : '');
-  const [password, setPassword] = useState( isDev ? '123456' : '');
+  const [email, setEmail] = useState( isDev ? dummyUser : '');
+  const [password, setPassword] = useState( isDev ? dummyPassword : '');
   const [errors, setErrors] = useState({});
   const [authError, setAuthError] = useState('');
 

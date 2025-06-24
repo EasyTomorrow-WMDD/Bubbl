@@ -11,8 +11,9 @@ import ProfileAddCard from '../cards/ProfileAddCard';
 // - profiles: Array of profile objects to display
 // - type: Type of profiles (e.g., 'friends', 'followers')
 // - navigation: Navigation object for navigating to profile details
+// - onCardPress: Function to handle custom card press events
 // - showAddCard: Boolean to conditionally show the add profile card
-const ProfileList = ({ profiles, type, navigation, showAddCard }) => {
+const ProfileList = ({ profiles, type, navigation, onCardPress, showAddCard = true }) => {
   return (
     // Render a list of profile cards
     <View style={globalStyles.cardRow}>
@@ -21,6 +22,7 @@ const ProfileList = ({ profiles, type, navigation, showAddCard }) => {
           key={profile.user_id}
           profile={profile}
           type={type}
+          {...(onCardPress && { onPress: () => onCardPress(profile.user_id, profile.user_nickname, profile.avatar_id) })}
           navigation={navigation}
         />
       ))}
