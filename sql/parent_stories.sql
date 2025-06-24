@@ -27,7 +27,7 @@ CREATE TABLE ref_parent_story (
 
 -- Table to store user read status for parent stories
 CREATE TABLE user_read_status (
-  user_id UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES public.user(user_id) ON DELETE CASCADE,
   parent_story_id UUID NOT NULL REFERENCES ref_parent_story(parent_story_id) ON DELETE CASCADE,
   user_parent_story_read BOOLEAN DEFAULT FALSE,
   user_parent_story_favorite BOOLEAN DEFAULT FALSE,

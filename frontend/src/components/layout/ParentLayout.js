@@ -6,6 +6,7 @@ import ParentHeader from './ParentHeader';
 import ParentBottomNav from '../navigation/ParentBottomNav';
 import ParentSettingsContainer from '../containers/ParentSettingsContainer';
 import ParentStoriesContainer from '../containers/ParentStoriesContainer';
+import ParentChildSelectionContainer from '../containers/ParentChildSelectionContainer';
 
 const ParentLayout = ({ navigation, initialTab = 'Stories' }) => {
 
@@ -18,7 +19,7 @@ const ParentLayout = ({ navigation, initialTab = 'Stories' }) => {
       case 'Stories':
         return <ParentStoriesContainer navigation={navigation} />;
       case 'Progress':
-        return <Text style={styles.pageText}>Child Progress Screen</Text>;
+        return <ParentChildSelectionContainer navigation={navigation} />;
       case 'Settings':
         return <ParentSettingsContainer navigation={navigation} />;
       case 'Notifications':
