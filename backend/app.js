@@ -11,6 +11,7 @@ const energyRoutes = require('./routes/energyRoutes');
 const modulesRoutes = require('./routes/modulesRoutes');
 const logRoutes = require('./routes/logRoutes');
 const badgeRoutes = require('./routes/badgesRoutes');
+const shopRoutes = require('./routes/ShopRoutes');
 
 // Increase img size to upload
 app.use(express.json({ limit: '5mb' }));
@@ -20,7 +21,7 @@ app.use('/api/users', badgeRoutes); // allways keep this before userRoutes to av
 app.use('/api/users', userRoutes);
 app.use('/api/stories', storyRoutes);
 app.use('/api/drawings', drawingRoutes);
-
+app.use('/api/shop', shopRoutes);
 /////////////Topics//////////////////
 app.use('/api/topics', topicsRoutes);
 ///////////////Energy/////////////////
@@ -31,6 +32,10 @@ app.use('/api/modules', modulesRoutes);
 app.use('/api/logs', logRoutes);
 ///////////////Badges/////////////////
 app.use('/api', badgeRoutes); 
+///////////////Shop/////////////////
+
+
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
