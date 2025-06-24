@@ -7,7 +7,7 @@ import Header from '../components/layout/Header';
 import { BASE_URL } from '../utils/config';
 import { StatsInventory } from '../components/containers/StatCards';
 import Avatar from '../components/containers/Avatar';
-
+import Skins from '../components/containers/Skins';
 
 
 const InventoryScreen = ({ navigation, route }) => {
@@ -33,6 +33,7 @@ const InventoryScreen = ({ navigation, route }) => {
   if (!user) return <Text>Loading...</Text>;
 
   return (
+    <ScrollView>
     <View >
       <Header />
       <View>
@@ -53,12 +54,14 @@ const InventoryScreen = ({ navigation, route }) => {
       </View>
       {section === 'assets' ? <Pressable>
         <View>
-          <Avatar/>
+          <Avatar userId={user.user_id} userLevel={user.user_level}/>
+          <Skins userId={user.user_id} userLevel={user.user_level}/>
         </View>
       </Pressable> : <Text>Badges</Text>}
 
 
     </View>
+    </ScrollView>
   )
 }
 

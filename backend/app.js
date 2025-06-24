@@ -9,6 +9,7 @@ const drawingRoutes = require('./routes/drawingRoutes');
 const topicsRoutes = require('./routes/topicsRoutes');
 const energyRoutes = require('./routes/energyRoutes');
 const modulesRoutes = require('./routes/modulesRoutes');
+const shopRoutes = require('./routes/ShopRoutes');
 
 //Increase img size to upload
 app.use(express.json({ limit: '5mb' }));
@@ -16,13 +17,16 @@ app.use('/api/childProgress', dashboardRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/stories', storyRoutes);
 app.use('/api/drawings', drawingRoutes);
-
+app.use('/api/shop', shopRoutes);
 /////////////Topics//////////////////
 app.use('/api/topics', topicsRoutes);
 ///////////////Energy/////////////////
 app.use('/api/energy', energyRoutes);
 ///////////////Modules/////////////////
 app.use('/api/modules', modulesRoutes);
+
+///////////////Shop/////////////////
+
 
 
 
