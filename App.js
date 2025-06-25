@@ -15,7 +15,7 @@ import ParentChildProgressScreen from './frontend/src/screens/ParentChildProgres
 import ChildMainScreen from './frontend/src/screens/ChildMainScreen';
 import ChildMoodScreen from './frontend/src/screens/ChildMoodScreen';
 import ChildMoodDrawingScreen from './frontend/src/screens/ChildMoodDrawingScreen';
-import ChildMoodDrawingConfirmationScreen from './frontend/src/screens/ChildMoodDrawingConfirmationScreen';
+import ChildDrawingConfirmation from './frontend/src/screens/ChildMoodDrawingConfirmationScreen';
 import TopicContainer from './frontend/src/components/containers/TopicContainer';
 import InventoryScreen from './frontend/src/screens/InventoryScreen';
 import TopicComplete from './frontend/src/screens/TopicComplete';
