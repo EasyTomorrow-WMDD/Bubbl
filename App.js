@@ -48,7 +48,7 @@ export default function App() {
             <Stack.Screen name="ChildMain" component={ChildMainScreen} />
             <Stack.Screen name="ChildMood" component={ChildMoodScreen} />
             <Stack.Screen name="ChildDrawing" component={ChildMoodDrawingScreen} />
-            <Stack.Screen name="ChildDrawingConfirmation" component={ChildMoodDrawingConfirmationScreen} />
+            <Stack.Screen name="ChildDrawingConfirmation" component={ChildDrawingConfirmation} />
             <Stack.Screen name="TopicScreen" component={TopicContainer} />
             <Stack.Screen name="Modules" component={TemporaryMainContainer} />
             <Stack.Screen name="TopicComplete" component={TopicComplete} />
