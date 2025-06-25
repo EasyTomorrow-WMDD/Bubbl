@@ -8,7 +8,7 @@ const {
   getUserProfiles, 
   addProfile, 
   getChildById,
-  getChildProfiles
+  getChildProfiles,
 } = require('../controllers/userController');
 
 const verifySupabaseToken = require('../middleware/verifySupabaseToken');

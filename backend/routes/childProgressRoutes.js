@@ -8,4 +8,6 @@ router.get('/modules', controller.getAllModulesAndTopics);
 router.get('/userProgress/:userId', controller.getChildProgress);
 router.post('/saveProgress', controller.saveProgress);
 
+router.post('/saveDrawingProgress', controller.saveDrawingProgress);
+
 module.exports = router;
