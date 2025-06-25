@@ -12,10 +12,11 @@ import starIcon from '../assets/icons/star.png';
 const Previsualization = ({ route }) => {
     const navigation = useNavigation();
     const { item, userId, userLevel, userStars } = route.params;
-    console.log('ITEM', item);
-    console.log('STARS', userStars);
     const [assets, setAssets] = useState([]);
     const [loading, setLoading] = useState(true);
+    
+    console.log('ITEM', item);
+
     const assetType = item?.ref_asset_variation?.ref_asset?.asset_type;
     const assetMap = {};
     assets.forEach((asset) => {
@@ -27,6 +28,8 @@ const Previsualization = ({ route }) => {
             assetMap[type] = levelAsset.asset_image_url;
         }
     });
+
+    // USE EFFECT TO FETCH AVATAR
     useEffect(() => {
         const fetchAvatar = async () => {
             try {
@@ -44,6 +47,32 @@ const Previsualization = ({ route }) => {
 
         fetchAvatar();
     }, [userId, userLevel]);
+    
+    // FUNCTION TO BUY ITEM
+    const buyItem = async (item) => {
+        try {
+            const response = await axios.post(`${BASE_URL}/api/shop/buy`, {
+                userId: userId,
+                assetVariationLevelId: item.asset_variation_level_id,
+            });
+            console.log('Purchase response:', response.data);
+            if (response.data.success) {
+                navigation.navigate('PurchaseSuccess', {
+                    item: item,
+                    userStars: userStars - item.ref_asset_variation.asset_variation_price,
+                });
+            } else {
+                console.error('Purchase failed:', response.data.message);
+            }
+        } catch (error) {
+            if (error.response) {
+                console.error('Backend error:', error.response.data);
+            } else {
+                console.error('Unknown error:', error.message);
+            }
+        }
+    };
+
     return (
         <View>
             <Header />
@@ -62,7 +91,7 @@ const Previsualization = ({ route }) => {
             </View>
             {/* RENDER AVATAR */}
             <View style={styles.avatarContainer}>
-            {/* IF THE ITEM SELECTED BY USER IS A SKIN, RENDERS THE SKIN SELECTED WITH THE USER ACCESSORIES EQUIPED OTHERWISE, WILL RENDER THE SKIN ALREADY OWNS WITH THE ACCESSORY THAT WANTS TO BUY */}
+                {/* IF THE ITEM SELECTED BY USER IS A SKIN, RENDERS THE SKIN SELECTED WITH THE USER ACCESSORIES EQUIPED OTHERWISE, WILL RENDER THE SKIN ALREADY OWNS WITH THE ACCESSORY THAT WANTS TO BUY */}
 
                 {assetType === 'skin' ? (
                     <>
@@ -108,31 +137,31 @@ const Previsualization = ({ route }) => {
                     </>
                 )}
             </View>
-           {/* SUMMARY OF PURCHASE SECTION */}
-            <View style={{backgroundColor: 'black'}}>
+            {/* SUMMARY OF PURCHASE SECTION */}
+            <View style={{ backgroundColor: 'black' }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 20 }}>
-                    <Text style={{color: 'white'}}>Your current starts</Text>
+                    <Text style={{ color: 'white' }}>Your current starts</Text>
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
-                        <Text style={{color: 'white'}}>{userStars}</Text>
+                        <Text style={{ color: 'white' }}>{userStars}</Text>
                         <Image source={starIcon} style={{ width: 20, height: 20 }} />
                     </View>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 20 }}>
-                    <Text style={{color: 'white'}}>Purchase total</Text>
+                    <Text style={{ color: 'white' }}>Purchase total</Text>
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
-                        <Text style={{color: 'white'}}>{item.ref_asset_variation.asset_variation_price}</Text>
+                        <Text style={{ color: 'white' }}>{item.ref_asset_variation.asset_variation_price}</Text>
                         <Image source={starIcon} style={{ width: 20, height: 20 }} />
                     </View>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 20 }}>
-                    <Text style={{color: 'white'}}>You will have</Text>
+                    <Text style={{ color: 'white' }}>You will have</Text>
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
-                        <Text style={{color: 'white'}}>{userStars - item.ref_asset_variation.asset_variation_price}</Text>
+                        <Text style={{ color: 'white' }}>{userStars - item.ref_asset_variation.asset_variation_price}</Text>
                         <Image source={starIcon} style={{ width: 20, height: 20 }} />
                     </View>
                 </View>
             </View>
-            <Pressable>
+            <Pressable onPress={() => buyItem(item)}>
                 <Text style={styles.title}>Buy</Text>
             </Pressable>
         </View>
