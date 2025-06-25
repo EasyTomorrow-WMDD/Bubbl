@@ -16,7 +16,7 @@ const badgeRoutes = require('./routes/badgesRoutes');
 app.use(express.json({ limit: '5mb' }));
 
 app.use('/api/childProgress', dashboardRoutes);
-app.use('/api/users', badgeRoutes);
+app.use('/api/users', badgeRoutes); // allways keep this before userRoutes to avoid conflicts
 app.use('/api/users', userRoutes);
 app.use('/api/stories', storyRoutes);
 app.use('/api/drawings', drawingRoutes);
