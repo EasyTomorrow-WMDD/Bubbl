@@ -11,7 +11,6 @@ const {
   getChildProfiles,
   updateDayStreak,
   getChildUserStats,
-  addStars,
 } = require('../controllers/userController');
 
 const verifySupabaseToken = require('../middleware/verifySupabaseToken');
