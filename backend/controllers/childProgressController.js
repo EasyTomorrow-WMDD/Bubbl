@@ -11,7 +11,21 @@ exports.getDashboard = async (req, res) => {
 
     if (error) throw error;
 
-    res.json(data[0]);
+    const userData = data[0];
+
+    const { count: badgeCount, error: badgeCountError } = await supabase
+      .from('user_badge')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', userId);
+
+    if (badgeCountError) throw badgeCountError;
+
+    const userWithBadges = {
+      ...userData,
+      user_badge: badgeCount || 0,
+    };
+
+    res.json(userWithBadges); 
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to fetch users' });
