@@ -9,66 +9,71 @@ import { StatsInventory } from '../components/containers/StatCards';
 import Avatar from '../components/containers/Avatar';
 import BadgesScreen from './BadgesScreen';
 
-
-
 const InventoryScreen = ({ navigation, route }) => {
   const { childProfileId } = route.params || {};
   const [user, setUser] = useState(null);
+  const [badges, setBadges] = useState([]);
   const [section, setSection] = useState('assets');
-  console.log('READING USER', user)
+
+  const fetchUserAndBadges = async () => {
+    try {
+      const userRes = await axios.get(`${BASE_URL}/api/childProgress/dashboard/${childProfileId}`);
+      setUser(userRes.data);
+
+      const badgeRes = await axios.get(`${BASE_URL}/api/users/${childProfileId}/badges`);
+      setBadges(badgeRes.data);
+    } catch (error) {
+      console.error('Error fetching user and badges:', error);
+    }
+  };
+
   useEffect(() => {
     if (!childProfileId) return;
-
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/api/childProgress/dashboard/${childProfileId}`);
-        setUser(response.data);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-
-    fetchUser();
+    fetchUserAndBadges();
   }, [childProfileId]);
+
+  const refreshBadges = () => {
+    axios
+      .get(`${BASE_URL}/api/users/${childProfileId}/badges`)
+      .then(res => setBadges(res.data))
+      .catch(err => console.error('Failed to refresh badges', err));
+  };
 
   if (!user) return <Text>Loading...</Text>;
 
-return (
-  <View>
-    <Header />
+  return (
     <View>
-      <View style={{ alignItems: 'center', marginVertical: 20 }}>
-        <Text style={styles.title}>Inventory</Text>
-      </View>
+      <Header />
       <View>
-        <StatsInventory user={user} />
-      </View>
-    </View>
-
-    <View style={styles.container}>
-      <Pressable style={styles.text} onPress={() => setSection('assets')}>
-        <Text style={styles.text}>Assets</Text>
-      </Pressable>
-      <Pressable style={styles.text} onPress={() => {console.log('presion badges');setSection('badges')}}>
-        <Text style={styles.text}>Badges</Text>
-      </Pressable>
-    </View>
-
-    {section === 'assets' ? (
-      <Pressable>
-        <View>
-          <Avatar />
+        <View style={{ alignItems: 'center', marginVertical: 20 }}>
+          <Text style={styles.title}>Inventory</Text>
         </View>
-      </Pressable>
-    ) : (
-      (() => {
-        console.log('childProfileId sending to BadgesScreen:', childProfileId);
-        return <BadgesScreen userId={childProfileId} />;
-      })()
-    )}
-  </View>
-);
-}
+        <View>
+          <StatsInventory user={user} badges={badges} />
+        </View>
+      </View>
+
+      <View style={styles.container}>
+        <Pressable style={styles.text} onPress={() => setSection('assets')}>
+          <Text style={styles.text}>Assets</Text>
+        </Pressable>
+        <Pressable style={styles.text} onPress={() => setSection('badges')}>
+          <Text style={styles.text}>Badges</Text>
+        </Pressable>
+      </View>
+
+      {section === 'assets' ? (
+        <Pressable>
+          <View>
+            <Avatar />
+          </View>
+        </Pressable>
+      ) : (
+        <BadgesScreen userId={childProfileId} refreshBadges={refreshBadges} />
+      )}
+    </View>
+  );
+};
 
 export default InventoryScreen;
 
@@ -80,7 +85,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-
   title: {
     fontSize: 40,
     fontWeight: 'bold',
@@ -90,7 +94,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-
   text: {
     fontSize: 16,
     color: 'black',
