@@ -10,9 +10,11 @@ const topicsRoutes = require('./routes/topicsRoutes');
 const energyRoutes = require('./routes/energyRoutes');
 const modulesRoutes = require('./routes/modulesRoutes');
 const logRoutes = require('./routes/logRoutes');
+const badgeRoutes = require('./routes/badgesRoutes');
 
-//Increase img size to upload
+// Increase img size to upload
 app.use(express.json({ limit: '5mb' }));
+
 app.use('/api/childProgress', dashboardRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/stories', storyRoutes);
@@ -26,6 +28,8 @@ app.use('/api/energy', energyRoutes);
 app.use('/api/modules', modulesRoutes);
 
 app.use('/api/logs', logRoutes);
+///////////////Badges/////////////////
+app.use('/api', badgeRoutes); 
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
