@@ -7,6 +7,7 @@ import Header from '../components/layout/Header';
 import { BASE_URL } from '../utils/config';
 import { StatsInventory } from '../components/containers/StatCards';
 import Avatar from '../components/containers/Avatar';
+import BadgesScreen from './BadgesScreen';
 
 
 
@@ -32,34 +33,41 @@ const InventoryScreen = ({ navigation, route }) => {
 
   if (!user) return <Text>Loading...</Text>;
 
-  return (
-    <View >
-      <Header />
+return (
+  <View>
+    <Header />
+    <View>
+      <View style={{ alignItems: 'center', marginVertical: 20 }}>
+        <Text style={styles.title}>Inventory</Text>
+      </View>
       <View>
-        <View style={{ alignItems: 'center', marginVertical: 20 }}>
-          <Text style={styles.title}>Inventory</Text>
-        </View>
-        <View>
-          <StatsInventory user={user} />
-        </View>
+        <StatsInventory user={user} />
       </View>
-      <View style={styles.container}>
-        <Pressable style={styles.text} onPress={() => setSection('assets')}>
-          <Text style={styles.text}>Assets</Text>
-        </Pressable>
-        <Pressable style={styles.text} onPress={() => setSection('badges')}>
-          <Text style={styles.text}>Badges</Text>
-        </Pressable>
-      </View>
-      {section === 'assets' ? <Pressable>
-        <View>
-          <Avatar/>
-        </View>
-      </Pressable> : <Text>Badges</Text>}
-
-
     </View>
-  )
+
+    <View style={styles.container}>
+      <Pressable style={styles.text} onPress={() => setSection('assets')}>
+        <Text style={styles.text}>Assets</Text>
+      </Pressable>
+      <Pressable style={styles.text} onPress={() => {console.log('presion badges');setSection('badges')}}>
+        <Text style={styles.text}>Badges</Text>
+      </Pressable>
+    </View>
+
+    {section === 'assets' ? (
+      <Pressable>
+        <View>
+          <Avatar />
+        </View>
+      </Pressable>
+    ) : (
+      (() => {
+        console.log('childProfileId sending to BadgesScreen:', childProfileId);
+        return <BadgesScreen userId={childProfileId} />;
+      })()
+    )}
+  </View>
+);
 }
 
 export default InventoryScreen;
