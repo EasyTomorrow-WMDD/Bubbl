@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 
+
 const dashboardRoutes = require('./routes/childProgressRoutes');
 const userRoutes = require('./routes/userRoutes');
 const storyRoutes = require('./routes/storyRoutes');
@@ -9,7 +10,7 @@ const drawingRoutes = require('./routes/drawingRoutes');
 const topicsRoutes = require('./routes/topicsRoutes');
 const energyRoutes = require('./routes/energyRoutes');
 const modulesRoutes = require('./routes/modulesRoutes');
-const shopRoutes = require('./routes/ShopRoutes');
+const shopRoutes = require('./routes/shopRoutes');
 
 //Increase img size to upload
 app.use(express.json({ limit: '5mb' }));

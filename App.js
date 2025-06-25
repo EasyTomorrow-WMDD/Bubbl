@@ -18,6 +18,7 @@ import TopicContainer from './frontend/src/components/containers/TopicContainer'
 import InventoryScreen from './frontend/src/screens/InventoryScreen';
 import { ChildProvider } from './frontend/src/context/ChildContext';
 import Previsualization from './frontend/src/screens/Previsualization';
+import PurchaseSuccess from './frontend/src/screens/PurchaseSucess';
 
 const Stack = createNativeStackNavigator();
 
@@ -41,6 +42,7 @@ export default function App() {
           <Stack.Screen name="TopicScreen" component={TopicContainer} />
           <Stack.Screen name="InventoryScreen" component={InventoryScreen} />
           <Stack.Screen name="PrevScreen" component={Previsualization} />
+          <Stack.Screen name="PurchaseSuccess" component={PurchaseSuccess} />
         </Stack.Navigator>
       </NavigationContainer>
     </ChildProvider>
