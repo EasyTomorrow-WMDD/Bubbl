@@ -6,7 +6,7 @@ const {
 } = require('../controllers/badgesController');
 
 
-router.get('/users/:userId/badges', getAllBadgesWithUserStatus);
-router.post('/users/:userId/badges/save', saveUserBadges);
+router.get('/:userId/badges', getAllBadgesWithUserStatus);
+router.post('/:userId/badges/save', saveUserBadges);
 
 module.exports = router;

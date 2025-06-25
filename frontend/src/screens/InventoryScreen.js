@@ -16,19 +16,30 @@ const InventoryScreen = ({ navigation, route }) => {
   const [section, setSection] = useState('assets');
 
   const fetchUserAndBadges = async () => {
-    try {
-      const userRes = await axios.get(`${BASE_URL}/api/childProgress/dashboard/${childProfileId}`);
-      setUser(userRes.data);
+  const userUrl = `${BASE_URL}/api/childProgress/dashboard/${childProfileId}`;
+  const badgeUrl = `${BASE_URL}/api/users/${childProfileId}/badges`;
 
-      const badgeRes = await axios.get(`${BASE_URL}/api/users/${childProfileId}/badges`);
-      setBadges(badgeRes.data);
-    } catch (error) {
-      console.error('Error fetching user and badges:', error);
-    }
-  };
+  try {
+    console.log('🔍 Fetching user from:', userUrl);
+    const userRes = await axios.get(userUrl);
+    setUser(userRes.data);
+  } catch (error) {
+    console.error('❌ Error fetching user:', error.response?.status, error.response?.data);
+  }
+
+  try {
+    console.log('🔍 Fetching badges from:', badgeUrl);
+    const badgeRes = await axios.get(badgeUrl);
+    setBadges(badgeRes.data);
+  } catch (error) {
+    console.error('❌ Error fetching badges:', error.response?.status, error.response?.data);
+  }
+};
+
 
   useEffect(() => {
     if (!childProfileId) return;
+    console.log('🔍 childProfileId:', childProfileId);
     fetchUserAndBadges();
   }, [childProfileId]);
 
