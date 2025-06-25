@@ -20,7 +20,7 @@ const BubblConfig = {
     : 'https://ogbfgllkkyehcurolhjf.supabase.co', // Production Supabase URL
 
   SUPABASE_ANON_KEY: isDev
-    ? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nYmZnbGxra3llaGN1cm9saGpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxOTA0NTMsImV4cCI6MjA2NDc2NjQ1M30.VIU3Wj-qyaRl4wT9wXGLFflrqooF58-SS8kZq9K8cBU' // Dev Supabase ANON key #1
+    ? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nYmZnbGxra3llaGN1cm9saGpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2NDU2NTksImV4cCI6MjA2NjIyMTY1OX0.WV07xTvn_EyCgrnUwgSrj_tTy6iZffEi21Hr7a8U0h0' // Dev Supabase ANON key #1
     // ? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFiZGtuZ2R4dHJzenZrd3Zxa214Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxODk1ODQsImV4cCI6MjA2NDc2NTU4NH0.9YxOPyYyA61hdOJx5GvuXti7118WI9kxcaO_Mia2PPI' // Dev Supabase ANON key #2
     : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nYmZnbGxra3llaGN1cm9saGpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxOTA0NTMsImV4cCI6MjA2NDc2NjQ1M30.VIU3Wj-qyaRl4wT9wXGLFflrqooF58-SS8kZq9K8cBU', // Production Supabase ANON key
 
