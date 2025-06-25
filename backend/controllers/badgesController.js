@@ -45,3 +45,36 @@ exports.getAllBadgesWithUserStatus = async (req, res) => {
 
   return res.json(result);
 };
+
+exports.saveUserBadges = async (req, res) => {
+  const { userId } = req.params;
+  const { activeBadgeIds } = req.body;
+
+  if (!Array.isArray(activeBadgeIds) || activeBadgeIds.length > 3) {
+    return res.status(400).json({ error: 'activeBadgeIds must be an array with max 3 items' });
+  }
+
+  try {
+    // Desactivar todos los badges del usuario
+    const { error: deactivateError } = await supabase
+      .from('user_badge')
+      .update({ user_badge_active: false })
+      .eq('user_id', userId);
+
+    if (deactivateError) throw deactivateError;
+
+    // Activar solo los seleccionados
+    const { error: activateError } = await supabase
+      .from('user_badge')
+      .update({ user_badge_active: true })
+      .in('badge_id', activeBadgeIds)
+      .eq('user_id', userId);
+
+    if (activateError) throw activateError;
+
+    res.json({ message: '✅ Badges updated successfully' });
+  } catch (err) {
+    console.error('❌ Error saving badges:', err.message);
+    res.status(500).json({ error: 'Failed to save badges' });
+  }
+};
