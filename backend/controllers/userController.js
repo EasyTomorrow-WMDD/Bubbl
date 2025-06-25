@@ -469,3 +469,41 @@ exports.getChildUserStats = async (req, res) => {
     return res.status(500).json({ success: false, error: 'Server error' });
   }
 };
+// Add stars to child
+// Route: POST /api/users/addStars
+exports.addStars = async (req, res) => {
+  const { user_id, starsToAdd } = req.body;
+
+  try {
+    // 1️⃣ Fetch current stars
+    const { data: userData, error: userFetchError } = await supabase
+      .from('user')
+      .select('user_star')
+      .eq('user_id', user_id)
+      .single();
+
+    if (userFetchError) {
+      console.error('[addStars] Fetch Error:', userFetchError.message);
+      return res.status(500).json({ error: 'Failed to fetch user' });
+    }
+
+    const currentStars = userData.user_star || 0;
+    const newStars = currentStars + starsToAdd;
+
+    // 2️⃣ Update user_star
+    const { error: updateError } = await supabase
+      .from('user')
+      .update({ user_star: newStars })
+      .eq('user_id', user_id);
+
+    if (updateError) {
+      console.error('[addStars] Update Error:', updateError.message);
+      return res.status(500).json({ error: 'Failed to add stars' });
+    }
+
+    return res.status(200).json({ success: true, newStars });
+  } catch (err) {
+    console.error('[addStars] Unexpected error:', err.message);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
