@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, Alert, Pressable } from 'react-native';
 import { BASE_URL } from '../utils/config';
+import { URI_URL } from '../utils/config';
 
-const BadgesScreen = ({ userId }) => {
+const BadgesScreen = ({ userId, refreshBadges }) => {
   const [badges, setBadges] = useState([]);
 
   useEffect(() => {
@@ -11,10 +12,8 @@ const BadgesScreen = ({ userId }) => {
     const fetchBadges = async () => {
       try {
         const url = `${BASE_URL}/api/users/${userId}/badges`;
-        console.log('🌐 Fetching badges from:', url);
         const response = await fetch(url);
         if (!response.ok) throw new Error('Failed to fetch badges');
-
         const data = await response.json();
 
         let order = 1;
@@ -44,7 +43,6 @@ const BadgesScreen = ({ userId }) => {
 
       const active = updated.filter((b) => b.badge_active);
       if (selected.badge_active) {
-        // Desactivar y reordenar
         const oldOrder = selected.selectionOrder;
         selected.badge_active = false;
         selected.selectionOrder = null;
@@ -82,6 +80,9 @@ const BadgesScreen = ({ userId }) => {
 
       if (!res.ok) throw new Error('Failed to save badges');
       Alert.alert('Badges saved!');
+
+      if (refreshBadges) refreshBadges(); // <- Esto actualiza InventoryScreen
+
     } catch (err) {
       console.error('Error saving badges:', err);
       Alert.alert('Error saving badges');
@@ -94,7 +95,7 @@ const BadgesScreen = ({ userId }) => {
         <View style={styles.badgeWrapper}>
           <Image
             source={{
-              uri: `https://ogbfgllkkyehcurolhjf.supabase.co/storage/v1/object/public/assets/Badges/${item.badge_image_url}`,
+              uri: `${URI_URL}/${item.badge_image_url}`,
             }}
             style={[
               styles.image,
