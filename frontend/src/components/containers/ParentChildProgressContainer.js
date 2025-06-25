@@ -29,6 +29,7 @@ const ParentChildProgressContainer = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      
       {/* Top Black Header */}
       <View style={styles.topHeader}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
