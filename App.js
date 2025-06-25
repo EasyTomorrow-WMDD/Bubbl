@@ -14,7 +14,7 @@ import ParentChildProgressScreen from './frontend/src/screens/ParentChildProgres
 import ChildMainScreen from './frontend/src/screens/ChildMainScreen';
 import ChildMoodScreen from './frontend/src/screens/ChildMoodScreen';
 import ChildMoodDrawingScreen from './frontend/src/screens/ChildMoodDrawingScreen';
-import ChildMoodDrawingConfirmationScreen from './frontend/src/screens/ChildMoodDrawingConfirmationScreen';
+import ChildDrawingConfirmation from './frontend/src/screens/ChildMoodDrawingConfirmationScreen';
 import TopicContainer from './frontend/src/components/containers/TopicContainer';
 import InventoryScreen from './frontend/src/screens/InventoryScreen';
 import TopicComplete from './frontend/src/screens/TopicComplete';
@@ -40,7 +40,7 @@ export default function App() {
           <Stack.Screen name="ChildMain" component={ChildMainScreen} />
           <Stack.Screen name="ChildMood" component={ChildMoodScreen} />
           <Stack.Screen name="ChildDrawing" component={ChildMoodDrawingScreen} />
-          <Stack.Screen name="ChildDrawingConfirmation" component={ChildMoodDrawingConfirmationScreen} />
+          <Stack.Screen name="ChildDrawingConfirmation" component={ChildDrawingConfirmation} />
           <Stack.Screen name="TopicScreen" component={TopicContainer} />
           <Stack.Screen name="Modules" component={TemporaryMainContainer} />
           <Stack.Screen name="TopicComplete" component={TopicComplete} />
