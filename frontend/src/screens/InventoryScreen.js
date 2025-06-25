@@ -20,19 +20,19 @@ const InventoryScreen = ({ navigation, route }) => {
   const badgeUrl = `${BASE_URL}/api/users/${childProfileId}/badges`;
 
   try {
-    console.log('🔍 Fetching user from:', userUrl);
+    //console.log('🔍 Fetching user from:', userUrl);
     const userRes = await axios.get(userUrl);
     setUser(userRes.data);
   } catch (error) {
-    console.error('❌ Error fetching user:', error.response?.status, error.response?.data);
+    console.error('Error fetching user:', error.response?.status, error.response?.data);
   }
 
   try {
-    console.log('🔍 Fetching badges from:', badgeUrl);
+    //console.log('🔍 Fetching badges from:', badgeUrl);
     const badgeRes = await axios.get(badgeUrl);
     setBadges(badgeRes.data);
   } catch (error) {
-    console.error('❌ Error fetching badges:', error.response?.status, error.response?.data);
+    console.error('Error fetching badges:', error.response?.status, error.response?.data);
   }
 };
 
