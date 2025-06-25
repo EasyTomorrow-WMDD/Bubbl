@@ -19,6 +19,7 @@ import ChildDrawingConfirmation from './frontend/src/screens/ChildMoodDrawingCon
 import TopicContainer from './frontend/src/components/containers/TopicContainer';
 import InventoryScreen from './frontend/src/screens/InventoryScreen';
 import TopicComplete from './frontend/src/screens/TopicComplete';
+import BadgesScreen from './frontend/src/screens/BadgesScreen';
 import { ChildProvider } from './frontend/src/context/ChildContext';
 import TemporaryMainContainer from './frontend/src/components/containers/TemporaryMainContainer';
 
@@ -47,6 +48,9 @@ export default function App() {
           <Stack.Screen name="Modules" component={TemporaryMainContainer} />
           <Stack.Screen name="TopicComplete" component={TopicComplete} />
           <Stack.Screen name="InventoryScreen" component={InventoryScreen} />
+          <Stack.Screen name="BadgesScreen" component={BadgesScreen} />
+
+
         </Stack.Navigator>
       </NavigationContainer>
     </ChildProvider>
