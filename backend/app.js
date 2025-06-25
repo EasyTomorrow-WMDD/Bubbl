@@ -15,6 +15,7 @@ const badgeRoutes = require('./routes/badgesRoutes');
 app.use(express.json({ limit: '5mb' }));
 
 app.use('/api/childProgress', dashboardRoutes);
+app.use('/api/users', badgeRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/stories', storyRoutes);
 app.use('/api/drawings', drawingRoutes);
@@ -25,8 +26,7 @@ app.use('/api/topics', topicsRoutes);
 app.use('/api/energy', energyRoutes);
 ///////////////Modules/////////////////
 app.use('/api/modules', modulesRoutes);
-///////////////Badges/////////////////
-app.use('/api', badgeRoutes); 
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
