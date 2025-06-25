@@ -26,7 +26,7 @@ const ParentChildSelectionContainer = ({ navigation }) => {
 
         // Step 3: Set the child profiles from the response
         const children = response.data.children || [];
-        console.log('[DEBUG][ParentChildSelectionContainer] Fetched child profiles:', children);
+        // console.log('[DEBUG][ParentChildSelectionContainer] Fetched child profiles:', children);
         setChildProfiles(children);
 
       } catch (error) {
@@ -37,21 +37,13 @@ const ParentChildSelectionContainer = ({ navigation }) => {
   }, []);
 
   const onCardPress = async (childUserId, childUserNickname, childUserAvatar) => {
-    console.log('[DEBUG][ParentChildSelectionContainer] Card pressed:', {
-      childUserId,
-      childUserNickname,
-      childUserAvatar,
-    }); 
+    // console.log('[DEBUG][ParentChildSelectionContainer] Card pressed:', { childUserId, childUserNickname,childUserAvatar, }); 
     try {
       // Store selected child profile in AsyncStorage
       await AsyncStorage.setItem('selected_child_user_id', childUserId);
       await AsyncStorage.setItem('selected_child_nickname', childUserNickname);
       await AsyncStorage.setItem('selected_child_avatar', childUserAvatar || '');
-      console.log('[INFO][ParentChildSelectionContainer] Stored selected child profile:', {
-        childUserId,
-        childUserNickname,
-        childUserAvatar,
-      });
+      // console.log('[INFO][ParentChildSelectionContainer] Stored selected child profile:', { childUserId, childUserNickname, childUserAvatar, });
       // Navigate to the ParentChildProgressContainer
       navigation.navigate('ParentChildProgress');
     } catch (error) {

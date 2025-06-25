@@ -3,13 +3,13 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import ParentChildActivityContainer from '../containers/ParentChildActivityContainer';
 import ParentChildMoodCanvasContainer from '../containers/ParentChildMoodCanvasContainer';
 
-const ParentChildProgressNavigation = () => {
+const ParentChildProgressNavigation = ({ userId }) => {
   const [activeTab, setActiveTab] = useState('Activity');
 
   const renderTabContent = () => {
     switch (activeTab) {
       case 'Activity':
-        return <ParentChildActivityContainer />;
+        return <ParentChildActivityContainer userId={userId} />;
       case 'Mood Canvas':
         return <ParentChildMoodCanvasContainer />;
       default:
