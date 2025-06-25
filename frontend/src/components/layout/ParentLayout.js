@@ -1,7 +1,7 @@
 // ParentLayout.js
 import { useState } from 'react';
-import { View, StyleSheet, Text, ScrollView, SafeAreaView } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { View, StyleSheet, Text, ScrollView } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import ParentHeader from './ParentHeader';
 import ParentBottomNav from '../navigation/ParentBottomNav';
 import ParentSettingsContainer from '../containers/ParentSettingsContainer';
