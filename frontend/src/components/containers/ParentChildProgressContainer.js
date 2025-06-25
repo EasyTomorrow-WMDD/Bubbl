@@ -25,29 +25,48 @@ const ParentChildProgressContainer = ({ navigation }) => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      {/* Top Black Header */}
-      <View style={styles.topHeader}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="white" />
-        </TouchableOpacity>
-      </View>
-
-      {/* Scrollable Content */}
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Child Info Area */}
-        <View style={styles.profileHeader}>
-          {/* Placeholder Avatar */}
-          <View style={styles.avatarPlaceholder} />
-          <Text style={styles.nickname}>{childNickname || 'Child Name'}</Text>
-          {/* Level, badges, etc., can be added later */}
+      <SafeAreaView style={styles.safeArea}>
+        {/* Top Black Header */}
+        <View style={styles.topHeader}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={24} color="white" />
+          </TouchableOpacity>
         </View>
+
+{/* Jaime Comment all this part of the code, because I cant have a scrollable view inside a scrollable view, so I will just use a View instead of ScrollView */}
+      {/* Scrollable Content */}
+      {/* <ScrollView contentContainerStyle={styles.scrollContent}> */}
+        {/* Child Info Area */}
+        {/* <View style={styles.profileHeader}> */}
+          {/* Placeholder Avatar */}
+          {/* <View style={styles.avatarPlaceholder} /> */}
+          {/* <Text style={styles.nickname}>{childNickname || 'Child Name'}</Text> */}
+          {/* Level, badges, etc., can be added later */}
+        {/* </View> */}
 
         {/* Tab Navigation Area */}
-        <View style={styles.tabSection}>
-          <ParentChildProgressNavigation />
-        </View>
-      </ScrollView>
+        {/* <View style={styles.tabSection}> */}
+          {/* <ParentChildProgressNavigation /> */}
+        {/* </View> */}
+      {/* </ScrollView> */}
+
+
+  {/* No ScrollView here */}
+  <View style={styles.content}>
+    {/* Child Info Area */}
+    <View style={styles.profileHeader}>
+      <View style={styles.avatarPlaceholder} />
+      <Text style={styles.nickname}>{childNickname || 'Child Name'}</Text>
+    </View>
+
+    {/* Tab Navigation Area */}
+    <View style={styles.tabSection}>
+      <ParentChildProgressNavigation />
+    </View>
+  </View>
+
+
+
     </SafeAreaView>
   );
 };
@@ -63,6 +82,9 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 16,
+  },
+  content: {
+    flex: 1,
   },
   profileHeader: {
     alignItems: 'center',
