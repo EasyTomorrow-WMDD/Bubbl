@@ -14,6 +14,7 @@ const InventoryScreen = ({ navigation, route }) => {
   const { childProfileId } = route.params || {};
   const [user, setUser] = useState(null);
   const [section, setSection] = useState('assets');
+  const [avatarKey, setAvatarKey] = useState(0);
   console.log('READING USER', user)
   useEffect(() => {
     if (!childProfileId) return;
@@ -34,34 +35,45 @@ const InventoryScreen = ({ navigation, route }) => {
 
   return (
     <ScrollView>
-    <View >
-      <Header />
-      <View>
-        <View style={{ alignItems: 'center', marginVertical: 20 }}>
-          <Text style={styles.title}>Inventory</Text>
-        </View>
+      <View >
+        <Header />
         <View>
-          <StatsInventory user={user} />
+          <View style={{ alignItems: 'center', marginVertical: 20 }}>
+            <Text style={styles.title}>Inventory</Text>
+          </View>
+          <View>
+            <StatsInventory user={user} />
+          </View>
         </View>
-      </View>
-      <View style={styles.container}>
-        <Pressable style={styles.text} onPress={() => setSection('assets')}>
-          <Text style={styles.text}>Assets</Text>
-        </Pressable>
-        <Pressable style={styles.text} onPress={() => setSection('badges')}>
-          <Text style={styles.text}>Badges</Text>
-        </Pressable>
-      </View>
-      {section === 'assets' ? <Pressable>
-        <View>
-          <Avatar userId={user.user_id} userLevel={user.user_level}/>
-          <Store userId={user.user_id} userLevel={user.user_level} userStars={user.user_star}/>
+        <View style={styles.container}>
+          <Pressable
+            style={[styles.toggle, section === 'assets' && styles.activeToggle]}
+            onPress={() => setSection('assets')}
+          >
+            <Text style={[styles.text, section === 'assets' && styles.activeText]}>
+              Assets
+            </Text>
+          </Pressable>
+          <Pressable
+            style={[styles.toggle, section === 'badges' && styles.activeToggle]}
+            onPress={() => setSection('badges')}
+          >
+            <Text style={[styles.text, section === 'badges' && styles.activeText]}>
+              Badges
+            </Text>
+          </Pressable>
         </View>
-      </Pressable> : <Text>Badges</Text>}
+
+        {section === 'assets' ? <Pressable>
+          <View>
+            <Avatar key={avatarKey} userId={user.user_id} userLevel={user.user_level} />
+            <Store userId={user.user_id} userLevel={user.user_level} userStars={user.user_star} onAssetEquipped={() => setAvatarKey(prev => prev + 1)} />
+          </View>
+        </Pressable> : <Text>Badges</Text>}
 
 
-    </View>
-    <ChildNavbar navigation={navigation} />
+      </View>
+      <ChildNavbar navigation={navigation} />
     </ScrollView>
   )
 }
@@ -69,13 +81,14 @@ const InventoryScreen = ({ navigation, route }) => {
 export default InventoryScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    padding: 30,
-    gap: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
+container: {
+  flexDirection: 'row',
+  justifyContent: 'center',
+  backgroundColor: '#EEEDFE',
+  borderRadius: 40,
+  padding: 4,
+  margin: 10,
+},
 
   title: {
     fontSize: 40,
@@ -91,4 +104,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black',
   },
-});
+
+toggle: {
+  paddingVertical: 10,
+  paddingHorizontal: 30,
+  borderRadius: 30,
+  backgroundColor: 'transparent',
+  alignItems: 'center',
+  width: '50%'
+},
+activeToggle: {
+  backgroundColor: '#C5BDF5',
+  borderWidth: 2,
+  borderColor: '#A997EE',
+},
+})
