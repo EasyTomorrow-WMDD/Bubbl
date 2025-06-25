@@ -55,7 +55,7 @@ exports.saveUserBadges = async (req, res) => {
   }
 
   try {
-    // Desactivar todos los badges del usuario
+    // deactivate all badges for the user
     const { error: deactivateError } = await supabase
       .from('user_badge')
       .update({ user_badge_active: false })
@@ -63,7 +63,7 @@ exports.saveUserBadges = async (req, res) => {
 
     if (deactivateError) throw deactivateError;
 
-    // Activar solo los seleccionados
+    // Activate badges that are in the activeBadgeIds array
     const { error: activateError } = await supabase
       .from('user_badge')
       .update({ user_badge_active: true })
@@ -72,9 +72,9 @@ exports.saveUserBadges = async (req, res) => {
 
     if (activateError) throw activateError;
 
-    res.json({ message: '✅ Badges updated successfully' });
+    res.json({ message: 'Badges updated successfully' });
   } catch (err) {
-    console.error('❌ Error saving badges:', err.message);
+    console.error('Error saving badges:', err.message);
     res.status(500).json({ error: 'Failed to save badges' });
   }
 };
