@@ -34,8 +34,6 @@ router.post('/addProfile', verifySupabaseToken, addProfile); // Route to add a n
 router.get('/getChildProfiles', verifySupabaseToken, getChildProfiles); // Route to get all child profiles for the authenticated user
 router.post('/updateDayStreak', verifySupabaseToken, updateDayStreak); // Route to update the day streak for a child profile
 
-router.post('/addStars', verifySupabaseToken, addStars); // Route to add stars to a child's profile
-
 // Dynamic routes. 
 // IMPORTANT! Make sure that static routes are defined before dynamic ones.
 router.get('/:userId/stats', verifySupabaseToken, getChildUserStats); // Route to get child user stats by user_id
