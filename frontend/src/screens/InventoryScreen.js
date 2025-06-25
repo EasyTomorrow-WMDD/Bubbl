@@ -7,42 +7,63 @@ import Header from '../components/layout/Header';
 import { BASE_URL } from '../utils/config';
 import { StatsInventory } from '../components/containers/StatCards';
 import Avatar from '../components/containers/Avatar';
-
-
+import BadgesScreen from './BadgesScreen';
 
 const InventoryScreen = ({ navigation, route }) => {
   const { childProfileId } = route.params || {};
   const [user, setUser] = useState(null);
+  const [badges, setBadges] = useState([]);
   const [section, setSection] = useState('assets');
-  console.log('READING USER', user)
+
+  const fetchUserAndBadges = async () => {
+  const userUrl = `${BASE_URL}/api/childProgress/dashboard/${childProfileId}`;
+  const badgeUrl = `${BASE_URL}/api/users/${childProfileId}/badges`;
+
+  try {
+    //console.log('🔍 Fetching user from:', userUrl);
+    const userRes = await axios.get(userUrl);
+    setUser(userRes.data);
+  } catch (error) {
+    console.error('Error fetching user:', error.response?.status, error.response?.data);
+  }
+
+  try {
+    //console.log('🔍 Fetching badges from:', badgeUrl);
+    const badgeRes = await axios.get(badgeUrl);
+    setBadges(badgeRes.data);
+  } catch (error) {
+    console.error('Error fetching badges:', error.response?.status, error.response?.data);
+  }
+};
+
+
   useEffect(() => {
     if (!childProfileId) return;
-
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/api/childProgress/dashboard/${childProfileId}`);
-        setUser(response.data);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-
-    fetchUser();
+    console.log('🔍 childProfileId:', childProfileId);
+    fetchUserAndBadges();
   }, [childProfileId]);
+
+  const refreshBadges = () => {
+    axios
+      .get(`${BASE_URL}/api/users/${childProfileId}/badges`)
+      .then(res => setBadges(res.data))
+      .catch(err => console.error('Failed to refresh badges', err));
+  };
 
   if (!user) return <Text>Loading...</Text>;
 
   return (
-    <View >
+    <View>
       <Header />
       <View>
         <View style={{ alignItems: 'center', marginVertical: 20 }}>
           <Text style={styles.title}>Inventory</Text>
         </View>
         <View>
-          <StatsInventory user={user} />
+          <StatsInventory user={user} badges={badges} />
         </View>
       </View>
+
       <View style={styles.container}>
         <Pressable style={styles.text} onPress={() => setSection('assets')}>
           <Text style={styles.text}>Assets</Text>
@@ -51,16 +72,19 @@ const InventoryScreen = ({ navigation, route }) => {
           <Text style={styles.text}>Badges</Text>
         </Pressable>
       </View>
-      {section === 'assets' ? <Pressable>
-        <View>
-          <Avatar/>
-        </View>
-      </Pressable> : <Text>Badges</Text>}
 
-
+      {section === 'assets' ? (
+        <Pressable>
+          <View>
+            <Avatar />
+          </View>
+        </Pressable>
+      ) : (
+        <BadgesScreen userId={childProfileId} refreshBadges={refreshBadges} />
+      )}
     </View>
-  )
-}
+  );
+};
 
 export default InventoryScreen;
 
@@ -72,7 +96,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-
   title: {
     fontSize: 40,
     fontWeight: 'bold',
@@ -82,7 +105,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-
   text: {
     fontSize: 16,
     color: 'black',
