@@ -3,9 +3,12 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'rea
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import ParentChildProgressNavigation from '../navigation/ParentChildProgressNavigation'; // bottom tab component
+import ParentChildProgressStatsContainer from './ParentChildProgressStatsContainer'; // stats container
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ParentChildProgressContainer = ({ navigation }) => {
+
+  // State to manage child user information
   const [childUserId, setChildUserId] = React.useState('');
   const [childNickname, setChildNickname] = React.useState('');
   const [childAvatar, setChildAvatar] = React.useState('');
@@ -19,7 +22,7 @@ const ParentChildProgressContainer = ({ navigation }) => {
       if (nickname) setChildNickname(nickname);
       if (userId) setChildUserId(userId);
       if (avatar) setChildAvatar(avatar);
-      console.log('[DEBUG][ParentChildProgressContainer] Loaded child info:', { nickname, userId, avatar });
+      // console.log('[DEBUG][ParentChildProgressContainer] Loaded child info:', { nickname, userId, avatar });
     };
     loadChildInfo();
   }, []);
@@ -36,21 +39,20 @@ const ParentChildProgressContainer = ({ navigation }) => {
       {/* Scrollable Content */}
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Child Info Area */}
-        <View style={styles.profileHeader}>
-          {/* Placeholder Avatar */}
-          <View style={styles.avatarPlaceholder} />
-          <Text style={styles.nickname}>{childNickname || 'Child Name'}</Text>
-          {/* Level, badges, etc., can be added later */}
-        </View>
+        <ParentChildProgressStatsContainer userId={childUserId} />
 
         {/* Tab Navigation Area */}
         <View style={styles.tabSection}>
-          <ParentChildProgressNavigation />
+          <ParentChildProgressNavigation  userId={childUserId} />
         </View>
+
       </ScrollView>
     </SafeAreaView>
   );
 };
+
+export default ParentChildProgressContainer;
+
 
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: '#fff' },
@@ -84,4 +86,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ParentChildProgressContainer;
