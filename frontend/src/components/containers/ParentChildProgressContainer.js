@@ -37,9 +37,8 @@ const ParentChildProgressContainer = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      {/* Tab Navigation Area */}
-      <View style={styles.content}>
-
+      {/* Main contents */}
+      <View style={styles.content}>    
         {/* Child Info Area */}
         <ParentChildProgressStatsContainer userId={childUserId} />
 
