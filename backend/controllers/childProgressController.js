@@ -167,3 +167,35 @@ exports.saveProgress = async (req, res) => {
     res.status(500).json({ error: 'Failed to save progress' });
   }
 };
+
+// ==========================================================================
+// Save drawing progress — Add stars for drawing
+// Route: POST /api/progress/saveDrawingProgress
+exports.saveDrawingProgress = async (req, res) => {
+  const { user_id } = req.body;
+
+  if (!user_id) {
+    return res.status(400).json({ error: 'Missing user_id' });
+  }
+
+  try {
+    const starsToAdd = 3;  // Add 3 stars for drawing
+    const xpToAdd = 0;     // No XP (or change this if you want!)
+
+    const { error: xpError } = await supabase.rpc('add_xp_and_stars', {
+      p_user_id: user_id,
+      p_xp: xpToAdd,
+      p_star: starsToAdd,
+    });
+
+    if (xpError) throw xpError;
+
+    console.log(`[saveDrawingProgress] Added stars for user ${user_id}`);
+
+    res.json({ message: 'Drawing progress saved (stars added)' });
+
+  } catch (err) {
+    console.error('[saveDrawingProgress] Error:', err);
+    res.status(500).json({ error: 'Failed to save drawing progress' });
+  }
+};
