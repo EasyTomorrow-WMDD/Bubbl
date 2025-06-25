@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,41 +8,107 @@ import {
   Dimensions,
 } from 'react-native';
 import LottieView from 'lottie-react-native';
+import Header from '../layout/Header';
+import ChildNavbar from '../layout/ChildNavbar';
+import supabase from '../../services/supabase';
+import BubblConfig from '../../config/BubblConfig';
 
 const { height } = Dimensions.get('window');
 
-export default function MoodScreenDone({ navigation }) {
+export default function ChildMoodDrawingConfirmationContainer({ navigation, route }) {
+  const { childProfileId } = route.params || {};
+
+  console.log('[addStars] childProfileId:', childProfileId);
+
+  useEffect(() => {
+    const addStars = async () => {
+      if (!childProfileId) {
+        console.warn('[addStars] No childProfileId provided');
+        return;
+      }
+
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+
+        const response = await fetch(`${BubblConfig.BACKEND_URL}/api/childProgress/saveDrawingProgress`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({
+            user_id: childProfileId,
+            starsToAdd: 3, // pass 3 stars
+          }),
+        });
+
+        const text = await response.text();
+        console.log('[addStars] Raw Response:', text);
+
+        try {
+          const result = JSON.parse(text);
+          console.log('[addStars] JSON:', result);
+        } catch (err) {
+          console.error('[addStars] JSON Parse Error:', err.message);
+        }
+
+      } catch (err) {
+        console.error('[addStars] Error:', err);
+      }
+    };
+
+    addStars();
+  }, [childProfileId]);
+
   return (
     <View style={styles.container}>
+      {/* Header */}
+      <Header title="Mood" />
+
+      {/* Mood Canvas Title */}
+      <View style={styles.titleContainer}>
+        <Text style={styles.canvasTitle}>Mood Canvas</Text>
+      </View>
+
+      {/* Purple content box with background image */}
       <ImageBackground
         source={require('../../assets/images/DrawingCanvas/Done_Background.png')}
-        style={styles.background}
+        style={styles.contentBox}
+        imageStyle={styles.imageBackgroundImage}
       >
-        {/* Title on top of background */}
-        <Text style={styles.header}>Mood Canvas</Text>
+        <View style={styles.contentInner}>
+          {/* Stars animation */}
+          <LottieView
+            source={require('../../assets/animations/Stars.json')}
+            autoPlay
+            loop={false}
+            style={styles.starsAnimation}
+          />
 
-        {/* White rectangle content */}
-        <View style={styles.contentBox}>
-          <View style={styles.contentInner}>
-            <Text style={styles.title}>Great Job!</Text>
-            <Text style={styles.subtitle}>Thanks for drawing with us.</Text>
+          {/* Title */}
+          <Text style={styles.title}>Awesome Drawing!</Text>
+          <Text style={styles.subtitle}>You got 3 stars today.</Text>
 
-            <LottieView
-              source={require('../../assets/animations/char_2.json')}
-              autoPlay
-              loop
-              style={styles.animation}
-            />
+          {/* Middle Lottie */}
+          <LottieView
+            source={require('../../assets/animations/char_2.json')}
+            autoPlay
+            loop
+            style={styles.animation}
+          />
 
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => navigation.navigate('ChildMain')}
-            >
-              <Text style={styles.buttonText}>Back to journey</Text>
-            </TouchableOpacity>
-          </View>
+          {/* Button */}
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('ChildMain')}
+          >
+            <Text style={styles.buttonText}>Back to journey</Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
+
+      {/* Navbar */}
+      <ChildNavbar navigation={navigation} />
     </View>
   );
 }
@@ -50,66 +116,79 @@ export default function MoodScreenDone({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
   },
-  background: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-    justifyContent: 'flex-end',
+  titleContainer: {
+    backgroundColor: '#EDEBFC',
+    paddingVertical: 20,
+    alignItems: 'center',
+    paddingBottom: 15,
   },
-  header: {
-    position: 'absolute',
-    top: 90,
-    alignSelf: 'center',
-    fontSize: 35,
+  canvasTitle: {
+    fontSize: 34,
     fontWeight: 'bold',
-    color: 'white',
+    color: '#2E195C',
   },
   contentBox: {
+    flex: 1,
     width: '100%',
-    height: height * 0.82,
-    backgroundColor: 'white',
+    height: height * 0.8,
+    backgroundColor: '#8361E4',
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: -2 },
-    shadowRadius: 10,
+    overflow: 'hidden',
     alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingVertical: 20,
+  },
+  imageBackgroundImage: {
+    resizeMode: 'contain',
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    top: 0,
+    left: 0,
   },
   contentInner: {
-    flex: 1,
-    justifyContent: 'center',
+    flexGrow: 1,
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingHorizontal: 30,
+    paddingVertical: 10,
+  },
+  starsAnimation: {
+    width: 220 * 0.7,
+    height: 220 * 0.7,
+    marginBottom: 10,
   },
   title: {
-    fontSize: 34, // bigger
+    fontSize: 34,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: '#333',
+    color: 'white',
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: 18, // slightly larger
-    color: '#666',
-    marginBottom: 30,
+    fontSize: 18,
+    color: 'white',
+    marginBottom: 20,
     textAlign: 'center',
   },
   animation: {
-    width: 220, // bigger
-    height: 220,
-    marginBottom: 30,
+    width: 200,
+    height: 200,
+    marginBottom: 20,
   },
   button: {
-    backgroundColor: '#5756a5',
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: '#AAAAAA',
     paddingVertical: 14,
     paddingHorizontal: 40,
     borderRadius: 10,
+    marginBottom: 10,
   },
   buttonText: {
-    color: 'white',
+    color: 'black',
     fontWeight: '600',
     fontSize: 18,
   },
