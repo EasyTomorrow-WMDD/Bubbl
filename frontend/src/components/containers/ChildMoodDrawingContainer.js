@@ -68,60 +68,120 @@ export default function ChildMoodDrawingContainer({ navigation, route }) {
     setCurrentPath(null);
   };
 
-  const saveDrawing = async () => {
-    try {
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      if (sessionError || !session) throw new Error('No valid session found');
+  // const saveDrawing = async () => {
+  //   try {
+  //     const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+  //     if (sessionError || !session) throw new Error('No valid session found');
 
-      const uri = await captureRef(canvasRef, {
-        format: 'jpg',
-        quality: 1,
-      });
+  //     const uri = await captureRef(canvasRef, {
+  //       format: 'jpg',
+  //       quality: 1,
+  //     });
 
-      const base64 = await FileSystem.readAsStringAsync(uri, {
-        encoding: FileSystem.EncodingType.Base64,
-      });
+  //     const base64 = await FileSystem.readAsStringAsync(uri, {
+  //       encoding: FileSystem.EncodingType.Base64,
+  //     });
 
-      if (!accountId || !childProfileId) {
-        throw new Error('Missing accountId or childProfileId');
-      }
+  //     if (!accountId || !childProfileId) {
+  //       throw new Error('Missing accountId or childProfileId');
+  //     }
 
-      const response = await fetch(`${BubblConfig.BACKEND_URL}/api/drawings/upload`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify({
-          imageBase64: base64,
-          user_profile_id: childProfileId,
-          account_id: accountId,
-          mood: mood,
-        }),
-      });
+  //     const response = await fetch(`${BubblConfig.BACKEND_URL}/api/drawings/upload`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${session.access_token}`,
+  //       },
+  //       body: JSON.stringify({
+  //         imageBase64: base64,
+  //         user_profile_id: childProfileId,
+  //         account_id: accountId,
+  //         mood: mood,
+  //       }),
+  //     });
 
-      const resultText = await response.text();
-      try {
-        const result = JSON.parse(resultText);
+  //     const resultText = await response.text();
+  //     try {
+  //       const result = JSON.parse(resultText);
 
-        if (!response.ok) {
-          throw new Error(result.error || 'Upload failed');
-        }
+  //       if (!response.ok) {
+  //         throw new Error(result.error || 'Upload failed');
+  //       }
 
-        console.log('✅ Drawing uploaded!', result);
+  //       console.log('✅ Drawing uploaded!', result);
 
-        // ✅ Pass childProfileId param here so /addStars can work!
-       navigation.navigate('ChildDrawingConfirmation', { childProfileId: childProfileId });
-      } catch (parseError) {
-        console.error('[saveDrawing] Failed to parse JSON:', parseError);
-        console.error('[saveDrawing] Response text:', resultText);
-        throw new Error('Server returned invalid JSON');
-      }
-    } catch (err) {
-      console.error('[saveDrawing] Error:', err);
-      Alert.alert('Save Error', err.message);
+  //       // ✅ Pass childProfileId param here so /addStars can work!
+  //      navigation.navigate('ChildDrawingConfirmation', { childProfileId: childProfileId });
+  //     } catch (parseError) {
+  //       console.error('[saveDrawing] Failed to parse JSON:', parseError);
+  //       console.error('[saveDrawing] Response text:', resultText);
+  //       throw new Error('Server returned invalid JSON');
+  //     }
+  //   } catch (err) {
+  //     console.error('[saveDrawing] Error:', err);
+  //     Alert.alert('Save Error', err.message);
+  //   }
+  // };
+
+const saveDrawing = async () => {
+  try {
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError || !session) throw new Error('No valid session found');
+
+    const uri = await captureRef(canvasRef, {
+      format: 'jpg',
+      quality: 1,
+    });
+
+    const base64 = await FileSystem.readAsStringAsync(uri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    if (!accountId || !childProfileId) {
+      throw new Error('Missing accountId or childProfileId');
     }
-  };
+
+    const response = await fetch(`${BubblConfig.BACKEND_URL}/api/drawings/upload`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify({
+        imageBase64: base64,
+        user_profile_id: childProfileId,
+        account_id: accountId,
+        mood: mood,
+      }),
+    });
+
+    const resultText = await response.text();
+
+    try {
+      const result = JSON.parse(resultText);
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Upload failed');
+      }
+
+      console.log('✅ Drawing uploaded!', result);
+
+      // Go to confirmation screen
+      navigation.navigate('ChildDrawingConfirmation', { childProfileId: childProfileId });
+
+    } catch (parseError) {
+      console.error('[saveDrawing] Failed to parse JSON:', parseError);
+      console.error('[saveDrawing] Response text:', resultText);
+      throw new Error('Server returned invalid JSON');
+    }
+
+  } catch (err) {
+    console.error('[saveDrawing] Error:', err);
+    Alert.alert('Save Error', err.message);
+  }
+};
+
+
 
   const toggleTool = (tool) => {
     if (tool === 'eraser') {
