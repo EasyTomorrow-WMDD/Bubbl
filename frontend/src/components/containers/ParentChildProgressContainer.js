@@ -29,7 +29,6 @@ const ParentChildProgressContainer = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      
       {/* Top Black Header */}
       <View style={styles.topHeader}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -37,11 +36,12 @@ const ParentChildProgressContainer = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      {/* Main contents */}
-      <View style={styles.content}>    
+      {/* Main Content */}
+      <View style={styles.content}>
         {/* Child Info Area */}
         <ParentChildProgressStatsContainer userId={childUserId} />
-        {/* Navigation area */}
+
+        {/* Tab Navigation Area */}
         <View style={styles.tabSection}>
           <ParentChildProgressNavigation />
         </View>
