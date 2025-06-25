@@ -11,12 +11,12 @@ import { Ionicons } from '@expo/vector-icons';
 import BubblConfig from '../../config/BubblConfig';
 
 const COLORS = [
-  '#FFCE48', // Yellow (was black)
-  '#7ED957', // Green
-  '#4FC3F7', // Red
-  '#F75C4C', // Yellow
-  '#B39DDB', // Purple
-  'black',   // Blue (now black)
+  '#FFCE48',  // yellow (was black)
+  '#4FC3F7',  // red (now blue)
+  '#F75C4C',  // yellow (now red)
+  '#7ED957',  // green
+  '#B39DDB',  // purple
+  'black'     // was blue, now black
 ];
 
 export default function ChildMoodDrawingContainer({ navigation, route }) {
@@ -53,11 +53,7 @@ export default function ChildMoodDrawingContainer({ navigation, route }) {
   const onTouchStart = (x, y) => {
     const path = Skia.Path.Make();
     path.moveTo(x, y);
-    setCurrentPath({
-      path,
-      color: currentColor,
-      strokeWidth: isEraser ? 9 : 8, // 4 + 4 and eraser 5+4
-    });
+    setCurrentPath({ path, color: currentColor, strokeWidth: isEraser ? 9 : 8 }); // updated stroke size
   };
 
   const onTouchMove = (x, y) => {
@@ -113,7 +109,9 @@ export default function ChildMoodDrawingContainer({ navigation, route }) {
         }
 
         console.log('✅ Drawing uploaded!', result);
-        navigation.navigate('ChildDrawingConfirmation');
+
+        // ✅ Pass childProfileId param here so /addStars can work!
+       navigation.navigate('ChildDrawingConfirmation', { childProfileId: childProfileId });
       } catch (parseError) {
         console.error('[saveDrawing] Failed to parse JSON:', parseError);
         console.error('[saveDrawing] Response text:', resultText);
@@ -136,7 +134,6 @@ export default function ChildMoodDrawingContainer({ navigation, route }) {
   };
 
   const handleGoBack = () => setShowExitModal(true);
-
   const confirmExit = () => {
     setShowExitModal(false);
     navigation.navigate('ChildMood', { childProfileId: childProfileId });
@@ -280,7 +277,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   doneText: {
-    color: 'white',
+    color: 'black',
     fontWeight: '600',
     fontSize: 16,
   },
