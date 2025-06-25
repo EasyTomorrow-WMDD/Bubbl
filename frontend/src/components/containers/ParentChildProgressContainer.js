@@ -41,8 +41,7 @@ const ParentChildProgressContainer = ({ navigation }) => {
       <View style={styles.content}>    
         {/* Child Info Area */}
         <ParentChildProgressStatsContainer userId={childUserId} />
-
-        {/* Tab Navigation Area */}
+        {/* Navigation area */}
         <View style={styles.tabSection}>
           <ParentChildProgressNavigation />
         </View>
