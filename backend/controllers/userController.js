@@ -357,4 +357,3 @@ exports.getChildProfiles = async (req, res) => {
     return res.status(500).json({ error: 'Server error' });
   }
 };
-
