@@ -19,6 +19,7 @@ const Avatar = ({ userId, userLevel }) => {
         }
     });
 
+    console.log('ASSETMAP', assetMap)
 
     useEffect(() => {
         const fetchAvatar = async () => {
@@ -68,6 +69,14 @@ const Avatar = ({ userId, userLevel }) => {
                     resizeMode="contain"
                 />
             )}
+            {/* Scarf */}
+            {assetMap.scarf && (
+                <Image
+                    source={{ uri: assetMap.scarf }}
+                    style={styles.glasses}
+                    resizeMode="contain"
+                />
+            )}
         </View>
     );
 
@@ -79,11 +88,11 @@ const styles = StyleSheet.create({
         position: 'relative',
     },
     skin: {
-        width: 200,
-        height: 200,
+        width: 300,
+        height:300,
         position: 'absolute',
-        left: 100,
-        top: 50,
+        left: 50,
+        top: 0,
     },
     hat: {
         width: 200,
@@ -100,6 +109,13 @@ const styles = StyleSheet.create({
         top: 90,
         left: 90,
     },
+    scarf:{
+        width: 120,
+        height: 40,
+        position: 'absolute',
+        top: 90,
+        left: 90,
+    }
 });
 
 
