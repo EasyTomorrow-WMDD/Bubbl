@@ -91,7 +91,7 @@ export default function ChildMoodDrawingConfirmationContainer({ navigation, rout
 
           {/* Middle Lottie */}
           <LottieView
-            source={require('../../assets/animations/char_2.json')}
+            source={require('../../assets/animations/Happy_Mood.json')}
             autoPlay
             loop
             style={styles.animation}
