@@ -12,6 +12,7 @@ import ProfileAddScreen from './frontend/src/screens/ProfileAddScreen';
 import ParentLayout from './frontend/src/components/layout/ParentLayout';
 import ParentStoryScreen from './frontend/src/screens/ParentStoryScreen';
 import ParentChildProgressScreen from './frontend/src/screens/ParentChildProgressScreen';
+import ParentSelectedDrawingScreen from './frontend/src/screens/ParentSelectedDrawingScreen';
 import ChildMainScreen from './frontend/src/screens/ChildMainScreen';
 import ChildMoodScreen from './frontend/src/screens/ChildMoodScreen';
 import ChildMoodDrawingScreen from './frontend/src/screens/ChildMoodDrawingScreen';
@@ -42,10 +43,11 @@ export default function App() {
             <Stack.Screen name="ParentMain" component={ParentLayout} />
             <Stack.Screen name="ParentStory" component={ParentStoryScreen} />
             <Stack.Screen name="ParentChildProgress" component={ParentChildProgressScreen} />
+            <Stack.Screen name="ParentSelectedDrawingScreen" component={ParentSelectedDrawingScreen} />
             <Stack.Screen name="ChildMain" component={ChildMainScreen} />
             <Stack.Screen name="ChildMood" component={ChildMoodScreen} />
             <Stack.Screen name="ChildDrawing" component={ChildMoodDrawingScreen} />
-            <Stack.Screen name="ChildDrawingConfirmation" component={ChildMoodDrawingConfirmationScreen} />
+            <Stack.Screen name="ChildDrawingConfirmation" component={ChildDrawingConfirmation} />
             <Stack.Screen name="TopicScreen" component={TopicContainer} />
             <Stack.Screen name="Modules" component={TemporaryMainContainer} />
             <Stack.Screen name="TopicComplete" component={TopicComplete} />
