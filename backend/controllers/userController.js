@@ -1,4 +1,10 @@
+const { DateTime } = require('luxon');
 const supabase = require('../utils/supabaseClient');
+
+// ## just FYI import in ESM mode - but I guess we can use CommonJS for now 
+// import { DateTime } from 'luxon';
+// import supabase from '../utils/supabaseClient.js';
+// ## we also need to update all the exports.functionName to use ESM syntax: export default async functionName() { ... }
 
 // ==========================================================================
 // checkUserExists
@@ -318,7 +324,7 @@ exports.getChildById = async (req, res) => {
 // Returns: List of child profiles (user_id, user_nickname, avatar_id)
 exports.getChildProfiles = async (req, res) => {
 
-  console.log('[DEBUG] /getChildProfiles hit');
+  // console.log('[DEBUG] /getChildProfiles hit');
 
   try {
     const userAuthId = req.user.sub; // get authenticated user's ID from JWT token
@@ -358,3 +364,108 @@ exports.getChildProfiles = async (req, res) => {
   }
 };
 
+// ==========================================================================
+// updateDayStreak
+// Route: POST /api/users/updateDayStreak
+// Description: Updates the day streak for a child profile
+// Input:
+//   - user_id: ID of the child profile
+//   - user_timezone: Timezone of the user (e.g., 'America/Vancouver')
+// Output: 200 with updated streak info or 500 with error message
+exports.updateDayStreak = async (req, res) => {
+  const { user_id, user_timezone } = req.body;
+
+  try {
+    // Step 1: Fetch the current user data from public.user
+    const { data: userData, error: userError } = await supabase
+      .from('user')
+      .select('user_day_streak, user_last_login_date')
+      .eq('user_id', user_id)
+      .single();
+    
+    if (userError || !userData) {
+      console.error('[ERROR][updateDayStreak] User fetch error:', userError?.message);
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Step 2: Convert last login and now into local time zone
+    const now = DateTime.now().setZone(user_timezone).startOf('day');
+    const lastLogin = DateTime.fromISO(userData.user_last_login_date, { zone: 'utc' })
+      .setZone(user_timezone)
+      .startOf('day');
+
+    // Step 3: Calculate the difference in days and decide on the streak update
+    const diffDays = now.diff(lastLogin, 'days').days;
+
+    let newStreak = userData.user_day_streak;
+    if (diffDays === 1) {
+      // If the last login was yesterday, increment the streak
+      newStreak += 1;
+    } else if (diffDays > 1) {
+      // If the last login was more than a day ago, reset the streak
+      newStreak = 1;
+    } 
+      // Otherwise if diffDays === 0 => do nothing
+
+    // Step 4: Update user information inSupabase
+    const { error: updateError } = await supabase
+      .from('user')
+      .update({
+        user_day_streak: newStreak,
+        user_last_login_date: new Date().toISOString(), // UTC
+      })
+      .eq('user_id', user_id);
+
+    if (updateError) {
+      throw updateError;
+    }
+
+    return res.json({ success: true, user_day_streak: newStreak });
+  } catch (err) {
+    console.error('[ERROR][updateDayStreak] error:', err.message);
+    res.status(500).json({ success: false, error: 'Server error' });
+  }
+};
+
+// ==========================================================================
+// getChildUserStats
+// Route: GET /api/users/:userId/stats
+// Description: Fetches child user stats by user_id
+// Returns: Object with user stats (user_xp, user_star, user_energy)
+exports.getChildUserStats = async (req, res) => {
+
+  console.log('[DEBUG] /getChildUserStats hit');
+
+  const { userId } = req.params;
+
+  try {
+    // Step 1: Fetch user core info (nickname, level, xp, etc.)
+    const { data: userData, error: userError } = await supabase.rpc('get_user_progress_stats', { uid: userId });
+
+    if (userError || !userData || userData.length === 0) {
+      return res.status(404).json({ success: false, error: 'User not found or stats unavailable.' });
+    }
+
+    const user = userData[0];
+    
+    // Step 2: Fetch avatar layers
+    const { data: avatarAssets, error: avatarError } = await supabase.rpc('get_user_avatar_assets', { uid: userId });
+    if (avatarError) throw avatarError;
+
+    // Step 3: Fetch activated badges (max 3)
+    const { data: badges, error: badgeError } = await supabase.rpc('get_user_active_badges', { uid: userId });
+    if (badgeError) throw badgeError;
+
+    // Step 4: Return the user stats along with avatar assets and badges
+    res.json({
+      success: true,
+      user: userData[0],
+      avatar_assets: avatarAssets,
+      badges,
+    });
+
+  } catch (err) {
+    console.error('[getChildUserStats] Error:', err.message);
+    return res.status(500).json({ success: false, error: 'Server error' });
+  }
+};

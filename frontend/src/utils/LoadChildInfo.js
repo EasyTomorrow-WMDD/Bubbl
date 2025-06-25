@@ -15,14 +15,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 //     setUserId(childProfile.user_id);
 //     setAvatarId(childProfile.avatar_id);
 //   };
-//   fetchProfile();
+//   fetchChildProfile();
 // }, []);
 //
 const LoadChildInfo = async () => {
   try {
+    const user_id = await AsyncStorage.getItem('selected_child_user_id');
     const nickname = await AsyncStorage.getItem('selected_child_nickname');
-    const user_id = await AsyncStorage.getItem('selected_child_id');
-    const avatar_id = await AsyncStorage.getItem('selected_child_avatar_id'); // optional, if stored
+    const avatar_id = await AsyncStorage.getItem('selected_child_avatar'); // optional, if stored
     return {
       nickname: nickname || null,
       user_id: user_id || null,
