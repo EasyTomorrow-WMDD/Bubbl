@@ -1,17 +1,16 @@
 const supabase = require('../utils/supabaseClient');
 
-// GET /api/users/:userId/badges
 exports.getAllBadgesWithUserStatus = async (req, res) => {
   const { userId } = req.params;
 
-  // 1. Obtener todos los badges disponibles
+  // 1. Get all available badges
   const { data: allBadges, error: badgeError } = await supabase
     .from('ref_badge')
     .select('badge_id, badge_name, badge_image_url');
 
   if (badgeError) return res.status(500).json({ error: badgeError.message });
 
-  // 2. Obtener los badges que el usuario ha ganado
+  // 2. Get the badges that the user has earned
   const { data: userBadges, error: userBadgeError } = await supabase
     .from('user_badge')
     .select('badge_id, user_badge_active')
@@ -19,7 +18,7 @@ exports.getAllBadgesWithUserStatus = async (req, res) => {
 
   if (userBadgeError) return res.status(500).json({ error: userBadgeError.message });
 
-  // 3. Crear mapa rápido y array para el orden de los activos
+  // 3. Create quick map and array for active order
   const userBadgeMap = {};
   const activeBadgesOrdered = [];
 
@@ -30,7 +29,7 @@ exports.getAllBadgesWithUserStatus = async (req, res) => {
     }
   });
 
-  // 4. Combinar todo con orden
+  // 4. Combine everything with order
   const result = allBadges.map((badge) => {
     const isEarned = badge.badge_id in userBadgeMap;
     const isActive = userBadgeMap[badge.badge_id] || false;
