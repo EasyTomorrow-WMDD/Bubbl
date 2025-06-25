@@ -250,9 +250,9 @@ export default function TopicScreen({ route, navigation }) {
       <Text style={[styles.energy, energy === 0 && styles.energyZero]}>
         Energy: {energy}
       </Text>
-      <Text style={styles.question}>
+      {/* <Text style={styles.question}>
         {currentQuestion.quiz?.question || currentQuestion.text}
-      </Text>
+      </Text> */}
 
       <QuizQuestion
         data={currentQuestion}
