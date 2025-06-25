@@ -9,7 +9,6 @@ const {
   addProfile, 
   getChildById,
   getChildProfiles,
-  addStars
 } = require('../controllers/userController');
 
 const verifySupabaseToken = require('../middleware/verifySupabaseToken');
@@ -30,8 +29,6 @@ router.post('/registerUser', verifySupabaseToken, registerUser); // Route to reg
 router.get('/profiles', verifySupabaseToken, getUserProfiles);  // Route to get user profiles for an account
 router.post('/addProfile', verifySupabaseToken, addProfile); // Route to add a new profile for a user
 router.get('/getChildProfiles', verifySupabaseToken, getChildProfiles); // Route to get all child profiles for the authenticated user
-
-router.post('/addStars', verifySupabaseToken, addStars); // Route to add stars to a child's profile
 
 // Dynamic routes. 
 // IMPORTANT! Make sure that static routes are defined before dynamic ones.
