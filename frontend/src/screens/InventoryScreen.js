@@ -108,7 +108,7 @@ container: {
 toggle: {
   paddingVertical: 10,
   paddingHorizontal: 30,
-  borderRadius: 30,
+  borderRadius: 12,
   backgroundColor: 'transparent',
   alignItems: 'center',
   width: '50%'
