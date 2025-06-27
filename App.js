@@ -26,9 +26,6 @@ import TemporaryMainContainer from './frontend/src/components/containers/Tempora
 import Previsualization from './frontend/src/screens/Previsualization';
 import PurchaseSuccess from './frontend/src/screens/PurchaseSucess';
 
-
-
-
 const Stack = createNativeStackNavigator();
 
 export default function App() {
