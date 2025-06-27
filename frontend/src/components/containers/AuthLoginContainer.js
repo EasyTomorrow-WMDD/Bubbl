@@ -44,18 +44,18 @@ const AuthLoginContainer = ({ navigation }) => {
       password,
     });
 
-    console.log('🔍 Supabase login result:', { data, error });
+    // console.log('🔍 Supabase login result:', { data, error });
 
     if (error) {
       setErrors({ email: 'Login failed. Please check your Email and Password.', password: true });
       return;
     }
 
-    console.log('[INFO][Login] User logged in successfully:');
+    // console.log('[INFO][Login] User logged in successfully:');
 
     // 🚀 Save session to AsyncStorage
     if (data.session) {
-      console.log('[INFO][Login] Saving session to AsyncStorage...');
+      // console.log('[INFO][Login] Saving session to AsyncStorage...');
       await AsyncStorage.setItem('supabaseSession', JSON.stringify(data.session));
     }
 
@@ -70,7 +70,7 @@ const AuthLoginContainer = ({ navigation }) => {
       path: 'login-callback',
     });
 
-    console.log('[INFO][Login with Google] Redirect URI:', redirectUri);
+    // console.log('[INFO][Login with Google] Redirect URI:', redirectUri);
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -86,7 +86,7 @@ const AuthLoginContainer = ({ navigation }) => {
 
     const authUrl = data?.url;
     if (authUrl) {
-      console.log('[INFO][Login with Google] Opening browser for:', authUrl);
+      // console.log('[INFO][Login with Google] Opening browser for:', authUrl);
       const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUri);
 
       if (result.type === 'success' && result.url) {
@@ -103,11 +103,11 @@ const AuthLoginContainer = ({ navigation }) => {
           if (error) {
             console.log('[ERROR][Login with Google] Failed to set session:', error.message);
           } else {
-            console.log('[INFO][Login with Google] Session restored:', data);
+            // console.log('[INFO][Login with Google] Session restored:', data);
 
             // 🚀 Save session
             if (data.session) {
-              console.log('[INFO][Login with Google] Saving session to AsyncStorage...');
+              // console.log('[INFO][Login with Google] Saving session to AsyncStorage...');
               await AsyncStorage.setItem('supabaseSession', JSON.stringify(data.session));
             }
 
@@ -128,9 +128,9 @@ const AuthLoginContainer = ({ navigation }) => {
 
       const accessToken = session?.access_token;
 
-      console.log('[INFO][Login] Access Token:', accessToken);
+      // console.log('[INFO][Login] Access Token:', accessToken);
       
-      console.log(`[INFO][Login] Calling ${BubblConfig.BACKEND_URL}/api/users/exists`);
+      // console.log(`[INFO][Login] Calling ${BubblConfig.BACKEND_URL}/api/users/exists`);
 
       const response = await axios.get(`${BubblConfig.BACKEND_URL}/api/users/exists`, {
         headers: {
@@ -141,10 +141,10 @@ const AuthLoginContainer = ({ navigation }) => {
       const exists = response.data.exists;
 
       if (exists) {
-        console.log('[INFO][Login] User exists, navigating to ParentMainScreen');
+        // console.log('[INFO][Login] User exists, navigating to ParentMainScreen');
         navigation.replace('Profile');
       } else {
-        console.log('[INFO][Login] New user, navigating to Onboarding');
+        // console.log('[INFO][Login] New user, navigating to Onboarding');
         navigation.replace('Onboarding');
       }
 
