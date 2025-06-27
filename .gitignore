@@ -44,3 +44,7 @@ backend/.env
 # ios / android
 ios/
 android/
+
+# internal files
+BubblConfig.js.local
+config.js.local
