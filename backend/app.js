@@ -13,7 +13,6 @@ const modulesRoutes = require('./routes/modulesRoutes');
 const logRoutes = require('./routes/logRoutes');
 const badgeRoutes = require('./routes/badgesRoutes');
 const shopRoutes = require('./routes/shopRoutes');
-const logRoutes = require('./routes/logRoutes');
 
 // Increase img size to upload
 app.use(express.json({ limit: '5mb' }));
@@ -35,9 +34,6 @@ app.use('/api/logs', logRoutes);
 ///////////////Badges/////////////////
 app.use('/api', badgeRoutes); 
 ///////////////Shop/////////////////
-
-
-app.use('/api/logs', logRoutes);
 
 
 const PORT = process.env.PORT || 3000;
