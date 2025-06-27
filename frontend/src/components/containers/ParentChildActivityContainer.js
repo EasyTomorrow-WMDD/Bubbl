@@ -8,6 +8,8 @@ import { format, parseISO } from 'date-fns';
 import { Modal } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import LoadChildInfo from '../../utils/LoadChildInfo';
+import ActivityLogCard from '../cards/ActivityLogCard';
+import BubblYearMonthPicker from '../forms/BubblYearMonthPicker';
 
 const ParentChildActivityContainer = () => {
 
@@ -80,6 +82,7 @@ const ParentChildActivityContainer = () => {
 
       if (response.data.success) {
         setActivityLogs(response.data.logs);
+        // console.log('[DEBUG][ActivityLog] Logs fetched successfully:', response.data.logs);
       } else {
         console.warn('[ActivityLog] Unexpected response', response.data);
         setActivityLogs([]);
@@ -100,27 +103,8 @@ const ParentChildActivityContainer = () => {
 
   // Render each activity log item
   const renderItem = ({ item, index }) => {
-    const currentDate = format(parseISO(item.log_timestamp), 'MMMM dd, yyyy');
     const previousItem = index > 0 ? activityLogs[index - 1] : null;
-    const previousDate = previousItem
-      ? format(parseISO(previousItem.log_timestamp), 'MMMM dd, yyyy')
-      : null;
-
-    const showDateDivider = currentDate !== previousDate;
-
-    return (
-      <View key={`${item.log_timestamp}_${index}`}>
-        {showDateDivider && (
-          <View style={styles.dateDividerContainer}>
-            <Text style={styles.dateDividerText}>{currentDate}</Text>
-          </View>
-        )}
-        <View style={styles.card}>
-          <Text style={styles.cardSummary}>{item.log_event_summary}</Text>
-          <Text style={styles.cardDetail}>{item.log_event}</Text>
-        </View>
-      </View>
-    );
+    return <ActivityLogCard item={item} index={index} previousItem={previousItem} />;
   };
 
   // Render the main component
@@ -137,62 +121,33 @@ const ParentChildActivityContainer = () => {
 
       </View>
 
-      {/* List Area */}
+      {/* Log List */}
       {activityLogs.length === 0 ? (
         <Text style={styles.noResultsText}>No results found</Text>
       ) : (
-        activityLogs.map((item, index) => renderItem({ item, index }))
+        <FlatList
+          data={activityLogs}
+          keyExtractor={(item, index) => `${item.log_timestamp}_${index}`}
+          renderItem={({ item, index }) => renderItem({ item, index })}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        />
       )}
 
       {/* Year & Month Picker */}
-      <Modal
-        animationType="slide"
-        transparent={true}
+      <BubblYearMonthPicker
         visible={showPicker}
-        onRequestClose={() => setShowPicker(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.pickerContainer}>
-            <Picker
-              selectedValue={selectedYear}
-              style={styles.picker}
-              onValueChange={(itemValue) => setSelectedYear(itemValue)}
-            >
-              {Array.from({ length: 6 }, (_, i) => {
-                const year = new Date().getFullYear() - i;
-                return <Picker.Item key={year} label={year.toString()} value={year} />;
-              })}
-            </Picker>
-
-            <Picker
-              selectedValue={selectedMonth}
-              style={styles.picker}
-              onValueChange={(itemValue) => setSelectedMonth(itemValue)}
-            >
-              {[
-                'January', 'February', 'March', 'April', 'May', 'June',
-                'July', 'August', 'September', 'October', 'November', 'December',
-              ].map((month, index) => (
-                <Picker.Item key={index} label={month} value={index + 1} />
-              ))}
-            </Picker>
-
-            <TouchableOpacity
-              style={styles.applyButton}
-              onPress={() => {
-                console.log('[Apply Picker]', { selectedMonth, selectedYear });
-                if (selectedMonth && selectedYear) {
-                  setSearchYearMonth(`${selectedYear}${String(selectedMonth).padStart(2, '0')}`);
-                  setShowPicker(false);
-                }
-              }}
-            >
-              <Text style={styles.applyButtonText}>Apply</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
+        selectedYear={selectedYear}
+        selectedMonth={selectedMonth}
+        onYearChange={setSelectedYear}
+        onMonthChange={setSelectedMonth}
+        onApply={() => {
+          if (selectedMonth && selectedYear) {
+            setSearchYearMonth(`${selectedYear}${String(selectedMonth).padStart(2, '0')}`);
+            setShowPicker(false);
+          }
+        }}
+        onClose={() => setShowPicker(false)}
+      />
 
     </View>
   );
@@ -203,7 +158,8 @@ export default ParentChildActivityContainer;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingTop: 12,
     backgroundColor: '#fff',
   },
   headingRow: {
