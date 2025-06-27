@@ -22,6 +22,7 @@ app.use('/api/users', badgeRoutes); // allways keep this before userRoutes to av
 app.use('/api/users', userRoutes);
 app.use('/api/stories', storyRoutes);
 app.use('/api/drawings', drawingRoutes);
+///////////////Shop/////////////////
 app.use('/api/shop', shopRoutes);
 /////////////Topics//////////////////
 app.use('/api/topics', topicsRoutes);
@@ -29,11 +30,10 @@ app.use('/api/topics', topicsRoutes);
 app.use('/api/energy', energyRoutes);
 ///////////////Modules/////////////////
 app.use('/api/modules', modulesRoutes);
-
+// Activity log
 app.use('/api/logs', logRoutes);
 ///////////////Badges/////////////////
 app.use('/api', badgeRoutes); 
-///////////////Shop/////////////////
 
 
 const PORT = process.env.PORT || 3000;
