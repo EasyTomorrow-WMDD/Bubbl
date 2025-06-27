@@ -10,6 +10,7 @@ const drawingRoutes = require('./routes/drawingRoutes');
 const topicsRoutes = require('./routes/topicsRoutes');
 const energyRoutes = require('./routes/energyRoutes');
 const modulesRoutes = require('./routes/modulesRoutes');
+const logRoutes = require('./routes/logRoutes');
 const badgeRoutes = require('./routes/badgesRoutes');
 const shopRoutes = require('./routes/shopRoutes');
 
@@ -21,6 +22,7 @@ app.use('/api/users', badgeRoutes); // allways keep this before userRoutes to av
 app.use('/api/users', userRoutes);
 app.use('/api/stories', storyRoutes);
 app.use('/api/drawings', drawingRoutes);
+///////////////Shop/////////////////
 app.use('/api/shop', shopRoutes);
 /////////////Topics//////////////////
 app.use('/api/topics', topicsRoutes);
@@ -28,9 +30,10 @@ app.use('/api/topics', topicsRoutes);
 app.use('/api/energy', energyRoutes);
 ///////////////Modules/////////////////
 app.use('/api/modules', modulesRoutes);
-
-///////////////Shop/////////////////
-
+// Activity log
+app.use('/api/logs', logRoutes);
+///////////////Badges/////////////////
+app.use('/api', badgeRoutes); 
 
 
 const PORT = process.env.PORT || 3000;

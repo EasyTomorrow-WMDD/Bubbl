@@ -15,10 +15,10 @@ const ProfileCard = ({ profile, type, onPress, navigation }) => {
       await AsyncStorage.setItem('selected_avatar_id', profile.avatar_id ?? '');
       await AsyncStorage.setItem('selected_account_id', profile.account_id);
 
-      console.log('[INFO][ProfileCard] Stored profile:', {
-        user_id: profile.user_id,
-        account_id: profile.account_id,
-      });
+      // console.log('[INFO][ProfileCard] Stored profile:', {
+      //   user_id: profile.user_id,
+      //   account_id: profile.account_id,
+      // });
 
     } catch (err) {
       console.error('[ERROR][ProfileCard] Failed to store profile:', err);
@@ -30,7 +30,7 @@ const ProfileCard = ({ profile, type, onPress, navigation }) => {
   const handlePress = async () => {
     // If a custom handler is provided, call it. (e.g., for child progress profile selection) 
     if (typeof onPress === 'function') {
-      console.log('[DUMMY][ProfileCard] Custom onPress handler called');
+      // console.log('[DUMMY][ProfileCard] Custom onPress handler called');
       return onPress();
     }
     // Otherwise, proceed with the default handler (navigation to parent or child main screen)
@@ -42,7 +42,7 @@ const ProfileCard = ({ profile, type, onPress, navigation }) => {
     }
 
     await storeProfile(); // Store the selected profile in AsyncStorage
-    console.log('[INFO][ProfileCard] Profile selected:', profile.user_nickname);
+    // console.log('[INFO][ProfileCard] Profile selected:', profile.user_nickname);
     navigation.replace(type === 'parent' ? 'ParentMain' : 'ChildMain');
   };
 
