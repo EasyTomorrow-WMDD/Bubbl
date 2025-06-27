@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   tabContent: {
+    flex: 1,
     paddingTop: 16,
   },
 });
