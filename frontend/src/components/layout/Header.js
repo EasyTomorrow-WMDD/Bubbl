@@ -17,7 +17,7 @@ const Header = () => {
 
 const styles = StyleSheet.create({
   safeArea: {
-    backgroundColor: '#3D218A',
+    backgroundColor: '#8361E4',
   },
   header: {
     flexDirection: 'row',
