@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import FavoriteBadgesDisplay from './FavoriteBadgesDisplay';
 
 
-const StatCard = ({ label, icon, value, extra }) => (
-    <View style={styles.card}>
-        <View style={styles.cardHeader}>
+const StatCard = ({ label, icon, value, extra, bgHeader, bgColor }) => (
+    <View style={[styles.card, {backgroundColor:bgColor}]}>
+        <View style={[styles.cardHeader, {backgroundColor:bgHeader}]}>
             <Text style={styles.headerText}>{label}</Text>
         </View>
         <Image source={icon} style={styles.icon} />
@@ -21,9 +21,9 @@ export default function StatsPanel({user}) {
 
     return (
         <View style={styles.container}>
-            <StatCard label="Total HP" icon={require('../../assets/icons/heart.png')} value={user.user_energy} />
-            <StatCard label="Total Stars" icon={require('../../assets/icons/star.png')} value={user.user_star} />
-            <StatCard label="XP" icon={require('../../assets/icons/flash.png')} value={user.user_xp} />
+            <StatCard label="Total HP" icon={require('../../assets/icons/heart.png')} value={user.user_energy} bgHeader={'#EE47EB'} bgColor={'#FDE8FF'}/>
+            <StatCard label="Total Stars" icon={require('../../assets/icons/star.png')} value={user.user_star} bgHeader={'#F99707'} bgColor={'#FFF2C6'} />
+            <StatCard label="XP" icon={require('../../assets/icons/flash.png')} value={user.user_xp} bgHeader={'#11BBB8'} bgColor={'#CBFCF6'}/>
         </View>
     );
 
@@ -55,37 +55,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 5,
   },
+
   card: {
     width: 100,
-    backgroundColor: '#f0f0f0',
+    height:70,
     borderRadius: 20,
     alignItems: 'center',
-    paddingBottom: 10,
   },
+
   cardHeader: {
-    backgroundColor: '#19D4E0',
     width: '100%',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    paddingVertical: 10,
+    paddingVertical: 4,
     alignItems: 'center',
   },
+
   headerText: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 14,
   },
+  
   icon: {
-    width: 30,
-    height: 30,
-    marginVertical: 6,
+    width: 22,
+    height: 20,
   },
+  
   valueText: {
     fontSize: 16,
     fontWeight: 'bold',
   },
-  extraText: {
-    fontSize: 12,
-    fontWeight: 'normal',
-  },
+
 });

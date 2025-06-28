@@ -85,11 +85,12 @@ export default function TemporaryMainContainer() {
     navigation.navigate('TopicScreen', { topicId: topic.topic_id });
   };
 
+
   return (
     <View style={{ flex: 1 }}>
       <Header title="Home" />
       <ScrollView contentContainerStyle={{ paddingBottom: 200 }}>
-        <View style={{ flex: 1, gap: 10 }}>
+        <View style={{ flex: 1, backgroundColor:'#DFDAFAA' }}>
           <StatusBar style="auto" />
           <ImageBackground
             source={require('../../assets/images/Background_Purple.png')}
@@ -103,9 +104,12 @@ export default function TemporaryMainContainer() {
               <StatsPanel user={user} />
               <Text style={styles.text}>Next HP refill in:</Text>
             </View>
+            <View style={{backgroundColor: "#FFCE48", marginHorizontal:20, marginBottom: 20, padding: 20, borderRadius: 15, borderWidth: 2, borderColor: '#FFBA20' }}>
+              <Text>Hola</Text>
+            </View>
           </ImageBackground>
 
-          <View style={styles.cardContainer}>
+          <View>
             <Module modules={modules} progress={progress} onTopicPress={handleTopicPress} />
           </View>
         </View>
@@ -151,8 +155,6 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     width: '100%',
-    paddingTop: 30,
-    paddingHorizontal: 30,
     flexDirection: 'column',
     gap: 10,
     alignItems: 'flex-start',
@@ -160,18 +162,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: 'white',
-  },
-  playTopic: {
-    backgroundColor: '#FFC670',
-    width: '95%',
-    height: 90,
-    alignSelf: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: 80, // Show above the navbar
-    zIndex: 10,
-    borderRadius: 12,
   },
 });
 
