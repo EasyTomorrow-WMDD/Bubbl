@@ -2,47 +2,21 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import CircularProgress from './Circle';
 import { useNavigation } from '@react-navigation/native';
+import { getBgClass, getTopicBg, textColor } from '../../styles/BubblColors';
+
 
 export default function Module({ modules, progress = [], onTopicPress }) {
-  //console.log('progress one:', JSON.stringify(progress, null, 2));
-  //console.log('Progress two:', progress);
-  //console.log('Modules:', modules);
-  const getBgClass = (moduleNumber) => {
-    switch (moduleNumber) {
-      case 1:
-        return '#DFDAFA';
-      case 2:
-        return '#FFE388';
-      case 3:
-        return '#FCD0FE';
-      default:
-        return '#97F8EE';
-    }
-  };
-
-  const getTopicBg = (moduleNumber) => {
-    switch (moduleNumber) {
-      case 1:
-        return '#F6F4FE';
-      case 2:
-        return '#FFFAEB';
-      case 3:
-        return '#FCD0FE';
-      default:
-        return '#97F8EE';
-    }
-  }
 
 return (
   <View style={{ width: '100%'}}>
     {modules.map((item) => (
-      <View key={item.module_id} style={{ gap: 30 }}>
-        <View style={{ backgroundColor: getTopicBg(item.module_number), padding: 10, borderRadius: 10 }}>
-          <Text style={styles.title}>
+      <View key={item.module_id} style={{ gap: 30,  }}>
+        <View style={{ backgroundColor: getTopicBg(item.module_number), padding: 10, paddingVertical: 20 }}>
+          <Text style={[styles.title, {color: textColor(item.module_number)}]}>
             Module {item.module_number} - {item.module_name}
           </Text>
 
-          <View style={[styles.container, { backgroundColor: getBgClass(item.module_number) }]}>
+          <View style={[styles.container, { backgroundColor: getBgClass(item.module_number),  }]}>
             {item.ref_topic.map((topic) => {
               const progressItem = progress.find((p) => p.topic_id === topic.topic_id);
               const isCompleted = progressItem?.user_topic_completed === true;
@@ -50,11 +24,11 @@ return (
               return (
                 <Pressable
                   key={topic.topic_id}
-                  style={[styles.card, {backgroundColor: getTopicBg(item.module_number)}]}
+                  style={[styles.card, {backgroundColor: getTopicBg(item.module_number), }]}
                   onPress={() => onTopicPress && onTopicPress(topic)}
                 >
                   <View style={{ marginRight: 40 }}>
-                    <CircularProgress topic_number={topic.topic_number} completed={isCompleted} />
+                    <CircularProgress topic_number={topic.topic_number} completed={isCompleted} moduleNumber={item.module_number} />
                   </View>
 
                   <View style={styles.textContainer}>
@@ -73,10 +47,10 @@ return (
 
 const styles = StyleSheet.create({
       title: {
-        fontSize: 20,
+        fontSize: 25,
         fontWeight: 'bold',
         color: 'black',
-        marginBottom: 5,
+        marginBottom: 15,
       },
       container: {
         padding: 10,

@@ -6,7 +6,7 @@ const ChildNavbar = ({ navigation, childProfileId }) => {
     <View style={styles.navbar}>
       {/* Activities */}
       <TouchableOpacity onPress={() => navigation.navigate('ChildMain')} style={styles.navItem}>
-        <Image source={require('../../assets/icons/Compass.png')} style={styles.navIcon} />
+        <Image source={require('../../assets/icons/activities.png')} style={styles.navIcon} />
         <Text style={styles.navText}>Activities</Text>
       </TouchableOpacity>
 
@@ -15,7 +15,7 @@ const ChildNavbar = ({ navigation, childProfileId }) => {
         onPress={() => navigation.navigate('ChildMood', { childProfileId })}
         style={styles.navItem}
       >
-        <Image source={require('../../assets/icons/Paint.png')} style={styles.navIcon} />
+        <Image source={require('../../assets/icons/paint.png')} style={styles.navIcon} />
         <Text style={styles.navText}>Mood Draw</Text>
       </TouchableOpacity>
 
@@ -24,7 +24,7 @@ const ChildNavbar = ({ navigation, childProfileId }) => {
         onPress={() => navigation.navigate('InventoryScreen', { childProfileId })}
         style={styles.navItem}
       >
-        <Image source={require('../../assets/icons/Cup.png')} style={styles.navIcon} />
+        <Image source={require('../../assets/icons/store.png')} style={styles.navIcon} />
         <Text style={styles.navText}>Quest</Text>
       </TouchableOpacity>
     </View>
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: '#2E195C', // new purple color
+    backgroundColor: 'white',
     paddingVertical: 12,
     zIndex: 20,
     paddingBottom: 20, 
@@ -51,12 +51,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   navIcon: {
-    width: 28,
-    height: 28,
+    width: 25,
+    height: 25,
     marginBottom: 4,
   },
   navText: {
-    color: 'white',
+    color: 'black',
     fontSize: 14,
     fontWeight: '600',
   },
