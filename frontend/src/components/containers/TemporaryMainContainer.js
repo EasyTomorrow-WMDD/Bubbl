@@ -7,7 +7,8 @@ import StatsPanel from './StatCards';
 import Module from './ModulesDashboard';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { globalStyles } from '../../styles/BubblStyles';
-import Header from '../layout/Header';
+// import Header from '../layout/Header';
+import PatthernHeader from '../layout/PatternHeader';
 import ChildNavbar from '../layout/ChildNavbar';
 import { useNavigation } from '@react-navigation/native';
 import { BASE_URL } from '../../utils/config';
@@ -80,32 +81,35 @@ export default function TemporaryMainContainer() {
 
     fetchChildProgress();
   }, [userId]);
-  
+
   const handleTopicPress = (topic) => {
     navigation.navigate('TopicScreen', { topicId: topic.topic_id });
   };
 
 
   return (
-    <View style={{ flex: 1 }}>
-      <Header title="Home" />
-      <ScrollView contentContainerStyle={{ paddingBottom: 200 }}>
-        <View style={{ flex: 1, backgroundColor:'#DFDAFAA' }}>
+    <View style={{ flex: 1,  }}>
+      <PatthernHeader />
+      <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
+        <View style={{ flex: 1, backgroundColor: '#DFDAFAA' }}>
           <StatusBar style="auto" />
           <ImageBackground
             source={require('../../assets/images/Background_Purple.png')}
             resizeMode="cover"
             style={styles.background}
           >
+            <View style={styles.backgroundOverlay} />
             <View style={styles.container}>
               <Image source={require('../../assets/images/yellow_bubbl.png')} style={styles.img} />
               {/* <Avatar userId={userId} userLevel={user ? user.user_level : null} /> */}
               <Text style={styles.title}>Hi, {user ? user.user_nickname : '...'}</Text>
               <StatsPanel user={user} />
-              <Text style={styles.text}>Next HP refill in:</Text>
+              {user?.user_energy < 3 ? <Text style={styles.text}>Next HP refill in:</Text> : null }
             </View>
-            <View style={{backgroundColor: "#FFCE48", marginHorizontal:20, marginBottom: 20, padding: 20, borderRadius: 15, borderWidth: 2, borderColor: '#FFBA20' }}>
-              <Text>Hola</Text>
+
+            <View style={{ backgroundColor: "#FFCE48", flexDirection: 'row' ,alignItems: 'center', justifyContent: 'center', gap: 5,marginHorizontal: 20, marginBottom: 20, padding: 20, borderRadius: 15, borderWidth: 2, borderColor: '#FFBA20' }}>
+              <Text style={{ fontSize: 16, color: '#7A310D' }}>Continue from where you left</Text>
+              <Image source={require('../../assets/icons/play_icon.png')} style={{height: 20, width: 20}}></Image>
             </View>
           </ImageBackground>
 
@@ -114,11 +118,6 @@ export default function TemporaryMainContainer() {
           </View>
         </View>
       </ScrollView>
-
-      {/* Keep Playing button */}
-      <View style={styles.playTopic}>
-        <Text>Keep Playing</Text>
-      </View>
 
       {/* Child Navbar */}
       <ChildNavbar navigation={navigation} childProfileId={userId} />
@@ -134,12 +133,15 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 40,
     padding: 0,
     margin: 0,
+    transform: [{ translateY: -20 }]
   },
   container: {
     alignItems: 'center',
     padding: 30,
     gap: 10,
   },
+
+
   img: {
     height: 190,
     width: 140,
