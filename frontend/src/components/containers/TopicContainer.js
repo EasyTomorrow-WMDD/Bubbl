@@ -192,7 +192,8 @@ export default function TopicScreen({ route, navigation }) {
         navigation.navigate('TopicComplete', {
           heading: topic.topic_completion_heading,
           text: topic.topic_completion_text,
-          topicId: topic.topic_id,
+          topic_xp: topic.topic_xp,
+          topic_star: topic.topic_star,
         });
       } else {
         setQuestions(updated);
@@ -250,9 +251,6 @@ export default function TopicScreen({ route, navigation }) {
       <Text style={[styles.energy, energy === 0 && styles.energyZero]}>
         Energy: {energy}
       </Text>
-      {/* <Text style={styles.question}>
-        {currentQuestion.quiz?.question || currentQuestion.text}
-      </Text> */}
 
       <QuizQuestion
         data={currentQuestion}
