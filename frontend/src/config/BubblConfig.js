@@ -11,10 +11,10 @@ const BubblConfig = {
     // ? 'http://10.128.198.35:3000'
     // ? 'http://192.168.1.81:3000' // Local IP address #1
     // ? 'http://10.100.1.67:3000' // Local IP address #2
-    ? 'http://10.100.2.107:3000' // Local IP address #3
+    // ? 'http://10.100.2.107:3000' // Local IP address #3
     // ? 'http://10.128.230.78:3000' // Loacl IP address #4
     // ? 'http://10.128.229.169:3000' // Local IP address #5
-    // ? 'http://192.168.1.72:3000' // Local IP address #6
+     ? 'http://192.168.1.72:3000' // Local IP address #6
     : 'https://some-url-in-aws-to-be-created.com',
 
   // Supabase URL
@@ -24,7 +24,8 @@ const BubblConfig = {
     : 'https://ogbfgllkkyehcurolhjf.supabase.co', // Production Supabase URL
 
   SUPABASE_ANON_KEY: isDev
-    ? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nYmZnbGxra3llaGN1cm9saGpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2NDU2NTksImV4cCI6MjA2NjIyMTY1OX0.WV07xTvn_EyCgrnUwgSrj_tTy6iZffEi21Hr7a8U0h0' // Dev Supabase ANON key #1
+  
+     ? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nYmZnbGxra3llaGN1cm9saGpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2NDU2NTksImV4cCI6MjA2NjIyMTY1OX0.WV07xTvn_EyCgrnUwgSrj_tTy6iZffEi21Hr7a8U0h0' // Dev Supabase ANON key #1
     // ? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFiZGtuZ2R4dHJzenZrd3Zxa214Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxODk1ODQsImV4cCI6MjA2NDc2NTU4NH0.9YxOPyYyA61hdOJx5GvuXti7118WI9kxcaO_Mia2PPI' // Dev Supabase ANON key #2
     : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nYmZnbGxra3llaGN1cm9saGpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2NDU2NTksImV4cCI6MjA2NjIyMTY1OX0.WV07xTvn_EyCgrnUwgSrj_tTy6iZffEi21Hr7a8U0h0', // Production Supabase ANON key
 
