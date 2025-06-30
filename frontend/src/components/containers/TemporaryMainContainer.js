@@ -5,9 +5,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import StatsPanel from './StatCards';
 import Module from './ModulesDashboard';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { globalStyles } from '../../styles/BubblStyles';
-// import Header from '../layout/Header';
 import PatthernHeader from '../layout/PatternHeader';
 import ChildNavbar from '../layout/ChildNavbar';
 import { useNavigation } from '@react-navigation/native';
@@ -21,6 +18,9 @@ export default function TemporaryMainContainer() {
   const [userId, setUserId] = useState('');
   const [progress, setProgress] = useState([]);
   const navigation = useNavigation();
+  const [userEnergy, setUserEnergy] = useState(null);
+  const [nextRechargeTime, setNextReachargeTime] = useState(null);
+
   console.log('USER ID:', userId);
 
   // ================= Load profile info from AsyncStorage ====================
@@ -72,12 +72,11 @@ export default function TemporaryMainContainer() {
     const fetchChildProgress = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/api/childProgress/userProgress/${userId}`);
-        console.log('Full response:', response)
         setProgress(response.data);
       } catch (error) {
         console.error('Error fetching child progress:', error);
       }
-    }
+    };
 
     fetchChildProgress();
   }, [userId]);
@@ -86,9 +85,76 @@ export default function TemporaryMainContainer() {
     navigation.navigate('TopicScreen', { topicId: topic.topic_id });
   };
 
+  //=============== Fetch Energy (once on mount) =======================
+  useEffect(() => {
+    const fetchEnergyStatus = async () => {
+      try {
+        if (!userId) return;
+
+        const res = await axios.get(`${BASE_URL}/api/energy/status`, {
+          params: { user_id: userId }
+        });
+
+        const data = res.data;
+
+        setUserEnergy(data.user_energy);
+
+        if (data.time_to_next_recharge_ms !== null) {
+          setNextReachargeTime(Date.now() + data.time_to_next_recharge_ms);
+        } else {
+          setNextReachargeTime(null);
+        }
+
+        // Actualiza user.user_energy también:
+        setUser(prev => prev ? { ...prev, user_energy: data.user_energy } : prev);
+
+      } catch (err) {
+        console.error('Error fetching energy status:', err);
+      }
+    };
+
+    fetchEnergyStatus();
+  }, [userId]);
+
+  //=============== Energy Polling =======================
+  useEffect(() => {
+    if (!userId) return;
+
+    const interval = setInterval(async () => {
+      try {
+        if (!userId) {
+          console.warn('Skipping polling: userId is undefined');
+          return;
+        }
+
+        const res = await axios.get(`${BASE_URL}/api/energy/status`, {
+          params: { user_id: userId }
+        });
+
+        const data = res.data;
+
+        if (data && data.user_energy !== undefined) {
+          console.log('Polled energy status:', data.user_energy);
+
+          setUser(prev => prev ? { ...prev, user_energy: data.user_energy } : prev);
+
+          if (data.time_to_next_recharge_ms !== null) {
+            setNextReachargeTime(Date.now() + data.time_to_next_recharge_ms);
+          } else {
+            setNextReachargeTime(null);
+          }
+        }
+
+      } catch (err) {
+        console.error('Error polling energy status:', err);
+      }
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [userId]);
 
   return (
-    <View style={{ flex: 1,  }}>
+    <View style={{ flex: 1 }}>
       <PatthernHeader />
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
         <View style={{ flex: 1, backgroundColor: '#DFDAFAA' }}>
@@ -101,15 +167,26 @@ export default function TemporaryMainContainer() {
             <View style={styles.backgroundOverlay} />
             <View style={styles.container}>
               <Image source={require('../../assets/images/yellow_bubbl.png')} style={styles.img} />
-              {/* <Avatar userId={userId} userLevel={user ? user.user_level : null} /> */}
               <Text style={styles.title}>Hi, {user ? user.user_nickname : '...'}</Text>
               <StatsPanel user={user} />
-              {user?.user_energy < 3 ? <Text style={styles.text}>Next HP refill in:</Text> : null }
+              {user?.user_energy < 3 ? <Text style={styles.text}>Next HP refill in:</Text> : null}
             </View>
 
-            <View style={{ backgroundColor: "#FFCE48", flexDirection: 'row' ,alignItems: 'center', justifyContent: 'center', gap: 5,marginHorizontal: 20, marginBottom: 20, padding: 20, borderRadius: 15, borderWidth: 2, borderColor: '#FFBA20' }}>
+            <View style={{
+              backgroundColor: "#FFCE48",
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 5,
+              marginHorizontal: 20,
+              marginBottom: 20,
+              padding: 20,
+              borderRadius: 15,
+              borderWidth: 2,
+              borderColor: '#FFBA20'
+            }}>
               <Text style={{ fontSize: 16, color: '#7A310D' }}>Continue from where you left</Text>
-              <Image source={require('../../assets/icons/play_icon.png')} style={{height: 20, width: 20}}></Image>
+              <Image source={require('../../assets/icons/play_icon.png')} style={{ height: 20, width: 20 }} />
             </View>
           </ImageBackground>
 
@@ -119,7 +196,6 @@ export default function TemporaryMainContainer() {
         </View>
       </ScrollView>
 
-      {/* Child Navbar */}
       <ChildNavbar navigation={navigation} childProfileId={userId} />
     </View>
   );
@@ -140,8 +216,6 @@ const styles = StyleSheet.create({
     padding: 30,
     gap: 10,
   },
-
-
   img: {
     height: 190,
     width: 140,
@@ -166,4 +240,3 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
-
