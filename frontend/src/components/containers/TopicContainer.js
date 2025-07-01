@@ -50,7 +50,6 @@ export default function TopicScreen({ route, navigation }) {
 
   useFocusEffect(
     useCallback(() => {
-      // Cuando vuelves desde la pantalla Streak, recarga si ya no hay preguntas
       if (correctStreak === 0 && topic && questions.length === 0) {
         resetTopicForTest();
       }
@@ -98,17 +97,6 @@ export default function TopicScreen({ route, navigation }) {
     }
   };
 
-  const awardBadge = async () => {
-    try {
-      await axios.post(`${BASE_URL}/api/users/${currentChild.user_id}/badges`, {
-        badge_id: FOUR_IN_A_ROW_BADGE_ID,
-        user_badge_active: true
-      });
-    } catch (error) {
-      console.error('[TopicScreen] Error awarding badge:', error);
-    }
-  };
-
   const startCountdown = (ms) => {
     if (!ms || ms <= 0) return;
     let remaining = ms;
@@ -137,6 +125,31 @@ export default function TopicScreen({ route, navigation }) {
       setQuestions(filtered);
     } catch (err) {
       setQuestions(allQuestions);
+    }
+  };
+
+  const awardBadge = async () => {
+    try {
+      await axios.post(`${BASE_URL}/api/users/${currentChild.user_id}/badges`, {
+        badge_id: FOUR_IN_A_ROW_BADGE_ID,
+        user_badge_active: true
+      });
+    } catch (error) {
+      console.error('[TopicScreen] Error awarding badge:', error);
+    }
+  };
+
+  const checkIfBadgeAlreadyEarned = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/api/users/${currentChild.user_id}/badges`);
+      const badges = res.data;
+      const alreadyEarned = badges.find(
+        (b) => b.badge_id === FOUR_IN_A_ROW_BADGE_ID && b.badge_active === true
+      );
+      return !!alreadyEarned;
+    } catch (error) {
+      console.error('[TopicScreen] Error checking badge:', error);
+      return false;
     }
   };
 
@@ -170,12 +183,17 @@ export default function TopicScreen({ route, navigation }) {
       const newStreak = correctStreak + 1;
       setCorrectStreak(newStreak);
 
-      /////////// Check for streak of 4 /////////////
       if (newStreak >= 4) {
-        await awardBadge();
+        const alreadyHasBadge = await checkIfBadgeAlreadyEarned();
+        if (!alreadyHasBadge) {
+          await awardBadge();
+          setCorrectStreak(0);
+          navigation.navigate('Streak');
+          return;
+        } else {
+          console.log('Badge already earned. Not showing Streak screen again.');
+        }
         setCorrectStreak(0);
-        navigation.navigate('Streak');
-        return;
       }
 
       const updated = [...questions];
