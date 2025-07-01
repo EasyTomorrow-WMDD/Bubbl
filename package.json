@@ -38,6 +38,7 @@
     "react-native-dnd": "^0.2.3",
     "react-native-gesture-handler": "^2.25.0",
     "react-native-markdown-display": "^7.0.2",
+    "react-native-paper": "^5.14.5",
     "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "4.11.1",
