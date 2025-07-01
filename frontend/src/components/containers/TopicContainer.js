@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Alert, ActivityIndicator, StyleSheet, Button } from 'react-native';
+import { View, Text, ActivityIndicator, StyleSheet, Button, ScrollView } from 'react-native';
 import QuizQuestion from '../quiz/quizQuestion';
 import axios from 'axios';
 import { useCurrentChild } from '../../context/ChildContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_URL } from '../../utils/config';
+import EnergyBarContainer from './EnergyBarContainer';
 
 export default function TopicScreen({ route, navigation }) {
   const { topicId } = route.params;
@@ -20,12 +21,6 @@ export default function TopicScreen({ route, navigation }) {
   const [isLoadingTopic, setIsLoadingTopic] = useState(true);
   const [isLoadingEnergy, setIsLoadingEnergy] = useState(true);
 
-  const [testReset, setTestReset] = useState(false);
-
-  console.log('[TopicScreen] isLoadingChild:', isLoadingChild);
-  console.log('[TopicScreen] currentChild:', currentChild);
-  console.log('[TopicScreen] topicId:', topicId);
-
   if (isLoadingChild) {
     return (
       <View style={styles.loaderContainer}>
@@ -36,7 +31,6 @@ export default function TopicScreen({ route, navigation }) {
   }
 
   if (!currentChild?.user_id) {
-    console.log('[TopicScreen] No child profile available');
     return (
       <View style={styles.loaderContainer}>
         <Text>No child profile available.</Text>
@@ -46,7 +40,6 @@ export default function TopicScreen({ route, navigation }) {
 
   useEffect(() => {
     if (topicId) {
-      console.log('[TopicScreen] Fetching topic:', topicId);
       fetchTopicData();
     }
   }, [topicId]);
@@ -54,13 +47,9 @@ export default function TopicScreen({ route, navigation }) {
   const fetchTopicData = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/api/topics/${topicId}`);
-      console.log('[TopicScreen] Fetched topic:', res.data);
       setTopic(res.data);
     } catch (err) {
-      console.error('[TopicScreen] Error loading topic:', err);
-      Alert.alert('Error', 'Could not load topic data.', [
-        { text: 'Back', onPress: () => navigation.goBack() }
-      ]);
+      navigation.goBack();
     } finally {
       setIsLoadingTopic(false);
     }
@@ -68,7 +57,6 @@ export default function TopicScreen({ route, navigation }) {
 
   useEffect(() => {
     if (currentChild?.user_id && topic) {
-      console.log('[TopicScreen] Fetching energy for child:', currentChild.user_id);
       fetchEnergy();
     }
   }, [topic, currentChild]);
@@ -78,8 +66,6 @@ export default function TopicScreen({ route, navigation }) {
       const res = await axios.get(`${BASE_URL}/api/energy/status`, {
         params: { user_id: currentChild.user_id }
       });
-
-      console.log('[TopicScreen] Fetched energy:', res.data);
 
       const userEnergy = res.data.user_energy;
       const timeRemaining = res.data.time_to_next_recharge_ms;
@@ -93,17 +79,13 @@ export default function TopicScreen({ route, navigation }) {
         await loadQuestions();
       }
     } catch (err) {
-      console.error('[TopicScreen] Error fetching energy:', err);
-      Alert.alert('Error', 'Unable to fetch your energy status.', [
-        { text: 'Back', onPress: () => navigation.goBack() }
-      ]);
+      navigation.goBack();
     } finally {
       setIsLoadingEnergy(false);
     }
   };
 
   const startCountdown = (ms) => {
-    console.log('[TopicScreen] Starting countdown:', ms);
     if (!ms || ms <= 0) return;
     let remaining = ms;
 
@@ -121,23 +103,15 @@ export default function TopicScreen({ route, navigation }) {
   };
 
   const loadQuestions = async () => {
-    console.log('[TopicScreen] Loading questions...');
     const allQuestions = topic?.topic_activities || [];
     const savedKey = `correctAnswers_${currentChild.user_id}_${topic.topic_id}`;
-
-    if (testReset) {
-      setQuestions(allQuestions);
-      return;
-    }
 
     try {
       const saved = await AsyncStorage.getItem(savedKey);
       const correctIds = saved ? JSON.parse(saved) : [];
       const filtered = allQuestions.filter(q => !correctIds.includes(q.id));
       setQuestions(filtered);
-      console.log('[TopicScreen] Loaded questions:', filtered.length);
     } catch (err) {
-      console.error('[TopicScreen] Error loading saved questions:', err);
       setQuestions(allQuestions);
     }
   };
@@ -153,9 +127,7 @@ export default function TopicScreen({ route, navigation }) {
 
       if (newEnergy === 0) {
         setTimeout(() => {
-          Alert.alert('Energy depleted', 'You must wait 30 minutes to continue.', [
-            { text: 'Back', onPress: () => navigation.goBack() }
-          ]);
+          navigation.goBack();
         }, 500);
       } else {
         const updated = [...questions];
@@ -169,23 +141,19 @@ export default function TopicScreen({ route, navigation }) {
     }
   };
 
-  const handleAnswer = async (isCorrect, message) => {
-    Alert.alert(isCorrect ? 'Correct!' : 'Wrong!', message);
-
+  const handleAnswer = async (isCorrect) => {
     if (isCorrect) {
       const updated = [...questions];
-      const answered = updated.splice(currentIndex, 1)[0];
+      updated.splice(currentIndex, 1);
 
-      if (!testReset) {
-        const key = `correctAnswers_${currentChild.user_id}_${topic.topic_id}`;
-        try {
-          const saved = await AsyncStorage.getItem(key);
-          const savedIds = saved ? JSON.parse(saved) : [];
-          const updatedIds = [...savedIds, answered.id];
-          await AsyncStorage.setItem(key, JSON.stringify(updatedIds));
-        } catch (err) {
-          console.error('[TopicScreen] Error saving correct answer:', err);
-        }
+      const key = `correctAnswers_${currentChild.user_id}_${topic.topic_id}`;
+      try {
+        const saved = await AsyncStorage.getItem(key);
+        const savedIds = saved ? JSON.parse(saved) : [];
+        const updatedIds = [...savedIds, questions[currentIndex].id];
+        await AsyncStorage.setItem(key, JSON.stringify(updatedIds));
+      } catch (err) {
+        console.error('[TopicScreen] Error saving correct answer:', err);
       }
 
       if (updated.length === 0) {
@@ -205,15 +173,12 @@ export default function TopicScreen({ route, navigation }) {
   };
 
   const resetTopicForTest = async () => {
-    console.log('[TopicScreen] Resetting topic for test');
     const key = `correctAnswers_${currentChild.user_id}_${topic.topic_id}`;
     await AsyncStorage.removeItem(key);
-    setTestReset(true);
     await loadQuestions();
   };
 
   if (isLoadingTopic || isLoadingEnergy || !topic) {
-    console.log('[TopicScreen] Loading topic/energy...');
     return (
       <View style={styles.loaderContainer}>
         <ActivityIndicator size="large" />
@@ -222,9 +187,8 @@ export default function TopicScreen({ route, navigation }) {
   }
 
   if (energy === 0) {
-    console.log('[TopicScreen] Energy is 0, countdown running');
     return (
-      <View style={styles.container}>
+      <View style={styles.loaderContainer}>
         <Text style={styles.energyZero}>Energy: 0</Text>
         <Text style={styles.countdownText}>
           {countdown ? `You will regain 1 energy in ${countdown}` : 'Please wait...'}
@@ -235,40 +199,40 @@ export default function TopicScreen({ route, navigation }) {
 
   const currentQuestion = questions[currentIndex];
   if (!currentQuestion) {
-    console.log('[TopicScreen] No more questions');
     return (
-      <View style={styles.container}>
-        <Text>No more questions available.</Text>
-        <Button title="Reset Topic for Test" onPress={resetTopicForTest} />
+      <View style={styles.loaderContainer}>
+        <Text style={styles.completedText}>You have already completed this topic!</Text>
+        <Button title="Restart Quiz" onPress={resetTopicForTest} />
       </View>
     );
   }
 
-  console.log('[TopicScreen] Showing question:', currentQuestion);
-
   return (
-    <View style={styles.container}>
-      <Text style={[styles.energy, energy === 0 && styles.energyZero]}>
-        Energy: {energy}
-      </Text>
+    <View style={{ flex: 1 }}>
+      <View style={{ paddingTop: 40, paddingHorizontal: 20 }}>
+        <EnergyBarContainer energy={energy} maxEnergy={3} />
+      </View>
 
-      <QuizQuestion
-        data={currentQuestion}
-        onAnswer={(isCorrect, message) => handleAnswer(isCorrect, message)}
-      />
-
-      <View style={{ marginTop: 30 }}>
-        <Button title="Reset Topic for Test" onPress={resetTopicForTest} />
+      <View style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <QuizQuestion
+            data={currentQuestion}
+            onAnswer={(isCorrect) => handleAnswer(isCorrect)}
+          />
+        </ScrollView>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, justifyContent: 'center' },
   loaderContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  question: { fontSize: 18, marginBottom: 20 },
-  energy: { fontSize: 16, fontWeight: 'bold', marginBottom: 10, textAlign: 'center' },
   energyZero: { fontSize: 20, color: 'red', textAlign: 'center', marginBottom: 10 },
   countdownText: { fontSize: 16, textAlign: 'center', color: '#555' },
+  completedText: { fontSize: 18, textAlign: 'center', marginBottom: 20 },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+    paddingTop: 20,
+  },
 });
