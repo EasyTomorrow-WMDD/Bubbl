@@ -78,3 +78,51 @@ exports.saveUserBadges = async (req, res) => {
     res.status(500).json({ error: 'Failed to save badges' });
   }
 };
+
+exports.awardBadgeToUser = async (req, res) => {
+  const { userId } = req.params;
+  const { badge_id, user_badge_active } = req.body;
+
+  if (!badge_id) {
+    return res.status(400).json({ error: 'badge_id is required' });
+  }
+
+  try {
+    // 1. Check if the user_badge already exists
+    const { data: existing, error: selectError } = await supabase
+      .from('user_badge')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('badge_id', badge_id)
+      .single();
+
+    if (selectError && selectError.code !== 'PGRST116') {
+      throw selectError;
+    }
+
+    if (existing) {
+      // 2. Update if it exists
+      const { error: updateError } = await supabase
+        .from('user_badge')
+        .update({ user_badge_active })
+        .eq('user_id', userId)
+        .eq('badge_id', badge_id);
+
+      if (updateError) throw updateError;
+    } else {
+      // 3. Insert if it does not exist
+      const { error: insertError } = await supabase
+        .from('user_badge')
+        .insert([
+          { user_id: userId, badge_id, user_badge_active }
+        ]);
+
+      if (insertError) throw insertError;
+    }
+
+    return res.json({ message: 'Badge awarded successfully.' });
+  } catch (error) {
+    console.error('[awardBadgeToUser] Error:', error.message);
+    return res.status(500).json({ error: 'Failed to award badge' });
+  }
+};
