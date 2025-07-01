@@ -1,31 +1,45 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-export default function MultiCorrectQuiz({ data, onAnswer }) {
+export default function MultiCorrectQuiz({ data, onSelect, disabled }) {
   const { quiz } = data;
   const [selected, setSelected] = useState([]);
-  const [feedbackShown, setFeedbackShown] = useState(false);
 
-  const handleSelect = (option) => {
-    if (feedbackShown || selected.find(item => item.label === option.label)) return;
+  useEffect(() => {
+  
+    setSelected([]);
+  }, [data]);
 
-    const updated = [...selected, option];
-    setSelected(updated);
-
-    if (updated.length === 3) {
-      const selectedLabels = updated.map(o => o.label).sort();
+  useEffect(() => {
+    if (selected.length === 3) {
+    
+      const selectedLabels = selected.map(o => o.label).sort();
       const correctLabels = quiz.correct.sort();
       const isCorrect = JSON.stringify(selectedLabels) === JSON.stringify(correctLabels);
-      setFeedbackShown(true);
-      onAnswer(isCorrect, isCorrect ? quiz.message_correct : quiz.message_wrong);
+
+      const message = isCorrect ? quiz.message_correct : quiz.message_wrong;
+
+    
+      onSelect(isCorrect, message);
     }
+  }, [selected]);
+
+  const handleSelect = (option) => {
+    if (disabled || selected.find(item => item.label === option.label)) return;
+    if (selected.length >= 3) return;
+
+    setSelected([...selected, option]);
   };
 
   const renderOptions = (start, end) => quiz.options.slice(start, end).map((option, idx) => (
     <TouchableOpacity
       key={idx}
-      style={[styles.option, selected.find(s => s.label === option.label) && styles.selectedOption]}
+      style={[
+        styles.option,
+        selected.find(s => s.label === option.label) && styles.selectedOption
+      ]}
       onPress={() => handleSelect(option)}
+      disabled={disabled}
     >
       <Text>{option.label}</Text>
     </TouchableOpacity>
@@ -52,7 +66,6 @@ export default function MultiCorrectQuiz({ data, onAnswer }) {
 const styles = StyleSheet.create({
   container: { padding: 20 },
   question: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
-  image: { width: '100%', height: 180, marginBottom: 10 },
   optionsRow: { flexDirection: 'row', justifyContent: 'space-between' },
   column: { flex: 1, gap: 10 },
   option: {
