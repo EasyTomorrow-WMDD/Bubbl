@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, Button, ScrollView } from 'react-native';
 import QuizQuestion from '../quiz/quizQuestion';
 import axios from 'axios';
@@ -6,6 +6,9 @@ import { useCurrentChild } from '../../context/ChildContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_URL } from '../../utils/config';
 import EnergyBarContainer from './EnergyBarContainer';
+import { useFocusEffect } from '@react-navigation/native';
+
+const FOUR_IN_A_ROW_BADGE_ID = 'e80e94c4-9fb1-4984-b401-783a5bcca719';
 
 export default function TopicScreen({ route, navigation }) {
   const { topicId } = route.params;
@@ -17,6 +20,7 @@ export default function TopicScreen({ route, navigation }) {
   const [energy, setEnergy] = useState(0);
   const [timeToNext, setTimeToNext] = useState(null);
   const [countdown, setCountdown] = useState(null);
+  const [correctStreak, setCorrectStreak] = useState(0);
 
   const [isLoadingTopic, setIsLoadingTopic] = useState(true);
   const [isLoadingEnergy, setIsLoadingEnergy] = useState(true);
@@ -43,6 +47,15 @@ export default function TopicScreen({ route, navigation }) {
       fetchTopicData();
     }
   }, [topicId]);
+
+  useFocusEffect(
+    useCallback(() => {
+      // Cuando vuelves desde la pantalla Streak, recarga si ya no hay preguntas
+      if (correctStreak === 0 && topic && questions.length === 0) {
+        resetTopicForTest();
+      }
+    }, [correctStreak, topic, questions])
+  );
 
   const fetchTopicData = async () => {
     try {
@@ -82,6 +95,17 @@ export default function TopicScreen({ route, navigation }) {
       navigation.goBack();
     } finally {
       setIsLoadingEnergy(false);
+    }
+  };
+
+  const awardBadge = async () => {
+    try {
+      await axios.post(`${BASE_URL}/api/users/${currentChild.user_id}/badges`, {
+        badge_id: FOUR_IN_A_ROW_BADGE_ID,
+        user_badge_active: true
+      });
+    } catch (error) {
+      console.error('[TopicScreen] Error awarding badge:', error);
     }
   };
 
@@ -143,6 +167,17 @@ export default function TopicScreen({ route, navigation }) {
 
   const handleAnswer = async (isCorrect) => {
     if (isCorrect) {
+      const newStreak = correctStreak + 1;
+      setCorrectStreak(newStreak);
+
+      /////////// Check for streak of 4 /////////////
+      if (newStreak >= 4) {
+        await awardBadge();
+        setCorrectStreak(0);
+        navigation.navigate('Streak');
+        return;
+      }
+
       const updated = [...questions];
       updated.splice(currentIndex, 1);
 
@@ -168,6 +203,7 @@ export default function TopicScreen({ route, navigation }) {
         setCurrentIndex(0);
       }
     } else {
+      setCorrectStreak(0);
       handleWrongAnswer();
     }
   };
