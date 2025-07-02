@@ -35,8 +35,8 @@ export function StatsInventory({ user, badges }) {
   return (
     <View>
       <View style={styles.container}>
-        <StatCard label="Total Stars" icon={require('../../assets/icons/star.png')} value={user.user_star} />
-        <StatCard label="Badges" icon={require('../../assets/icons/badge.png')} value={user.user_badge ?? 0} />
+        <StatCard label="Total Stars" icon={require('../../assets/icons/star.png')} value={user.user_star} bgHeader={'#11BBB8'} bgColor={'#CBFCF6'}/>
+        <StatCard label="Badges" icon={require('../../assets/icons/badge.png')} value={user.user_badge ?? 0} bgHeader={'#EE47EB'} bgColor={'#FDE8FF'}/>
       </View>
       <FavoriteBadgesDisplay badges={badges} />
     </View>
