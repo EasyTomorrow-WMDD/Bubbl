@@ -120,7 +120,6 @@ export const getTopicBg = (moduleNumber) => {
     default:
       return '#97F8EE';
   }
-
 }
 
 export const getCompleted = (moduleNumber) => {
@@ -146,6 +145,20 @@ export const textColor = (moduleNumber) => {
       return '#741B6C';
     default:
       return '#124D4F';
+  }
+}
+
+export const currentTopicColor = (moduleNumber) => {
+  switch(moduleNumber){
+    case 1:
+      return '#7B4DDA';
+    case 2:
+      return '#FFBA20';
+    case 3:
+      return '#7B4DDA';
+    
+    default:
+      return '#0B9596';
   }
 }
 
