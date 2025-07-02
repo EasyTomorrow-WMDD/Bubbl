@@ -21,6 +21,7 @@ export default function TopicScreen({ route, navigation }) {
   const [timeToNext, setTimeToNext] = useState(null);
   const [countdown, setCountdown] = useState(null);
   const [correctStreak, setCorrectStreak] = useState(0);
+  const [showRestart, setShowRestart] = useState(false);
 
   const [isLoadingTopic, setIsLoadingTopic] = useState(true);
   const [isLoadingEnergy, setIsLoadingEnergy] = useState(true);
@@ -51,7 +52,7 @@ export default function TopicScreen({ route, navigation }) {
   useFocusEffect(
     useCallback(() => {
       if (correctStreak === 0 && topic && questions.length === 0) {
-        resetTopicForTest();
+        setShowRestart(true);
       }
     }, [correctStreak, topic, questions])
   );
@@ -123,8 +124,16 @@ export default function TopicScreen({ route, navigation }) {
       const correctIds = saved ? JSON.parse(saved) : [];
       const filtered = allQuestions.filter(q => !correctIds.includes(q.id));
       setQuestions(filtered);
+
+      if (filtered.length === 0) {
+        setShowRestart(true);
+      } else {
+        setShowRestart(false);
+      }
+
     } catch (err) {
       setQuestions(allQuestions);
+      setShowRestart(false);
     }
   };
 
@@ -211,6 +220,7 @@ export default function TopicScreen({ route, navigation }) {
 
       if (updated.length === 0) {
         navigation.navigate('TopicComplete', {
+          topicId: topic.topic_id,
           heading: topic.topic_completion_heading,
           text: topic.topic_completion_text,
           topic_xp: topic.topic_xp,
@@ -251,8 +261,7 @@ export default function TopicScreen({ route, navigation }) {
     );
   }
 
-  const currentQuestion = questions[currentIndex];
-  if (!currentQuestion) {
+  if (showRestart || !questions.length) {
     return (
       <View style={styles.loaderContainer}>
         <Text style={styles.completedText}>You have already completed this topic!</Text>
@@ -260,6 +269,8 @@ export default function TopicScreen({ route, navigation }) {
       </View>
     );
   }
+
+  const currentQuestion = questions[currentIndex];
 
   return (
     <View style={{ flex: 1 }}>
