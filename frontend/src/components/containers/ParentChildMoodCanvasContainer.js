@@ -1,204 +1,3 @@
-// import React, { useState, useEffect } from 'react';
-// import {
-//   View,
-//   Text,
-//   FlatList,
-//   Image,
-//   TouchableOpacity,
-//   StyleSheet,
-// } from 'react-native';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-// import supabase from '../../services/supabase';
-// import BubblConfig from '../../config/BubblConfig';
-// import { Ionicons } from '@expo/vector-icons';
-
-// const ParentChildMoodCanvasContainer = ({ navigation }) => {
-//   const [drawings, setDrawings] = useState([]);
-//   const [loading, setLoading] = useState(false);
-
-//   useEffect(() => {
-//     const fetchDrawings = async () => {
-//       const childUserId = await AsyncStorage.getItem('selected_child_user_id');
-//       console.log('[ParentChildMoodCanvasContainer] Fetching drawings for:', childUserId);
-
-//       if (!childUserId) return;
-
-//       try {
-//         setLoading(true);
-
-//         const { data: { session } } = await supabase.auth.getSession();
-
-//         const response = await fetch(`${BubblConfig.BACKEND_URL}/api/drawings/getByChild/${childUserId}`, {
-//           method: 'GET',
-//           headers: {
-//             'Authorization': `Bearer ${session.access_token}`,
-//           },
-//         });
-
-//         const result = await response.json();
-//         console.log('[ParentChildMoodCanvasContainer] Raw drawings:', result);
-
-//         if (response.ok && Array.isArray(result)) {
-//           const signedDrawings = await Promise.all(result.map(async (item) => {
-//             const { data: signedUrlData, error } = await supabase.storage
-//               .from('drawings')
-//               // .createSignedUrl(`drawings/${item.drawing_url}`, 60 * 60); // add "drawings/"
-//               .createSignedUrl(item.drawing_url, 60 * 60); // 1 hour
-
-//             if (error) {
-//               console.error('[ParentChildMoodCanvasContainer] Signed URL error:', error.message);
-//               return item;
-//             }
-
-//             return { ...item, signedUrl: signedUrlData?.signedUrl };
-//           }));
-
-//           console.log('[ParentChildMoodCanvasContainer] Signed drawings:', signedDrawings);
-//           setDrawings(signedDrawings);
-//         } else {
-//           console.error('[ParentChildMoodCanvasContainer] Fetch failed:', result?.error || 'Unknown error');
-//         }
-//       } catch (err) {
-//         console.error('[ParentChildMoodCanvasContainer] Fetch error:', err.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchDrawings();
-//   }, []);
-
-// const handleDrawingPress = (item) => {
-//   navigation.navigate('ParentSelectedDrawingScreen', { drawing: item });
-// };
-
-//   const renderDrawingCard = ({ item }) => (
-//     <TouchableOpacity
-//       style={styles.card}
-//       onPress={() => handleDrawingPress(item)}
-//     >
-//       {/* <Image
-//         source={{ uri: item.signedUrl }}
-//         style={styles.drawingImage}
-//       /> */}
-
-
-// <Image
-//   source={{ uri: item.signedUrl }}
-//   style={styles.drawingImage}
-//   onError={(e) => console.log('[Image] Load error:', e.nativeEvent.error)}
-// />
-
-
-
-//       <Text style={styles.moodLabel}>{item.mood}</Text>
-//     </TouchableOpacity>
-//   );
-
-//   return (
-//     <View style={styles.container}>
-//       {/* Top header with calendar */}
-//       <View style={styles.header}>
-//         <Text style={styles.headerTitle}>Mood Canvas</Text>
-//         <TouchableOpacity>
-//           <Ionicons name="calendar-outline" size={24} color="#8361E4" />
-//         </TouchableOpacity>
-//       </View>
-
-//       {/* FlatList */}
-//       <FlatList
-//         data={drawings}
-//         keyExtractor={(item, index) => index.toString()}
-//         numColumns={2}
-//         contentContainerStyle={styles.listContent}
-//         renderItem={renderDrawingCard}
-//         ListEmptyComponent={
-//           !loading && (
-//             <View style={styles.emptyContainer}>
-//               <Text style={styles.emptyText}>No drawings found.</Text>
-//             </View>
-//           )
-//         }
-//       />
-//     </View>
-//   );
-// };
-
-// export default ParentChildMoodCanvasContainer;
-
-// const styles = StyleSheet.create({
-//   container: {
-//     // flex: 1,
-//     backgroundColor: '#fff',
-//     padding: 12,
-//   },
-//   header: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     alignItems: 'center',
-//     marginBottom: 12,
-//   },
-//   headerTitle: {
-//     fontSize: 22,
-//     fontWeight: 'bold',
-//     color: '#2E195C',
-//   },
-//   listContent: {
-//     paddingBottom: 20,
-//   },
-// card: {
-//   width: '48%',         // 2 columns (48% + margins)
-//   backgroundColor: '#8361E4',
-//   borderRadius: 16,
-//   margin: '1%',         // small margin between cards
-//   overflow: 'hidden',
-// },
-// drawingImage: {
-//   width: '100%',        // full card width
-//   height: 160,
-//   borderTopLeftRadius: 16,
-//   borderTopRightRadius: 16,
-//   backgroundColor: '#ccc',   // TEMP for debugging
-// },
-//   moodLabel: {
-//     color: '#fff',
-//     fontSize: 16,
-//     fontWeight: '600',
-//     padding: 8,
-//     textAlign: 'right',
-//   },
-//   emptyContainer: {
-//     marginTop: 50,
-//     alignItems: 'center',
-//   },
-//   emptyText: {
-//     color: '#999',
-//     fontSize: 16,
-//   },
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -212,99 +11,131 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import supabase from '../../services/supabase';
 import BubblConfig from '../../config/BubblConfig';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';  // ✅ Add this!
+import { useNavigation } from '@react-navigation/native';
+
+import BubblYearMonthPicker from '../forms/BubblYearMonthPicker';
+
+
+const moodIcons = {
+  Happy: require('../../assets/icons/Moods/Happy.png'),
+  Mad: require('../../assets/icons/Moods/Mad.png'),
+  Sad: require('../../assets/icons/Moods/Sad.png'),
+};
 
 const ParentChildMoodCanvasContainer = () => {
-  const navigation = useNavigation();  // ✅ Hook to get navigation
+  const navigation = useNavigation();
 
   const [drawings, setDrawings] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchDrawings = async () => {
-      const childUserId = await AsyncStorage.getItem('selected_child_user_id');
-      console.log('[ParentChildMoodCanvasContainer] Fetching drawings for:', childUserId);
+  const [calendarVisible, setCalendarVisible] = useState(false);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
 
-      if (!childUserId) return;
+  const fetchDrawings = async (year = selectedYear, month = selectedMonth) => {
+    const childUserId = await AsyncStorage.getItem('selected_child_user_id');
+    if (!childUserId) return;
 
-      try {
-        setLoading(true);
+    try {
+      setLoading(true);
 
-        const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session } } = await supabase.auth.getSession();
 
-        const response = await fetch(`${BubblConfig.BACKEND_URL}/api/drawings/getByChild/${childUserId}`, {
+      const response = await fetch(
+        `${BubblConfig.BACKEND_URL}/api/drawings/getByChild/${childUserId}?month=${month}&year=${year}`,
+        {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${session.access_token}`,
           },
-        });
-
-        const result = await response.json();
-        console.log('[ParentChildMoodCanvasContainer] Raw drawings:', result);
-
-        if (response.ok && Array.isArray(result)) {
-          const signedDrawings = await Promise.all(result.map(async (item) => {
-            const { data: signedUrlData, error } = await supabase.storage
-              .from('drawings')
-              .createSignedUrl(item.drawing_url, 60 * 60); // 1 hour
-
-            if (error) {
-              console.error('[ParentChildMoodCanvasContainer] Signed URL error:', error.message);
-              return item;
-            }
-
-            return { ...item, signedUrl: signedUrlData?.signedUrl };
-          }));
-
-          console.log('[ParentChildMoodCanvasContainer] Signed drawings:', signedDrawings);
-          setDrawings(signedDrawings);
-        } else {
-          console.error('[ParentChildMoodCanvasContainer] Fetch failed:', result?.error || 'Unknown error');
         }
-      } catch (err) {
-        console.error('[ParentChildMoodCanvasContainer] Fetch error:', err.message);
-      } finally {
-        setLoading(false);
+      );
+
+      const result = await response.json();
+
+      if (response.ok && Array.isArray(result)) {
+        const signedDrawings = await Promise.all(result.map(async (item) => {
+          const { data: signedUrlData, error } = await supabase.storage
+            .from('drawings')
+            .createSignedUrl(item.drawing_url, 60 * 60);
+
+          if (error) {
+            console.error('[Signed URL error]', error.message);
+            return item;
+          }
+
+          return { ...item, signedUrl: signedUrlData?.signedUrl };
+        }));
+
+        setDrawings(signedDrawings);
+      } else {
+        console.error('[Fetch failed]', result?.error || 'Unknown error');
+        setDrawings([]);
       }
-    };
-
-    fetchDrawings();
-  }, []);
-
-  const handleDrawingPress = (item) => {
-    navigation.navigate('ParentSelectedDrawingScreen', { drawing: item });  // ✅ Screen name is correct here
+    } catch (err) {
+      console.error('[Fetch error]', err.message);
+      setDrawings([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const renderDrawingCard = ({ item }) => (
-    <TouchableOpacity
-      style={styles.card}
-      onPress={() => handleDrawingPress(item)}
-    >
-      <Image
-        source={{ uri: item.signedUrl }}
-        style={styles.drawingImage}
-        onError={(e) => console.log('[Image] Load error:', e.nativeEvent.error)}
-      />
-      <Text style={styles.moodLabel}>{item.mood}</Text>
-    </TouchableOpacity>
-  );
+  useEffect(() => {
+    fetchDrawings(); 
+  }, []);
+
+  const handleApplyCalendar = () => {
+    fetchDrawings(selectedYear, selectedMonth);
+    setCalendarVisible(false);
+  };
+
+  const handleDrawingPress = (item) => {
+    navigation.navigate('ParentSelectedDrawingScreen', { drawing: item });
+  };
+
+  const renderDrawingCard = ({ item }) => {
+    const moodKey = item.mood?.charAt(0).toUpperCase() + item.mood?.slice(1).toLowerCase();
+    const date = new Date(item.created_at);
+    const formattedDate = `${date.getDate()} ${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
+
+    return (
+      <TouchableOpacity style={styles.card} onPress={() => handleDrawingPress(item)}>
+        <View style={styles.purpleBox}>
+          <Image
+            source={{ uri: item.signedUrl }}
+            style={styles.drawingImage}
+            onError={(e) => console.log('[Image Load error]', e.nativeEvent.error)}
+          />
+
+          {moodIcons[moodKey] && (
+            <View style={styles.moodIconWrapper}>
+              <Image source={moodIcons[moodKey]} style={styles.moodIcon} />
+            </View>
+          )}
+
+          <Text style={styles.dateText}>{formattedDate}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>
-      {/* Top header with calendar */}
+      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Mood Canvas</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => setCalendarVisible(true)}>
           <Ionicons name="calendar-outline" size={24} color="#8361E4" />
         </TouchableOpacity>
       </View>
 
-      {/* FlatList */}
+      {/* Drawings list */}
       <FlatList
         data={drawings}
         keyExtractor={(item, index) => index.toString()}
         numColumns={2}
-        contentContainerStyle={styles.listContent}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[styles.listContent, { justifyContent: 'center', alignItems: 'center' }]}
         renderItem={renderDrawingCard}
         ListEmptyComponent={
           !loading && (
@@ -314,16 +145,29 @@ const ParentChildMoodCanvasContainer = () => {
           )
         }
       />
+
+      {/* Calendar modal */}
+      <BubblYearMonthPicker
+        visible={calendarVisible}
+        selectedYear={selectedYear}
+        selectedMonth={selectedMonth}
+        onYearChange={(val) => setSelectedYear(val)}
+        onMonthChange={(val) => setSelectedMonth(val)}
+        onApply={handleApplyCalendar}
+        onClose={() => setCalendarVisible(false)}
+      />
     </View>
   );
 };
 
 export default ParentChildMoodCanvasContainer;
 
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     padding: 12,
+    flex: 1,
   },
   header: {
     flexDirection: 'row',
@@ -340,25 +184,46 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   card: {
-    width: '48%',         // 2 columns (48% + margins)
-    backgroundColor: '#8361E4',
-    borderRadius: 16,
-    margin: '1%',         // small margin between cards
+    width: 180,
+    margin: 8,
+  },
+  purpleBox: {
+    backgroundColor: '#2E195C',
+    borderRadius: 20,
     overflow: 'hidden',
+    paddingTop: 12,
+    paddingHorizontal: 12,
+    paddingBottom: 8,
+    position: 'relative',
+    paddingBottom: 12,
   },
   drawingImage: {
     width: '100%',
-    height: 160,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    backgroundColor: '#ccc',
+    height: 140,
+    borderRadius: 16,
+    resizeMode: 'cover',
   },
-  moodLabel: {
+  moodIconWrapper: {
+    position: 'absolute',
+    bottom: 8,
+    right: 8,
+    backgroundColor: '#2E195C',
+    borderRadius: 50,
+    padding: 4,
+    borderWidth: 2,
+    borderColor: '#2E195C',
+  },
+  moodIcon: {
+    width: 40,
+    height: 40,
+    resizeMode: 'contain',
+  },
+  dateText: {
+    marginTop: 13,
     color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-    padding: 8,
-    textAlign: 'right',
+    fontSize: 14,
+    // alignSelf: 'flex-start',
+    marginLeft: 4,
   },
   emptyContainer: {
     marginTop: 50,
