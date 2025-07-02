@@ -1,6 +1,6 @@
 const supabase = require('../utils/supabaseClient');
 
-const MINUTES_TO_RECHARGE = 30;
+const MINUTES_TO_RECHARGE = 60;
 const MAX_ENERGY = 3;
 
 

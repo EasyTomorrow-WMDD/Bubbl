@@ -13,6 +13,7 @@ import ChildNavbar from '../layout/ChildNavbar';
 import { useNavigation } from '@react-navigation/native';
 import { BASE_URL } from '../../utils/config';
 import Avatar from './Avatar';
+import EnergyTimer from './Timer';
 
 export default function TemporaryMainContainer() {
   const [user, setUser] = useState(null);
@@ -90,9 +91,9 @@ export default function TemporaryMainContainer() {
   let currentTopicId = null;
 
   for (const mod of modules) {
-    const sortedTopics = mod.ref_topic.sort((a, b) => a.topic_number - b.topic_number);
-    for (const topic of sortedTopics) {
-      const progressItem = progress.find((p) => p.topic_id === topic.topic_id);
+    const sortedTopics = mod.ref_topic.sort((a, b) => a.topic_number - b.topic_number); // Sort the topics
+    for (const topic of sortedTopics) { 
+      const progressItem = progress.find((p) => p.topic_id === topic.topic_id); // Check if the topic from SortedTopics is inside the progress Array, if it is not, then the currentTopicId variable gets updated with the value of the topic id that is not completed
       if (!progressItem?.user_topic_completed) {
         currentTopicId = topic.topic_id;
         break;
@@ -119,7 +120,7 @@ export default function TemporaryMainContainer() {
               <Avatar userId={userId} userLevel={user ? user.user_level : null} />
               <Text style={styles.title}>Hi, {user ? user.user_nickname : '...'}</Text>
               <StatsPanel user={user} />
-              {user?.user_energy < 3 ? <Text style={styles.text}>Next HP refill in:</Text> : null}
+              {user?.user_energy < 3 ? <EnergyTimer userId={userId}/> : null}
             </View>
 
             <Pressable style={{ backgroundColor: "#FFCE48", flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5, marginHorizontal: 20, marginBottom: 20, padding: 20, borderRadius: 15, borderWidth: 2, borderColor: '#FFBA20' }}
@@ -155,7 +156,8 @@ const styles = StyleSheet.create({
   },
   container: {
     alignItems: 'center',
-    padding: 30,
+    paddingHorizontal: 30,
+    paddingVertical: 20,
     gap: 10,
   },
 
