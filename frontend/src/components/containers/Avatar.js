@@ -22,6 +22,7 @@ const Avatar = ({ userId, userLevel }) => {
     console.log('ASSETMAP', assetMap)
 
     useEffect(() => {
+        if (!userId) return;
         const fetchAvatar = async () => {
             try {
                 const response = await axios.get(
@@ -30,14 +31,14 @@ const Avatar = ({ userId, userLevel }) => {
                 setAssets(response.data);
                 console.log('AVATAR', JSON.stringify(response.data, null, 2));
             } catch (error) {
-                console.error('Error fetching avatar:', error);
+                console.error('Error fetching avatar:', error.message);
             } finally {
                 setLoading(false);
             }
         };
 
         fetchAvatar();
-    }, [userId, userLevel]);
+    }, [userId]);
 
     if (loading) return <ActivityIndicator size="large" color="#0000ff" />;
 
@@ -84,22 +85,22 @@ const Avatar = ({ userId, userLevel }) => {
 const styles = StyleSheet.create({
     avatarContainer: {
         width: '100%',
-        height: 300,
+        height: 200,
         position: 'relative',
     },
     skin: {
-        width: 300,
-        height:300,
+        width: 150,
+        height:150,
         position: 'absolute',
-        left: 50,
-        top: 0,
+        left: 100,
+        top: 50,
     },
     hat: {
-        width: 200,
+        width: 100,
         height:100,
         position: 'absolute',
-        top: 10,
-        left: 150,
+        top: 0,
+        left: 170,
         transform: [{ rotate: '15deg' }],
     },
     glasses: {

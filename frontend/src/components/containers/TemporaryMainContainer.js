@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, ImageBackground, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, ImageBackground, ScrollView, Pressable } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -22,6 +22,7 @@ export default function TemporaryMainContainer() {
   const [progress, setProgress] = useState([]);
   const navigation = useNavigation();
   console.log('USER ID:', userId);
+
 
   // ================= Load profile info from AsyncStorage ====================
   useEffect(() => {
@@ -86,9 +87,23 @@ export default function TemporaryMainContainer() {
     navigation.navigate('TopicScreen', { topicId: topic.topic_id });
   };
 
+  let currentTopicId = null;
+
+  for (const mod of modules) {
+    const sortedTopics = mod.ref_topic.sort((a, b) => a.topic_number - b.topic_number);
+    for (const topic of sortedTopics) {
+      const progressItem = progress.find((p) => p.topic_id === topic.topic_id);
+      if (!progressItem?.user_topic_completed) {
+        currentTopicId = topic.topic_id;
+        break;
+      }
+    }
+    if (currentTopicId) break;
+  }
+
 
   return (
-    <View style={{ flex: 1,  }}>
+    <View style={{ flex: 1, }}>
       <PatthernHeader />
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
         <View style={{ flex: 1, backgroundColor: '#DFDAFAA' }}>
@@ -100,21 +115,24 @@ export default function TemporaryMainContainer() {
           >
             <View style={styles.backgroundOverlay} />
             <View style={styles.container}>
-              <Image source={require('../../assets/images/yellow_bubbl.png')} style={styles.img} />
-              {/* <Avatar userId={userId} userLevel={user ? user.user_level : null} /> */}
+              {/* <Image source={require('../../assets/images/yellow_bubbl.png')} style={styles.img} /> */}
+              <Avatar userId={userId} userLevel={user ? user.user_level : null} />
               <Text style={styles.title}>Hi, {user ? user.user_nickname : '...'}</Text>
               <StatsPanel user={user} />
-              {user?.user_energy < 3 ? <Text style={styles.text}>Next HP refill in:</Text> : null }
+              {user?.user_energy < 3 ? <Text style={styles.text}>Next HP refill in:</Text> : null}
             </View>
 
-            <View style={{ backgroundColor: "#FFCE48", flexDirection: 'row' ,alignItems: 'center', justifyContent: 'center', gap: 5,marginHorizontal: 20, marginBottom: 20, padding: 20, borderRadius: 15, borderWidth: 2, borderColor: '#FFBA20' }}>
+            <Pressable style={{ backgroundColor: "#FFCE48", flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5, marginHorizontal: 20, marginBottom: 20, padding: 20, borderRadius: 15, borderWidth: 2, borderColor: '#FFBA20' }}
+              onPress={() => {
+                if (currentTopicId) { handleTopicPress({ topic_id: currentTopicId }); }
+              }}>
               <Text style={{ fontSize: 16, color: '#7A310D' }}>Continue from where you left</Text>
-              <Image source={require('../../assets/icons/play_icon.png')} style={{height: 20, width: 20}}></Image>
-            </View>
+              <Image source={require('../../assets/icons/play_icon.png')} style={{ height: 20, width: 20 }}></Image>
+            </Pressable>
           </ImageBackground>
 
           <View>
-            <Module modules={modules} progress={progress} onTopicPress={handleTopicPress} />
+            <Module modules={modules} progress={progress} onTopicPress={handleTopicPress} currentTopicId={currentTopicId} />
           </View>
         </View>
       </ScrollView>
