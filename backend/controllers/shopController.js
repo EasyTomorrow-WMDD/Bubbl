@@ -77,7 +77,7 @@ exports.postPurchaseAsset = async (req, res) => {
   }
 
   try {
-    // 1. Obtener asset_variation_id, asset_id y precio
+    //Get asset_variation_id, asset_id
     const { data: levelData, error: levelError } = await supabase
       .from('ref_asset_variation_level')
       .select(`
@@ -99,7 +99,7 @@ exports.postPurchaseAsset = async (req, res) => {
     const assetId = levelData.ref_asset_variation.asset_id;
     const assetPrice = levelData.ref_asset_variation.asset_variation_price;
 
-    // 2. Verificar si ya tiene esa combinación (nivel específico)
+    // Check if the user own the item based on the level
     const { data: existing, error: existError } = await supabase
       .from('user_asset')
       .select('user_asset_id')
@@ -116,7 +116,7 @@ exports.postPurchaseAsset = async (req, res) => {
       return res.status(400).json({ error: 'You already own this variation level' });
     }
 
-    // 3. Obtener estrellas del usuario
+    // Get User Stars
     const { data: userData, error: userError } = await supabase
       .from('user')
       .select('user_star')
@@ -131,7 +131,7 @@ exports.postPurchaseAsset = async (req, res) => {
       return res.status(400).json({ error: 'Insufficient stars' });
     }
 
-    // 4. Descontar estrellas
+    // Discount Stars
     const { error: updateError } = await supabase
       .from('user')
       .update({ user_star: userData.user_star - assetPrice })
@@ -142,7 +142,7 @@ exports.postPurchaseAsset = async (req, res) => {
       return res.status(500).json({ error: 'Error updating stars' });
     }
 
-    // 5. Registrar la compra
+    // Submit the purchase
     const { data: inserted, error: insertError } = await supabase
       .from('user_asset')
       .insert([{
@@ -199,7 +199,7 @@ exports.activateAsset = async (req, res) => {
   }
 
   try {
-    // 1. Obtener la variación con su tipo de asset
+    // Get variation base on asset
     const { data: variationLevelData, error: variationLevelError } = await supabase
       .from('ref_asset_variation_level')
       .select(`asset_variation_id, ref_asset_variation(asset_variation_id, ref_asset(asset_id, asset_type))`)
@@ -214,7 +214,7 @@ exports.activateAsset = async (req, res) => {
       return res.status(400).json({ error: 'Asset type not found for the variation level' });
     }
 
-    // 2. Obtener todas las variaciones del mismo tipo
+    // Get diffeent variation  based on type
     const { data: variationData, error: variationError } = await supabase
       .from('ref_asset_variation')
       .select(`asset_variation_id, ref_asset(asset_id, asset_type)`);
@@ -225,7 +225,7 @@ exports.activateAsset = async (req, res) => {
       .filter(v => v.ref_asset?.asset_type === assetType)
       .map(v => v.asset_variation_id);
 
-    // 3. Obtener los niveles asociados a esas variaciones
+    // Get level associate to variations
     const { data: levelData, error: levelError } = await supabase
       .from('ref_asset_variation_level')
       .select('asset_variation_level_id')
@@ -235,7 +235,7 @@ exports.activateAsset = async (req, res) => {
 
     const levelIds = levelData.map(l => l.asset_variation_level_id);
 
-    // 4. Desactivar todas las del mismo tipo para ese usuario
+    // Deactivate items with the same type, so it makes sure the user do not use two same type, which is weird
     const { error: deactivateError } = await supabase
       .from('user_asset')
       .update({ user_asset_active: false })
@@ -244,7 +244,7 @@ exports.activateAsset = async (req, res) => {
 
     if (deactivateError) throw deactivateError;
 
-    // 5. Activar solo la que se eligió
+    // Activate only the item that was chose
     const { error: activateError } = await supabase
       .from('user_asset')
       .update({ user_asset_active: true })
