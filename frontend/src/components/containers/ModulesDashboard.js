@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import CircularProgress from './Circle';
 import { useNavigation } from '@react-navigation/native';
-import { getBgClass, getTopicBg, textColor } from '../../styles/BubblColors';
+import { getBgClass, getTopicBg, textColor, currentTopicColor } from '../../styles/BubblColors';
 
 
 export default function Module({ modules, progress = [], onTopicPress, currentTopicId }) {
@@ -42,7 +42,7 @@ export default function Module({ modules, progress = [], onTopicPress, currentTo
                         styles.card,
                         {
                           backgroundColor: 
-                          isCurrent ? '#7B4DDA' :
+                          isCurrent ? currentTopicColor(item.module_number) :
                           getTopicBg(item.module_number),
                           opacity: isLocked ? 0.4 : 1,
                         }
