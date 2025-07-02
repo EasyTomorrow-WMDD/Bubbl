@@ -1,16 +1,17 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text, Image, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, Image, StyleSheet, ImageBackground, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const PatthernHeader = () => {
+  const navigation = useNavigation();
   return (
 
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.header}>
           <Text style={styles.title}>Bubbl.</Text>
-          <View style={styles.icons}>
+          <Pressable style={styles.icons} onPress={() => navigation.navigate('Profile')}>
             <Image source={require('../../assets/icons/happy-beaming.png')} style={styles.icon} />
-            <Image source={require('../../assets/icons/bell.png')} style={styles.icon} />
-          </View>
+          </Pressable>
         </View>
       </SafeAreaView>
   );
