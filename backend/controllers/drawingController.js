@@ -85,23 +85,42 @@ exports.uploadDrawing = async (req, res) => {
 // Get all drawings for child
 exports.getDrawingsByChild = async (req, res) => {
   const userId = req.params.userId;
+  const { month, year } = req.query;
 
-  console.log('[getDrawingsByChild] Fetching drawings for user_profile_id:', userId);
+  console.log('[getDrawingsByChild] Fetching drawings for:', userId, 'Month:', month, 'Year:', year);
 
   try {
-    const { data, error } = await supabase
+    let query = supabase
       .from('drawing')
       .select('user_profile_id, account_id, mood, drawing_url, created_at')
-      .eq('user_profile_id', userId)
-      .order('created_at', { ascending: false });
+      .eq('user_profile_id', userId);
+
+    // If month and year provided, filter the date
+    if (month && year) {
+      const paddedMonth = month.toString().padStart(2, '0');
+      const startDate = `${year}-${paddedMonth}-01T00:00:00.000Z`;
+      const endMonth = parseInt(month) + 1;
+      const paddedNextMonth = endMonth.toString().padStart(2, '0');
+      const endDate =
+        endMonth > 12
+          ? `${parseInt(year) + 1}-01-01T00:00:00.000Z`
+          : `${year}-${paddedNextMonth}-01T00:00:00.000Z`;
+
+      query = query
+        .gte('created_at', startDate)
+        .lt('created_at', endDate);
+    }
+
+    query = query.order('created_at', { ascending: false });
+
+    const { data, error } = await query;
 
     if (error) {
-      console.error('[getDrawingsByChild] Fetch failed:', error.message);
+      console.error('[getDrawingsByChild] Fetch error:', error.message);
       return res.status(500).json({ error: 'Fetch failed' });
     }
 
-    console.log('[getDrawingsByChild] Fetched:', data.length, 'items');
-
+    console.log('[getDrawingsByChild] Found:', data.length, 'drawings');
     return res.status(200).json(data);
   } catch (err) {
     console.error('[getDrawingsByChild] Unexpected error:', err.message);
