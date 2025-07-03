@@ -45,9 +45,9 @@ export const globalStyles = StyleSheet.create({
     paddingHorizontal: 8,
     marginTop: 40,
   },
+  // Header title styles
   headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    color: BubblColors.BubblPurple800,
     textAlign: 'center',
     flex: 1,
     marginTop: 40,
@@ -76,13 +76,25 @@ export const globalStyles = StyleSheet.create({
   // Form styles -- START
   label: {
     marginTop: 10,
-    fontWeight: '500',
   },
   input: {
     borderWidth: 1,
     borderColor: '#aaa',
     borderRadius: 6,
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingTop: 8,
+    paddingBottom: 12,
+    marginTop: 5,
+    width: '100%',
+    maxWidth: 300,
+  },
+  passwordInput: {
+    borderWidth: 1,
+    borderColor: '#aaa',
+    borderRadius: 6,
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
     marginTop: 5,
     width: '100%',
     maxWidth: 300,
@@ -95,7 +107,7 @@ export const globalStyles = StyleSheet.create({
     fontSize: 13,
   },
   button: {
-    backgroundColor: '#5DADE2',
+    backgroundColor: BubblColors.BubblPurple800,
     width: '100%',
     maxWidth: 300,
     paddingVertical: 12,
@@ -113,7 +125,7 @@ export const globalStyles = StyleSheet.create({
     marginBottom: 20,
   },
   forgotText: {
-    color: '#1e90ff',
+    color: BubblColors.BubblNeutralDark,
   },
   // Form styles -- END
   // The "or" divider styles -- START
@@ -128,12 +140,12 @@ export const globalStyles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#ccc',
+    backgroundColor: BubblColors.BubblNeutralDark,
   },
   dividerText: {
     marginHorizontal: 12,
     fontSize: 14,
-    color: '#999',
+    color: BubblColors.BubblNeutralDark,
   },
   // The "or" divider styles -- END
   // Login page specific styles -- START

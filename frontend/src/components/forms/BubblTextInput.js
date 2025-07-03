@@ -1,5 +1,7 @@
 import { View, Text, TextInput } from 'react-native';
 import { globalStyles } from '../../styles/BubblStyles';
+import { fontStyles } from '../../styles/BubblFontStyles';
+
 
 // ==========================================================================
 // BubblTextInput component
@@ -14,9 +16,9 @@ import { globalStyles } from '../../styles/BubblStyles';
 // - error: Error message to display (optional)
 const BubblTextInput = ({ label, placeholder, value, onChangeText, autoCapitalize = 'none', keyboardType = 'default', error }) => (
   <View style={{ marginBottom: 16 }}>
-    <Text style={globalStyles.label}>{label}</Text>
+    <Text style={[fontStyles.tagline, globalStyles.label]}>{label}</Text>
     <TextInput
-      style={[globalStyles.input, error && globalStyles.errorInput]}
+      style={[fontStyles.bodyDefault, globalStyles.input, error && globalStyles.errorInput]}
       placeholder={placeholder}
       value={value}
       onChangeText={onChangeText}
