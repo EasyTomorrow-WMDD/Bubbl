@@ -15,6 +15,7 @@ exports.checkUserExists = async (req, res) => {
 
   // Extract userId from request parameters
   const userAuthId = req.user.sub; // from verified JWT token payload via middleware
+    console.log('[DEBUG] checkUserExists - userAuthId:', userAuthId);
 
   try {
     // Check if userId exists in the 'public.user' table
@@ -24,11 +25,14 @@ exports.checkUserExists = async (req, res) => {
       .eq('user_auth_id', userAuthId)
       .single();
 
+    console.log('[DEBUG] checkUserExists - results:', !!data);
+
     // Return 500 error if there is an error other than 'PGRST116' (which indicates no data found)
     if (error && error.code !== 'PGRST116') {
       console.error(error);
       return res.status(500).json({ success: false, error: 'Database error' });
     }
+
 
     // Otherwise, return 200 with the existence status (something or null)
     return res.status(200).json({ exists: !!data });
