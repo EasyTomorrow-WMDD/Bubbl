@@ -22,11 +22,13 @@ router.use((req, res, next) => {
 });
 
 // Static routes. 
-router.get('/exists', verifySupabaseToken, async (req, res) => {
-  const user = req.user;
-  console.log('[✅ BACKEND] Token verified, user:', user.email);
-  res.json({ exists: true });
-});  // Route to check if a user exists
+// router.get('/exists', verifySupabaseToken, async (req, res) => {
+//   const user = req.user;
+//   console.log('[✅ BACKEND] Token verified, user:', user.email);
+//   res.json({ exists: true });
+// });  
+// Route to check if a user exists
+router.get('/exists', verifySupabaseToken, checkUserExists); // Route to check if a user exists
 router.post('/registerUser', verifySupabaseToken, registerUser); // Route to register a new user or add an existing user to an account
 router.get('/profiles', verifySupabaseToken, getUserProfiles);  // Route to get user profiles for an account
 router.post('/addProfile', verifySupabaseToken, addProfile); // Route to add a new profile for a user
