@@ -1,5 +1,7 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { globalStyles } from '../../styles/BubblStyles';
+import { fontStyles } from '../../styles/BubblFontStyles';
+import backIcon from '../../assets/icons/navigation-back.png';
 
 // ==========================================================================
 // PageHeading component
@@ -17,10 +19,14 @@ const PageHeading = ({ title, onBackPress, style, titleStyle }) => (
   <View style={[globalStyles.headerRow, style]}>
     { onBackPress && (
         <TouchableOpacity onPress={onBackPress}>
-          <Text style={globalStyles.backButton}>{'\u2190'}</Text>
+          <Image
+            source={backIcon}
+            style={{ marginTop: 40 }}
+            resizeMode="contain"
+          />
         </TouchableOpacity>
     ) }
-    <Text style={[globalStyles.headerTitle, titleStyle]}>{title}</Text>
+    <Text style={[fontStyles.display3, globalStyles.headerTitle, titleStyle]}>{title}</Text>
     { onBackPress && (
         // Spacer to balance back the icon
         <View style={{ width: 24 }} />
