@@ -2,6 +2,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet, View, Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import React, { useCallback, useEffect, useState } from 'react';
+// import * as SplashScreen from 'expo-splash-screen';
+import * as Font from 'expo-font';
+
 // Import screens and components
 import AuthWelcomeScreen from './frontend/src/screens/AuthWelcomeScreen';
 import AuthLoginScreen from './frontend/src/screens/AuthLoginScreen';
@@ -26,11 +30,32 @@ import TemporaryMainContainer from './frontend/src/components/containers/Tempora
 import Previsualization from './frontend/src/screens/Previsualization';
 import PurchaseSuccess from './frontend/src/screens/PurchaseSucess';
 
+// SplashScreen.preventAutoHideAsync(); // Keep splash screen until fonts are loaded
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+    Font.loadAsync({
+      'MuseoSansRounded': require('./assets/fonts/MuseoSansRounded700.otf'),
+      'ABeeZee': require('./assets/fonts/ABeeZee-Regular.otf'),
+    }).then(() => setFontsLoaded(true));
+  }, []);
+
+  // const onLayoutRootView = useCallback(async () => {
+  //   if (fontsLoaded) await SplashScreen.hideAsync();
+  // }, [fontsLoaded]);
+
+  if (!fontsLoaded) return null;
+
+//  <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
+    // </View>
+
   return (
-    <SafeAreaProvider>
+  <SafeAreaProvider>
       <ChildProvider>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false }}>
