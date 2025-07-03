@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, ImageBackground, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, ImageBackground, ScrollView, Pressable } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -10,6 +10,7 @@ import ChildNavbar from '../layout/ChildNavbar';
 import { useNavigation } from '@react-navigation/native';
 import { BASE_URL } from '../../utils/config';
 import Avatar from './Avatar';
+import EnergyTimer from './Timer';
 
 export default function TemporaryMainContainer() {
   const [user, setUser] = useState(null);
@@ -22,6 +23,7 @@ export default function TemporaryMainContainer() {
   const [nextRechargeTime, setNextReachargeTime] = useState(null);
 
   console.log('USER ID:', userId);
+
 
   // ================= Load profile info from AsyncStorage ====================
   useEffect(() => {
@@ -154,6 +156,23 @@ export default function TemporaryMainContainer() {
 
   return (
     <View style={{ flex: 1 }}>
+  let currentTopicId = null;
+
+  for (const mod of modules) {
+    const sortedTopics = mod.ref_topic.sort((a, b) => a.topic_number - b.topic_number); // Sort the topics
+    for (const topic of sortedTopics) { 
+      const progressItem = progress.find((p) => p.topic_id === topic.topic_id); // Check if the topic from SortedTopics is inside the progress Array, if it is not, then the currentTopicId variable gets updated with the value of the topic id that is not completed
+      if (!progressItem?.user_topic_completed) {
+        currentTopicId = topic.topic_id;
+        break;
+      }
+    }
+    if (currentTopicId) break;
+  }
+
+
+  return (
+    <View style={{ flex: 1, }}>
       <PatthernHeader />
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
         <View style={{ flex: 1, backgroundColor: '#DFDAFAA' }}>
@@ -161,36 +180,28 @@ export default function TemporaryMainContainer() {
           <ImageBackground
             source={require('../../assets/images/Background_Purple.png')}
             resizeMode="cover"
-            style={styles.background}
-          >
+            style={styles.background}>
             <View style={styles.backgroundOverlay} />
             <View style={styles.container}>
-              <Image source={require('../../assets/images/yellow_bubbl.png')} style={styles.img} />
+
+              {/* <Image source={require('../../assets/images/yellow_bubbl.png')} style={styles.img} /> */}
+              <Avatar userId={userId} userLevel={user ? user.user_level : null} />
               <Text style={styles.title}>Hi, {user ? user.user_nickname : '...'}</Text>
               <StatsPanel user={user} />
-              {user?.user_energy < 3 ? <Text style={styles.text}>Next HP refill in:</Text> : null}
+              {user?.user_energy < 3 ? <EnergyTimer userId={userId}/> : null}
             </View>
 
-            <View style={{
-              backgroundColor: "#FFCE48",
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 5,
-              marginHorizontal: 20,
-              marginBottom: 20,
-              padding: 20,
-              borderRadius: 15,
-              borderWidth: 2,
-              borderColor: '#FFBA20'
-            }}>
+            <Pressable style={{ backgroundColor: "#FFCE48", flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5, marginHorizontal: 20, marginBottom: 20, padding: 20, borderRadius: 15, borderWidth: 2, borderColor: '#FFBA20' }}
+              onPress={() => {
+                if (currentTopicId) { handleTopicPress({ topic_id: currentTopicId }); }
+              }}>
               <Text style={{ fontSize: 16, color: '#7A310D' }}>Continue from where you left</Text>
-              <Image source={require('../../assets/icons/play_icon.png')} style={{ height: 20, width: 20 }} />
-            </View>
+              <Image source={require('../../assets/icons/play_icon.png')} style={{ height: 20, width: 20 }}></Image>
+            </Pressable>
           </ImageBackground>
 
           <View>
-            <Module modules={modules} progress={progress} onTopicPress={handleTopicPress} />
+            <Module modules={modules} progress={progress} onTopicPress={handleTopicPress} currentTopicId={currentTopicId} />
           </View>
         </View>
       </ScrollView>
@@ -212,7 +223,8 @@ const styles = StyleSheet.create({
   },
   container: {
     alignItems: 'center',
-    padding: 30,
+    paddingHorizontal: 30,
+    paddingVertical: 20,
     gap: 10,
   },
   img: {
