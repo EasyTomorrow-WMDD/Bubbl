@@ -1,5 +1,6 @@
 import { View, Text, TextInput } from 'react-native';
 import { globalStyles } from '../../styles/BubblStyles';
+import { fontStyles } from '../../styles/BubblFontStyles';
 
 // ==========================================================================
 // BubblPasswordInput component
@@ -12,9 +13,9 @@ import { globalStyles } from '../../styles/BubblStyles';
 // - error: Error message to display (optional)
 const BubblPasswordInput = ({ label, placeholder, value, onChangeText, error }) => (
   <View style={{ marginBottom: 16 }}>
-    <Text style={globalStyles.label}>{label}</Text>
+    <Text style={[fontStyles.tagline, globalStyles.label]}>{label}</Text>
     <TextInput
-      style={[globalStyles.input, error && globalStyles.errorInput]}
+      style={[fontStyles.bodyDefault, globalStyles.passwordInput, error && globalStyles.errorInput]}
       placeholder="Enter your password"
       value={value}
       onChangeText={onChangeText}
