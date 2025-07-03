@@ -105,7 +105,6 @@ export default function TemporaryMainContainer() {
           setNextReachargeTime(null);
         }
 
-        // Actualiza user.user_energy también:
         setUser(prev => prev ? { ...prev, user_energy: data.user_energy } : prev);
 
       } catch (err) {
