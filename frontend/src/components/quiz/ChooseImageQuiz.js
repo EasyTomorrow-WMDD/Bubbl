@@ -1,21 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
-export default function ChooseImageQuiz({ data, onAnswer }) {
-  const handlePress = (selected) => {
-    const isCorrect = selected.is_correct;
+export default function ChooseImageQuiz({ data, onSelect, disabled }) {
+  const [selected, setSelected] = useState(null);
+
+  useEffect(() => {
+    setSelected(null);
+  }, [data]);
+
+  const handlePress = (img) => {
+    if (disabled) return;
+    setSelected(img.label);
+
+    const isCorrect = img.is_correct;
     const message = isCorrect ? data.quiz.message_correct : data.quiz.message_wrong;
-    onAnswer(selected.label, isCorrect, message);
+
+    onSelect(img.label, isCorrect, message);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{data.text}</Text>
+      {data.text && <Text style={styles.text}>{data.text}</Text>}
       <Text style={styles.question}>{data.quiz.question}</Text>
 
-      <View style={styles.imageGrid}>
+      <View style={styles.gridContainer}>
         {data.quiz.images.map((img, index) => (
-          <TouchableOpacity key={index} onPress={() => handlePress(img)} style={styles.imageWrapper}>
+          <TouchableOpacity
+            key={index}
+            onPress={() => handlePress(img)}
+            disabled={disabled}
+            style={[
+              styles.gridItem,
+              selected === img.label && styles.selectedItem
+            ]}
+          >
             <Image source={{ uri: img.url }} style={styles.image} />
             <Text style={styles.label}>{img.label}</Text>
           </TouchableOpacity>
@@ -26,11 +44,47 @@ export default function ChooseImageQuiz({ data, onAnswer }) {
 }
 
 const styles = StyleSheet.create({
-  container: { marginVertical: 20, padding: 10 },
-  text: { fontSize: 16, marginBottom: 10 },
-  question: { fontWeight: 'bold', fontSize: 18, marginBottom: 10 },
-  imageGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-around' },
-  imageWrapper: { width: '40%', marginBottom: 12, alignItems: 'center' },
-  image: { width: 100, height: 100, borderRadius: 8 },
-  label: { marginTop: 6, fontSize: 12 }
+  container: {
+    marginVertical: 20,
+    padding: 10
+  },
+  text: {
+    fontSize: 16,
+    marginBottom: 10
+  },
+  question: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginBottom: 10
+  },
+  gridContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between'
+  },
+  gridItem: {
+    width: '48%',
+    aspectRatio: 1,
+    marginBottom: 12,
+    alignItems: 'center',
+    backgroundColor: '#f8f8f8',
+    borderRadius: 8,
+    padding: 8
+  },
+  selectedItem: {
+    borderWidth: 2,
+    borderColor: '#4CAF50',
+    backgroundColor: '#e8f5e9'
+  },
+  image: {
+    width: '100%',
+    height: undefined,
+    aspectRatio: 1,
+    borderRadius: 8
+  },
+  label: {
+    marginTop: 6,
+    fontSize: 12,
+    textAlign: 'center'
+  }
 });

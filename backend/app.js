@@ -14,6 +14,7 @@ const logRoutes = require('./routes/logRoutes');
 const badgeRoutes = require('./routes/badgesRoutes');
 const shopRoutes = require('./routes/shopRoutes');
 
+
 // Increase img size to upload
 app.use(express.json({ limit: '5mb' }));
 
