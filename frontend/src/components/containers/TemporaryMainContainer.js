@@ -24,7 +24,6 @@ export default function TemporaryMainContainer() {
 
   console.log('USER ID:', userId);
 
-
   // ================= Load profile info from AsyncStorage ====================
   useEffect(() => {
     const loadProfileInfo = async () => {
@@ -83,11 +82,7 @@ export default function TemporaryMainContainer() {
     fetchChildProgress();
   }, [userId]);
 
-  const handleTopicPress = (topic) => {
-    navigation.navigate('TopicScreen', { topicId: topic.topic_id });
-  };
-
-  //=============== Fetch Energy (once on mount) =======================
+  // =============== Fetch Energy (once on mount) =======================
   useEffect(() => {
     const fetchEnergyStatus = async () => {
       try {
@@ -117,7 +112,7 @@ export default function TemporaryMainContainer() {
     fetchEnergyStatus();
   }, [userId]);
 
-  //=============== Energy Polling =======================
+  // =============== Energy Polling =======================
   useEffect(() => {
     if (!userId) return;
 
@@ -154,14 +149,12 @@ export default function TemporaryMainContainer() {
     return () => clearInterval(interval);
   }, [userId]);
 
-  return (
-    <View style={{ flex: 1 }}>
+  // =================== Calculate currentTopicId ========================
   let currentTopicId = null;
-
   for (const mod of modules) {
-    const sortedTopics = mod.ref_topic.sort((a, b) => a.topic_number - b.topic_number); // Sort the topics
-    for (const topic of sortedTopics) { 
-      const progressItem = progress.find((p) => p.topic_id === topic.topic_id); // Check if the topic from SortedTopics is inside the progress Array, if it is not, then the currentTopicId variable gets updated with the value of the topic id that is not completed
+    const sortedTopics = mod.ref_topic.sort((a, b) => a.topic_number - b.topic_number);
+    for (const topic of sortedTopics) {
+      const progressItem = progress.find((p) => p.topic_id === topic.topic_id);
       if (!progressItem?.user_topic_completed) {
         currentTopicId = topic.topic_id;
         break;
@@ -170,9 +163,12 @@ export default function TemporaryMainContainer() {
     if (currentTopicId) break;
   }
 
+  const handleTopicPress = (topic) => {
+    navigation.navigate('TopicScreen', { topicId: topic.topic_id });
+  };
 
   return (
-    <View style={{ flex: 1, }}>
+    <View style={{ flex: 1 }}>
       <PatthernHeader />
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
         <View style={{ flex: 1, backgroundColor: '#DFDAFAA' }}>
@@ -183,20 +179,33 @@ export default function TemporaryMainContainer() {
             style={styles.background}>
             <View style={styles.backgroundOverlay} />
             <View style={styles.container}>
-
-              {/* <Image source={require('../../assets/images/yellow_bubbl.png')} style={styles.img} /> */}
               <Avatar userId={userId} userLevel={user ? user.user_level : null} />
               <Text style={styles.title}>Hi, {user ? user.user_nickname : '...'}</Text>
               <StatsPanel user={user} />
               {user?.user_energy < 3 ? <EnergyTimer userId={userId}/> : null}
             </View>
 
-            <Pressable style={{ backgroundColor: "#FFCE48", flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5, marginHorizontal: 20, marginBottom: 20, padding: 20, borderRadius: 15, borderWidth: 2, borderColor: '#FFBA20' }}
+            <Pressable
+              style={{
+                backgroundColor: "#FFCE48",
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 5,
+                marginHorizontal: 20,
+                marginBottom: 20,
+                padding: 20,
+                borderRadius: 15,
+                borderWidth: 2,
+                borderColor: '#FFBA20'
+              }}
               onPress={() => {
-                if (currentTopicId) { handleTopicPress({ topic_id: currentTopicId }); }
+                if (currentTopicId) {
+                  handleTopicPress({ topic_id: currentTopicId });
+                }
               }}>
               <Text style={{ fontSize: 16, color: '#7A310D' }}>Continue from where you left</Text>
-              <Image source={require('../../assets/icons/play_icon.png')} style={{ height: 20, width: 20 }}></Image>
+              <Image source={require('../../assets/icons/play_icon.png')} style={{ height: 20, width: 20 }} />
             </Pressable>
           </ImageBackground>
 
@@ -205,7 +214,6 @@ export default function TemporaryMainContainer() {
           </View>
         </View>
       </ScrollView>
-
       <ChildNavbar navigation={navigation} childProfileId={userId} />
     </View>
   );
