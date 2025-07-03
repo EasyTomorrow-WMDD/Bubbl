@@ -164,7 +164,7 @@ const AuthLoginContainer = ({ navigation }) => {
 
         <BubblTextInput
           label="Email"
-          placeholder="Enter your email, e.g., email123@bubbl.com"
+          placeholder="Enter your email"
           value={email}
           onChangeText={setEmail}
           autoCapitalize="none"
@@ -194,11 +194,6 @@ const AuthLoginContainer = ({ navigation }) => {
         <BubblButton
           label="Login with Google"
           onPress={handleGoogleLogin}
-        />
-
-        <BubblButton
-          label="Login with Apple"
-          onPress={() => { }}
         />
 
         <Text style={globalStyles.errorText}>{authError}</Text>
