@@ -4,7 +4,7 @@ import MultiCorrectQuiz from './MultiCorrectQuiz';
 import ChooseImageQuiz from './ChooseImageQuiz';
 
 export default function QuizQuestion({ data, onAnswer }) {
-  
+
   if (!data || !data.quiz) {
     return (
       <View style={styles.loaderContainer}>
@@ -22,7 +22,6 @@ export default function QuizQuestion({ data, onAnswer }) {
   const [selectionReady, setSelectionReady] = useState(false);
 
   useEffect(() => {
-    
     setHasChecked(false);
     setSelectedOption(null);
     setIsCorrect(false);
@@ -120,15 +119,19 @@ export default function QuizQuestion({ data, onAnswer }) {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        {text && <Text style={styles.subHeading}>{text}</Text>}
+        {data?.text && (
+          <Text style={styles.subHeading}>{data.text}</Text>
+        )}
 
         {quiz?.image && (
           <Image source={{ uri: quiz.image }} style={styles.img} />
         )}
 
-        <Text style={styles.question}>
-          {quiz?.question || quiz?.statement || quiz?.sentence || '📝'}
-        </Text>
+        {type !== 'choose_image' && (
+          <Text style={styles.question}>
+            {quiz?.question || quiz?.statement || quiz?.sentence || '📝'}
+          </Text>
+        )}
 
         {renderOptions()}
 

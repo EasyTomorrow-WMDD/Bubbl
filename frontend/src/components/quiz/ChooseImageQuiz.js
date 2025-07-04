@@ -20,7 +20,6 @@ export default function ChooseImageQuiz({ data, onSelect, disabled }) {
 
   return (
     <View style={styles.container}>
-      {data.text && <Text style={styles.text}>{data.text}</Text>}
       <Text style={styles.question}>{data.quiz.question}</Text>
 
       <View style={styles.gridContainer}>
@@ -47,10 +46,6 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 20,
     padding: 10
-  },
-  text: {
-    fontSize: 16,
-    marginBottom: 10
   },
   question: {
     fontWeight: 'bold',
