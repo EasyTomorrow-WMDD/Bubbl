@@ -15,7 +15,7 @@ const ChildNavbar = ({ navigation, childProfileId }) => {
         onPress={() => navigation.navigate('ChildMood', { childProfileId })}
         style={styles.navItem}
       >
-        <Image source={require('../../assets/icons/Paint.png')} style={styles.navIcon} />
+        <Image source={require('../../assets/icons/paint.png')} style={styles.navIcon} />
         <Text style={styles.navText}>Mood Draw</Text>
       </TouchableOpacity>
 
