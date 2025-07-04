@@ -127,7 +127,7 @@ export default function QuizQuestion({ data, onAnswer }) {
           <Image source={{ uri: quiz.image }} style={styles.img} />
         )}
 
-        {type !== 'choose_image' && (
+        {type !== 'choose_image' && type !== 'select_correct' && (
           <Text style={styles.question}>
             {quiz?.question || quiz?.statement || quiz?.sentence || '📝'}
           </Text>

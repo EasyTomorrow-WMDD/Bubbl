@@ -6,20 +6,17 @@ export default function MultiCorrectQuiz({ data, onSelect, disabled }) {
   const [selected, setSelected] = useState([]);
 
   useEffect(() => {
-  
     setSelected([]);
   }, [data]);
 
   useEffect(() => {
     if (selected.length === 3) {
-    
       const selectedLabels = selected.map(o => o.label).sort();
       const correctLabels = quiz.correct.sort();
       const isCorrect = JSON.stringify(selectedLabels) === JSON.stringify(correctLabels);
 
       const message = isCorrect ? quiz.message_correct : quiz.message_wrong;
 
-    
       onSelect(isCorrect, message);
     }
   }, [selected]);
@@ -54,11 +51,15 @@ export default function MultiCorrectQuiz({ data, onSelect, disabled }) {
         <View style={styles.column}>{renderOptions(3, 6)}</View>
       </View>
 
-      <View style={styles.selectedBox}>
-        {selected.map((s, idx) => (
-          <Text key={idx} style={styles.selectedText}>{s.label}</Text>
-        ))}
-      </View>
+      {selected.length > 0 && (
+        <View style={styles.selectedBox}>
+          {selected.map((s, idx) => (
+            <View key={idx} style={styles.selectedItem}>
+              <Text style={styles.selectedText}>{s.label}</Text>
+            </View>
+          ))}
+        </View>
+      )}
     </View>
   );
 }
@@ -80,12 +81,19 @@ const styles = StyleSheet.create({
   },
   selectedBox: {
     marginTop: 20,
-    padding: 10,
-    backgroundColor: '#fff9c4',
-    borderRadius: 10,
-    minHeight: 60,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    gap: 10
+  },
+  selectedItem: {
+    borderWidth: 1,
+    borderColor: 'black',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    backgroundColor: 'white',
   },
   selectedText: {
     fontSize: 16,
