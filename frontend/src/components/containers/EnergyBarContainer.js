@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
+import  BubblColors  from '../../styles/BubblColors';
 
 const EnergyBarContainer = ({ energy, maxEnergy = 3 }) => {
   const fillPercentage = (energy / maxEnergy) * 100;
@@ -11,7 +12,10 @@ const EnergyBarContainer = ({ energy, maxEnergy = 3 }) => {
         <View style={styles.backgroundBar}>
           <View style={[styles.fillBar, { width: `${fillPercentage}%` }]} />
         </View>
-        <Text style={styles.heart}>❤️</Text>
+        <View style={styles.heartContainer}>
+          <Text style={styles.heart}>❤️</Text>
+          <Text style={styles.energyCount}>{energy}</Text>
+        </View>
         {/*
           for images
           <Image source={require('../assets/heart.png')} style={styles.heartImage} />
@@ -30,32 +34,42 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     fontWeight: 'bold',
     fontSize: 16,
-    color: '#333',
+    color: BubblColors.BubblNeutralDark,
   },
   barWithIcon: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   backgroundBar: {
-    width: 200,
-    height: 20,
-    backgroundColor: '#ddd',
+    width: 250,
+    height: 11,
+    backgroundColor: BubblColors.BubblCyan100,
     borderRadius: 10,
     overflow: 'hidden',
   },
   fillBar: {
     height: '100%',
-    backgroundColor: '#f44336',
+    backgroundColor: BubblColors.BubblCyan400,
+  },
+  heartContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 8,
   },
   heart: {
-    marginLeft: 8,
-    fontSize: 20,
+    fontSize: 15,
+  },
+  energyCount: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 4,
+    color: BubblColors.BubblNeutralDark,
   },
   heartImage: {
     marginLeft: 8,
-    width: 24,
-    height: 24,
+    width: 18,
+    height: 16,
   },
 });
 
-export default EnergyBarContainer
+export default EnergyBarContainer;

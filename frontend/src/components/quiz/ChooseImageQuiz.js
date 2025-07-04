@@ -20,8 +20,11 @@ export default function ChooseImageQuiz({ data, onSelect, disabled }) {
 
   return (
     <View style={styles.container}>
-      {data.text && <Text style={styles.text}>{data.text}</Text>}
-      <Text style={styles.question}>{data.quiz.question}</Text>
+      {/* Título con el tipo de pregunta */}
+      {data.text && <Text style={styles.typeText}>{data.text}</Text>}
+
+      {/* Pregunta específica */}
+      {data.quiz?.question && <Text style={styles.questionText}>{data.quiz.question}</Text>}
 
       <View style={styles.gridContainer}>
         {data.quiz.images.map((img, index) => (
@@ -46,21 +49,25 @@ export default function ChooseImageQuiz({ data, onSelect, disabled }) {
 const styles = StyleSheet.create({
   container: {
     marginVertical: 20,
-    padding: 10
+    padding: 10,
   },
-  text: {
+  typeText: {
     fontSize: 16,
-    marginBottom: 10
-  },
-  question: {
     fontWeight: 'bold',
-    fontSize: 18,
-    marginBottom: 10
+    marginBottom: 4,
+    color: '#333',
+    textAlign: 'center',
+  },
+  questionText: {
+    fontSize: 16,
+    marginBottom: 12,
+    color: '#333',
+    textAlign: 'center',
   },
   gridContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   gridItem: {
     width: '48%',
@@ -69,22 +76,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#f8f8f8',
     borderRadius: 8,
-    padding: 8
+    padding: 8,
   },
   selectedItem: {
     borderWidth: 2,
     borderColor: '#4CAF50',
-    backgroundColor: '#e8f5e9'
+    backgroundColor: '#e8f5e9',
   },
   image: {
     width: '100%',
     height: undefined,
     aspectRatio: 1,
-    borderRadius: 8
+    borderRadius: 8,
   },
   label: {
     marginTop: 6,
     fontSize: 12,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });

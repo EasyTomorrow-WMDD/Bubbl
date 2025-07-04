@@ -10,8 +10,12 @@ export default function FillInTheBlankQuiz({ data, onAnswer }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{data.text}</Text>
+      {/* Tipo de pregunta */}
+      {data.text && (
+        <Text style={styles.typeText}>{data.text}</Text>
+      )}
 
+      {/* Imagen opcional */}
       {data.quiz.image && (
         <Image
           source={{ uri: data.quiz.image }}
@@ -19,10 +23,14 @@ export default function FillInTheBlankQuiz({ data, onAnswer }) {
         />
       )}
 
-      <Text style={styles.question}>
-        {data.quiz.sentence.replace('______', '_____')}
-      </Text>
+      {/* Pregunta principal */}
+      {data.quiz.question && (
+        <Text style={styles.question}>
+          {data.quiz.question}
+        </Text>
+      )}
 
+      {/* Opciones */}
       {data.quiz.options.map((option, i) => (
         <Button key={i} title={option} onPress={() => handlePress(option)} />
       ))}
@@ -32,8 +40,20 @@ export default function FillInTheBlankQuiz({ data, onAnswer }) {
 
 const styles = StyleSheet.create({
   container: { marginVertical: 20, padding: 10 },
-  text: { fontSize: 16, marginBottom: 10 },
-  question: { fontWeight: 'bold', fontSize: 18, marginBottom: 10 },
+  typeText: { 
+    fontSize: 16, 
+    fontWeight: 'bold', 
+    marginBottom: 6, 
+    textAlign: 'center',
+    color: '#333' 
+  },
+  question: { 
+    fontWeight: '400', 
+    fontSize: 18, 
+    marginBottom: 10, 
+    textAlign: 'center',
+    color: '#000' 
+  },
   image: {
     width: 250,
     height: 150,
@@ -42,4 +62,3 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
 });
-
