@@ -20,7 +20,11 @@ export default function ChooseImageQuiz({ data, onSelect, disabled }) {
 
   return (
     <View style={styles.container}>
-      {data.text && <Text style={styles.instructions}>{data.text}</Text>}
+      {/* Título con el tipo de pregunta */}
+      {data.text && <Text style={styles.typeText}>{data.text}</Text>}
+
+      {/* Pregunta específica */}
+      {data.quiz?.question && <Text style={styles.questionText}>{data.quiz.question}</Text>}
 
       <View style={styles.gridContainer}>
         {data.quiz.images.map((img, index) => (
@@ -47,10 +51,18 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     padding: 10,
   },
-  instructions: {
+  typeText: {
     fontSize: 16,
-    marginBottom: 10,
+    fontWeight: 'bold',
+    marginBottom: 4,
     color: '#333',
+    textAlign: 'center',
+  },
+  questionText: {
+    fontSize: 16,
+    marginBottom: 12,
+    color: '#333',
+    textAlign: 'center',
   },
   gridContainer: {
     flexDirection: 'row',
