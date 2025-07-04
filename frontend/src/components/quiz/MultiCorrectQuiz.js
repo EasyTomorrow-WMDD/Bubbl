@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
 export default function MultiCorrectQuiz({ data, onSelect, disabled }) {
   const { quiz } = data;
@@ -44,7 +44,16 @@ export default function MultiCorrectQuiz({ data, onSelect, disabled }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.question}>{quiz.question}</Text>
+      {/* ✅ 1. TYPE */}
+      {data.text && <Text style={styles.typeText}>{data.text}</Text>}
+
+      {/* ✅ 2. QUESTION */}
+      {quiz.question && <Text style={styles.questionText}>{quiz.question}</Text>}
+
+      {/* ✅ 3. IMAGE (optional) */}
+      {quiz.image && (
+        <Image source={{ uri: quiz.image }} style={styles.image} />
+      )}
 
       <View style={styles.optionsRow}>
         <View style={styles.column}>{renderOptions(0, 3)}</View>
@@ -66,9 +75,35 @@ export default function MultiCorrectQuiz({ data, onSelect, disabled }) {
 
 const styles = StyleSheet.create({
   container: { padding: 20 },
-  question: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
-  optionsRow: { flexDirection: 'row', justifyContent: 'space-between' },
-  column: { flex: 1, gap: 10 },
+  typeText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 6,
+    textAlign: 'center',
+    color: '#333',
+  },
+  questionText: {
+    fontSize: 18,
+    marginBottom: 12,
+    color: '#000',
+    textAlign: 'center',
+  },
+  image: {
+    width: '100%',
+    height: 160,
+    resizeMode: 'cover',
+    borderRadius: 12,
+    marginBottom: 12,
+  },
+  optionsRow: { 
+    flexDirection: 'row', 
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  column: { 
+    flex: 1, 
+    gap: 10 
+  },
   option: {
     padding: 12,
     backgroundColor: '#eee',
@@ -99,4 +134,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600'
   }
-});
+})
