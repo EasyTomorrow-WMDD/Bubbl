@@ -81,7 +81,7 @@ const BadgesScreen = ({ userId, refreshBadges }) => {
       if (!res.ok) throw new Error('Failed to save badges');
       Alert.alert('Badges saved!');
 
-      if (refreshBadges) refreshBadges(); // <- Esto actualiza InventoryScreen
+      if (refreshBadges) refreshBadges(); 
 
     } catch (err) {
       console.error('Error saving badges:', err);

@@ -1,25 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
 export default function MultiCorrectQuiz({ data, onSelect, disabled }) {
   const { quiz } = data;
   const [selected, setSelected] = useState([]);
 
   useEffect(() => {
-  
     setSelected([]);
   }, [data]);
 
   useEffect(() => {
     if (selected.length === 3) {
-    
       const selectedLabels = selected.map(o => o.label).sort();
       const correctLabels = quiz.correct.sort();
       const isCorrect = JSON.stringify(selectedLabels) === JSON.stringify(correctLabels);
 
       const message = isCorrect ? quiz.message_correct : quiz.message_wrong;
 
-    
       onSelect(isCorrect, message);
     }
   }, [selected]);
@@ -47,27 +44,66 @@ export default function MultiCorrectQuiz({ data, onSelect, disabled }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.question}>{quiz.question}</Text>
+      {/* ✅ 1. TYPE */}
+      {data.text && <Text style={styles.typeText}>{data.text}</Text>}
+
+      {/* ✅ 2. QUESTION */}
+      {quiz.question && <Text style={styles.questionText}>{quiz.question}</Text>}
+
+      {/* ✅ 3. IMAGE (optional) */}
+      {quiz.image && (
+        <Image source={{ uri: quiz.image }} style={styles.image} />
+      )}
 
       <View style={styles.optionsRow}>
         <View style={styles.column}>{renderOptions(0, 3)}</View>
         <View style={styles.column}>{renderOptions(3, 6)}</View>
       </View>
 
-      <View style={styles.selectedBox}>
-        {selected.map((s, idx) => (
-          <Text key={idx} style={styles.selectedText}>{s.label}</Text>
-        ))}
-      </View>
+      {selected.length > 0 && (
+        <View style={styles.selectedBox}>
+          {selected.map((s, idx) => (
+            <View key={idx} style={styles.selectedItem}>
+              <Text style={styles.selectedText}>{s.label}</Text>
+            </View>
+          ))}
+        </View>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { padding: 20 },
-  question: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
-  optionsRow: { flexDirection: 'row', justifyContent: 'space-between' },
-  column: { flex: 1, gap: 10 },
+  typeText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 6,
+    textAlign: 'center',
+    color: '#333',
+  },
+  questionText: {
+    fontSize: 18,
+    marginBottom: 12,
+    color: '#000',
+    textAlign: 'center',
+  },
+  image: {
+    width: '100%',
+    height: 160,
+    resizeMode: 'cover',
+    borderRadius: 12,
+    marginBottom: 12,
+  },
+  optionsRow: { 
+    flexDirection: 'row', 
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  column: { 
+    flex: 1, 
+    gap: 10 
+  },
   option: {
     padding: 12,
     backgroundColor: '#eee',
@@ -80,15 +116,22 @@ const styles = StyleSheet.create({
   },
   selectedBox: {
     marginTop: 20,
-    padding: 10,
-    backgroundColor: '#fff9c4',
-    borderRadius: 10,
-    minHeight: 60,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    gap: 10
+  },
+  selectedItem: {
+    borderWidth: 1,
+    borderColor: 'black',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    backgroundColor: 'white',
   },
   selectedText: {
     fontSize: 16,
     fontWeight: '600'
   }
-});
+})
