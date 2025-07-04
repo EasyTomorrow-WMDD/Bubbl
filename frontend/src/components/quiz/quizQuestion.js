@@ -74,7 +74,7 @@ export default function QuizQuestion({ data, onAnswer }) {
         ));
 
       case 'true_false':
-        return ['True', 'False'].map((option, index) => (
+        return quiz.options.map((option, index) => (
           <TouchableOpacity
             key={index}
             style={[
@@ -120,18 +120,18 @@ export default function QuizQuestion({ data, onAnswer }) {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        {data?.text && (
-          <Text style={styles.subHeading}>{data.text}</Text>
-        )}
-
-        {quiz?.image && (
-          <Image source={{ uri: quiz.image }} style={styles.img} />
-        )}
-
-        {type !== 'choose_image' && type !== 'select_correct' && (
-          <Text style={styles.question}>
-            {quiz?.question || quiz?.statement || quiz?.sentence || '📝'}
-          </Text>
+        {(type !== 'choose_image' && type !== 'select_correct') && (
+          <>
+            {data?.text && (
+              <Text style={styles.subHeading}>{data.text}</Text>
+            )}
+            {quiz?.question && (
+              <Text style={styles.question}>{quiz.question}</Text>
+            )}
+            {quiz?.image && (
+              <Image source={{ uri: quiz.image }} style={styles.img} />
+            )}
+          </>
         )}
 
         {renderOptions()}
@@ -160,8 +160,8 @@ export default function QuizQuestion({ data, onAnswer }) {
         <TouchableOpacity
           style={[
             styles.checkButton,
+            (!selectionReady && !hasChecked) ? styles.checkButtonDisabled : styles.checkButtonActive,
             hasChecked && (isCorrect ? styles.continueCorrect : styles.continueWrong),
-            (!selectionReady && !hasChecked) && styles.checkButtonDisabled
           ]}
           onPress={handleButtonPress}
           disabled={!selectionReady && !hasChecked}
@@ -229,12 +229,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: BubblColors.BubblBlack,
     textAlign: 'center',
+    marginBottom: 8,
   },
   question: {
     fontSize: 18,
     fontWeight: '400',
     textAlign: 'center',
-    marginVertical: 10,
+    marginBottom: 10,
     color: BubblColors.BubblBlack,
   },
   img: {
@@ -243,11 +244,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     resizeMode: 'cover',
     alignSelf: 'center',
+    marginBottom: 12,
   },
   optionButton: {
     borderWidth: 1,
     borderColor: BubblColors.BubblPurple500,
-    borderStyle: 'solid',
     borderRadius: 12,
     paddingVertical: 14,
     paddingHorizontal: 20,
@@ -263,8 +264,20 @@ const styles = StyleSheet.create({
   optionButtonSelected: {
     backgroundColor: BubblColors.BubblPurple300,
   },
+  optionButtonCorrect: {
+    backgroundColor: BubblColors.BubblCyan300,
+  },
+  optionButtonWrong: {
+    backgroundColor: BubblColors.BubblOrange300,
+  },
+  optionText: {
+    fontSize: 16,
+    color: BubblColors.BubblBlack,
+  },
+  optionTextChecked: {
+    fontWeight: 'bold',
+  },
   checkButton: {
-    backgroundColor: BubblColors.BubblPurple500,
     borderRadius: 12,
     paddingVertical: 14,
     paddingHorizontal: 20,
@@ -274,7 +287,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   checkButtonDisabled: {
-    backgroundColor: BubblColors.Bubbl,
+    backgroundColor: '#ccc',
+  },
+  checkButtonActive: {
+    backgroundColor: BubblColors.BubblPurple500,
   },
   continueCorrect: {
     backgroundColor: BubblColors.BubblCyan900,
