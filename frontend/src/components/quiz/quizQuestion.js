@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
 import MultiCorrectQuiz from './MultiCorrectQuiz';
 import ChooseImageQuiz from './ChooseImageQuiz';
+import BubblColors from '../../styles/BubblColors';
 
 export default function QuizQuestion({ data, onAnswer }) {
-  
+
   if (!data || !data.quiz) {
     return (
       <View style={styles.loaderContainer}>
@@ -22,7 +23,6 @@ export default function QuizQuestion({ data, onAnswer }) {
   const [selectionReady, setSelectionReady] = useState(false);
 
   useEffect(() => {
-    
     setHasChecked(false);
     setSelectedOption(null);
     setIsCorrect(false);
@@ -74,7 +74,7 @@ export default function QuizQuestion({ data, onAnswer }) {
         ));
 
       case 'true_false':
-        return ['True', 'False'].map((option, index) => (
+        return quiz.options.map((option, index) => (
           <TouchableOpacity
             key={index}
             style={[
@@ -120,15 +120,19 @@ export default function QuizQuestion({ data, onAnswer }) {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        {text && <Text style={styles.subHeading}>{text}</Text>}
-
-        {quiz?.image && (
-          <Image source={{ uri: quiz.image }} style={styles.img} />
+        {(type !== 'choose_image' && type !== 'select_correct') && (
+          <>
+            {data?.text && (
+              <Text style={styles.subHeading}>{data.text}</Text>
+            )}
+            {quiz?.question && (
+              <Text style={styles.question}>{quiz.question}</Text>
+            )}
+            {quiz?.image && (
+              <Image source={{ uri: quiz.image }} style={styles.img} />
+            )}
+          </>
         )}
-
-        <Text style={styles.question}>
-          {quiz?.question || quiz?.statement || quiz?.sentence || '📝'}
-        </Text>
 
         {renderOptions()}
 
@@ -141,14 +145,23 @@ export default function QuizQuestion({ data, onAnswer }) {
       ]}>
         {hasChecked && feedbackMessage && (
           <View style={styles.feedbackContainer}>
-            <Text style={styles.feedbackText}>{feedbackMessage}</Text>
+            <View style={styles.feedbackContent}>
+              {isCorrect && (
+                <Image
+                  source={require('../../assets/icons/correct.png')}
+                  style={styles.feedbackIcon}
+                />
+              )}
+              <Text style={styles.feedbackText}>{feedbackMessage}</Text>
+            </View>
           </View>
         )}
 
         <TouchableOpacity
           style={[
             styles.checkButton,
-            (!selectionReady && !hasChecked) && styles.checkButtonDisabled
+            (!selectionReady && !hasChecked) ? styles.checkButtonDisabled : styles.checkButtonActive,
+            hasChecked && (isCorrect ? styles.continueCorrect : styles.continueWrong),
           ]}
           onPress={handleButtonPress}
           disabled={!selectionReady && !hasChecked}
@@ -180,36 +193,50 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   fixedBottomCorrect: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: BubblColors.BubblCyan200,
   },
   fixedBottomWrong: {
-    backgroundColor: '#E53935',
+    backgroundColor: BubblColors.BubblOrange400,
   },
   feedbackContainer: {
     width: '100%',
-    alignItems: 'center',
     paddingHorizontal: 20,
+    paddingVertical: 12,
+    alignItems: 'flex-start',
+  },
+  feedbackContent: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    maxWidth: 400,
+    flexWrap: 'nowrap',
+  },
+  feedbackIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 8,
+    resizeMode: 'contain',
   },
   feedbackText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    width: '100%',
-    paddingVertical: 12,
+    color: BubblColors.BubblBlack,
+    fontSize: 14,
+    fontWeight: '400',
+    textAlign: 'left',
+    flexShrink: 1,
   },
   subHeading: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
+    color: BubblColors.BubblBlack,
     textAlign: 'center',
+    marginBottom: 8,
   },
   question: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '400',
     textAlign: 'center',
-    marginVertical: 10,
-    color: '#555',
+    marginBottom: 10,
+    color: BubblColors.BubblBlack,
   },
   img: {
     width: '100%',
@@ -217,10 +244,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     resizeMode: 'cover',
     alignSelf: 'center',
+    marginBottom: 12,
   },
   optionButton: {
-    backgroundColor: '#FFC670',
-    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: BubblColors.BubblPurple500,
+    borderRadius: 12,
     paddingVertical: 14,
     paddingHorizontal: 20,
     alignItems: 'center',
@@ -228,26 +257,28 @@ const styles = StyleSheet.create({
     marginVertical: 6,
     width: '100%',
     alignSelf: 'center',
-    shadowColor: '#000',
+    shadowColor: BubblColors.BubblBlack,
     shadowOpacity: 0.05,
     shadowRadius: 4,
   },
   optionButtonSelected: {
-    backgroundColor: '#FFAA3B',
+    backgroundColor: BubblColors.BubblPurple300,
   },
   optionButtonCorrect: {
-    backgroundColor: '#81C784',
-    borderWidth: 2,
-    borderColor: '#4CAF50',
+    backgroundColor: BubblColors.BubblCyan300,
   },
   optionButtonWrong: {
-    backgroundColor: '#EF5350',
-    borderWidth: 2,
-    borderColor: '#E53935',
+    backgroundColor: BubblColors.BubblOrange300,
+  },
+  optionText: {
+    fontSize: 16,
+    color: BubblColors.BubblBlack,
+  },
+  optionTextChecked: {
+    fontWeight: 'bold',
   },
   checkButton: {
-    backgroundColor: 'black',
-    borderRadius: 8,
+    borderRadius: 12,
     paddingVertical: 14,
     paddingHorizontal: 20,
     marginTop: 12,
@@ -256,7 +287,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   checkButtonDisabled: {
-    borderColor: '#A5D6A7',
+    backgroundColor: '#ccc',
+  },
+  checkButtonActive: {
+    backgroundColor: BubblColors.BubblPurple500,
+  },
+  continueCorrect: {
+    backgroundColor: BubblColors.BubblCyan900,
+  },
+  continueWrong: {
+    backgroundColor: BubblColors.BubblOrange600,
   },
   checkButtonText: {
     color: 'white',
