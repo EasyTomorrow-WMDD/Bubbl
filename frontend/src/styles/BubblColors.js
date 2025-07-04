@@ -90,7 +90,7 @@ const BubblColors = {
   // Etc., (these were samples to be removed later, but keeping just in case if anyone is using it..)
   BubblWhite: '#fff',
   BubblBlack: '#000',
-  BubblePurple: '#8361E4',
+  BubblePurple: '#5931A6',
   BubbleOrange: '#FFCE48',
   BubblePink: '#FBA5FB',
   BubbleGreen: '#60EDE4',
