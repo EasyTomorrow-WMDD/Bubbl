@@ -9,13 +9,14 @@ const BubblConfig = {
     // ? 'http://10.128.198.35:3000'
     // ? 'http://10.100.2.107:3000'
     // ? 'http://10.128.228.82:3000'
+    ? 'http://bubbl.wmdd4950.com/app-backend'
     // ? 'http://10.128.198.35:3000'
     // ? 'http://192.168.1.81:3000' // Local IP address #1
     // ? 'http://10.100.1.67:3000' // Local IP address #2
     // ? 'http://10.100.2.107:3000' // Local IP address #3
     // ? 'http://10.128.230.78:3000' // Loacl IP address #4
     // ? 'http://10.128.229.169:3000' // Local IP address #5
-     ? 'http://192.168.1.72:3000' // Local IP address #6 - Francisco
+    //  ? 'http://192.168.1.72:3000' // Local IP address #6 - Francisco
     : 'https://some-url-in-aws-to-be-created.com',
 
   // Supabase URL
