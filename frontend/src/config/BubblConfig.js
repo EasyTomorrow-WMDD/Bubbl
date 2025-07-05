@@ -8,7 +8,7 @@ const BubblConfig = {
     
     // ? 'http://10.128.198.35:3000'
     // ? 'http://10.100.2.107:3000'
-    ? 'http://10.128.228.82:3000'
+    ? 'http://bubbl.wmdd4950.com/app-backend'
     // ? 'http://10.128.198.35:3000'
     // ? 'http://192.168.1.81:3000' // Local IP address #1
     // ? 'http://10.100.1.67:3000' // Local IP address #2
