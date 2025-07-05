@@ -75,8 +75,7 @@ exports.getChildProgress = async (req, res) => {
         user_last_attempted,
         user_topic_fail_count
       `)
-      .eq('user_id', userId)
-
+      .eq('user_id', userId);
 
     if (error) throw error;
 
@@ -86,7 +85,6 @@ exports.getChildProgress = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-
 
 exports.saveProgress = async (req, res) => {
   const { user_id, topic_id } = req.body;
@@ -148,17 +146,66 @@ exports.saveProgress = async (req, res) => {
 
     const { topic_xp, topic_star } = topicData;
 
-    const { error: xpError } = await supabase.rpc('add_xp_and_stars', {
-      p_user_id: user_id,
-      p_xp: topic_xp,
-      p_star: topic_star
-    });
+    console.log(`Adding XP/Stars for user ${user_id}, topic ${topic_id}: XP=${topic_xp}, Stars=${topic_star}`);
 
-    if (xpError) throw xpError;
+    // Try direct update instead of RPC
+    const { data: currentUser, error: getCurrentUserError } = await supabase
+      .from('user')
+      .select('user_xp, user_star')
+      .eq('user_id', user_id)
+      .single();
+
+    if (getCurrentUserError) throw getCurrentUserError;
+
+    const newXP = (currentUser.user_xp || 0) + (topic_xp || 0);
+    const newStars = (currentUser.user_star || 0) + (topic_star || 0);
+
+    const { error: updateUserError } = await supabase
+      .from('user')
+      .update({ 
+        user_xp: newXP,
+        user_star: newStars 
+      })
+      .eq('user_id', user_id);
+
+    if (updateUserError) {
+      console.error('Direct user update error:', updateUserError);
+      throw updateUserError;
+    }
+
+    console.log(`XP/Stars updated successfully: New XP=${newXP}, New Stars=${newStars}`);
 
     // } // ← close - if (isFirstCompletion)
 
     /////////////////////////////////////////////////////////////
+
+    function getLevelFromXp(xp) {
+      if (xp >= 150) return 4;
+      if (xp >= 100) return 3;
+      if (xp >= 50) return 2;
+      return 1;
+    }
+
+    const { data: userData, error: userError } = await supabase
+      .from('user')
+      .select('user_xp, user_level')
+      .eq('user_id', user_id)
+      .single();
+
+    if (userError) throw userError;
+
+    const currentXp = userData.user_xp;
+    const currentLevel = userData.user_level;
+    const correctLevel = getLevelFromXp(currentXp);
+
+    if (currentLevel !== correctLevel) {
+      const { error: levelUpdateError } = await supabase
+        .from('user')
+        .update({ user_level: correctLevel })
+        .eq('user_id', user_id);
+
+      if (levelUpdateError) throw levelUpdateError;
+    }
 
     res.json({ message: 'Progress saved!' });
 
@@ -193,12 +240,12 @@ exports.saveDrawingProgress = async (req, res) => {
     console.log(`[saveDrawingProgress] Added stars for user ${user_id}`);
 
     res.json({ message: 'Drawing progress saved (stars added)' });
-
   } catch (err) {
     console.error('[saveDrawingProgress] Error:', err);
     res.status(500).json({ error: 'Failed to save drawing progress' });
   }
 };
+
 exports.getChildAvatar = async (req, res) => {
   const userId = req.params.userId;
 
@@ -226,5 +273,3 @@ exports.getChildAvatar = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-
-
