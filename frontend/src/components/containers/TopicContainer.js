@@ -219,6 +219,15 @@ export default function TopicScreen({ route, navigation }) {
       }
 
       if (updated.length === 0) {
+        try {
+          await axios.post(`${BASE_URL}/api/childProgress/saveProgress`, {
+            user_id: currentChild.user_id,
+            topic_id: topic.topic_id
+          });
+        } catch (error) {
+          console.error('[TopicScreen] Error saving progress:', error);
+        }
+
         navigation.navigate('TopicComplete', {
           topicId: topic.topic_id,
           heading: topic.topic_completion_heading,
