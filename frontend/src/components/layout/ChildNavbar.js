@@ -59,5 +59,6 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 14,
     fontWeight: '600',
+    marginTop: 5
   },
 });
