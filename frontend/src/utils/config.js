@@ -3,9 +3,9 @@
 //  const BASE_URL = 'http://192.168.1.72:3000';
 //  const BASE_URL = 'http://10.100.2.107:3000';
 // const BASE_URL = 'http://192.168.1.72:3000';
-const BASE_URL = 'http://10.128.228.82:3000';
-// const BASE_URL = 'http://10.128.198.35:3000';
-// const BASE_URL = 'http://10.128.201.48:3000';
+const BASE_URL = 'http://bubbl.wmdd4950.com/app-backend';
+
+
 const URI_URL = 'https://ogbfgllkkyehcurolhjf.supabase.co/storage/v1/object/public/assets/Badges'
 
 export { BASE_URL };
