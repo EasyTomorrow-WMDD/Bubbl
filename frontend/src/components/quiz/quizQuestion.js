@@ -5,7 +5,6 @@ import ChooseImageQuiz from './ChooseImageQuiz';
 import BubblColors from '../../styles/BubblColors';
 
 export default function QuizQuestion({ data, onAnswer }) {
-
   if (!data || !data.quiz) {
     return (
       <View style={styles.loaderContainer}>
@@ -146,12 +145,14 @@ export default function QuizQuestion({ data, onAnswer }) {
         {hasChecked && feedbackMessage && (
           <View style={styles.feedbackContainer}>
             <View style={styles.feedbackContent}>
-              {isCorrect && (
-                <Image
-                  source={require('../../assets/icons/correct.png')}
-                  style={styles.feedbackIcon}
-                />
-              )}
+              <Image
+                source={
+                  isCorrect
+                    ? require('../../assets/icons/correct.png')
+                    : require('../../assets/icons/wrong.png')
+                }
+                style={styles.feedbackIcon}
+              />
               <Text style={styles.feedbackText}>{feedbackMessage}</Text>
             </View>
           </View>
@@ -275,7 +276,7 @@ const styles = StyleSheet.create({
     color: BubblColors.BubblBlack,
   },
   optionTextChecked: {
-    fontWeight: 'bold',
+    fontWeight: '400',
   },
   checkButton: {
     borderRadius: 12,
@@ -300,7 +301,7 @@ const styles = StyleSheet.create({
   },
   checkButtonText: {
     color: 'white',
-    fontWeight: 'bold',
+    fontWeight: '400',
     fontSize: 16,
   },
   emptyText: {

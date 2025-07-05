@@ -56,13 +56,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 4,
     color: '#333',
-    textAlign: 'center',
+    textAlign: 'left',
   },
   questionText: {
     fontSize: 16,
-    marginBottom: 12,
+    marginBottom: 40,
     color: '#333',
-    textAlign: 'center',
+    textAlign: 'left',
   },
   gridContainer: {
     flexDirection: 'row',
