@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   backgroundBar: {
-    width: 250,
+    width: 280,
     height: 11,
     backgroundColor: BubblColors.BubblCyan100,
     borderRadius: 10,
