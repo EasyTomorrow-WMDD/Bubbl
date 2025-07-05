@@ -89,6 +89,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: BubblColors.BubblNeutralWhite,
-    fontWeight: '600',
+    fontWeight: '400',
   },
 });

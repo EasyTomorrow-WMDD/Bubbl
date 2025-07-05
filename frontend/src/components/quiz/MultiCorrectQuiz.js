@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import BubblColors from '../../styles/BubblColors';
 
 export default function MultiCorrectQuiz({ data, onSelect, disabled }) {
   const { quiz } = data;
@@ -55,11 +56,13 @@ export default function MultiCorrectQuiz({ data, onSelect, disabled }) {
         <Image source={{ uri: quiz.image }} style={styles.image} />
       )}
 
+      {/* ✅ 4. OPTIONS */}
       <View style={styles.optionsRow}>
         <View style={styles.column}>{renderOptions(0, 3)}</View>
         <View style={styles.column}>{renderOptions(3, 6)}</View>
       </View>
 
+      {/* ✅ 5. SELECTED BOX */}
       {selected.length > 0 && (
         <View style={styles.selectedBox}>
           {selected.map((s, idx) => (
@@ -75,19 +78,22 @@ export default function MultiCorrectQuiz({ data, onSelect, disabled }) {
 
 const styles = StyleSheet.create({
   container: { padding: 20 },
+
   typeText: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 6,
-    textAlign: 'center',
+    textAlign: 'left',
     color: '#333',
   },
+
   questionText: {
     fontSize: 18,
-    marginBottom: 12,
+    marginBottom: 32,
     color: '#000',
-    textAlign: 'center',
+    textAlign: 'left',
   },
+
   image: {
     width: '100%',
     height: 160,
@@ -95,43 +101,55 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 12,
   },
+
   optionsRow: { 
     flexDirection: 'row', 
     justifyContent: 'space-between',
     marginTop: 10,
   },
+
   column: { 
     flex: 1, 
     gap: 10 
   },
+
   option: {
     padding: 12,
     backgroundColor: '#eee',
-    borderRadius: 8,
+    borderRadius: 12,
     margin: 5,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: BubblColors.BubblPurple400
   },
+
   selectedOption: {
-    backgroundColor: '#cdeffd',
+    backgroundColor: BubblColors.BubblPurple200,
   },
+
   selectedBox: {
-    marginTop: 20,
+    marginTop: 50,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 10
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
   },
+
   selectedItem: {
     borderWidth: 1,
-    borderColor: 'black',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-    backgroundColor: 'white',
+    borderColor: BubblColors.BubblPurple400,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 12,
+    margin: 5,
+    backgroundColor: BubblColors.BubblPurple700,
+    // minWidth: '45%',
+    alignItems: 'center',
   },
+
   selectedText: {
-    fontSize: 16,
-    fontWeight: '600'
-  }
-})
+    color: BubblColors.BubblNeutralWhite,
+    fontSize: 12,
+    fontWeight: '400',
+  },
+});
