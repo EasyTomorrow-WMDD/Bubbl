@@ -2,16 +2,17 @@ import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { useState, useEffect } from 'react';
 import FavoriteBadgesDisplay from './FavoriteBadgesDisplay';
+import { fontStyles } from '../../styles/BubblFontStyles';
 
 
 const StatCard = ({ label, icon, value, extra, bgHeader, bgColor }) => (
   <View style={{ backgroundColor: bgHeader, borderRadius: 20 }}>
     <View style={[styles.cardHeader, { backgroundColor: bgHeader }]}>
-      <Text style={styles.headerText}>{label}</Text>
+      <Text style={[fontStyles.bodyDefault, {color: 'white'}]}>{label}</Text>
     </View>
     <View style={[styles.card, { backgroundColor: bgColor }]}>
       <Image source={icon} style={styles.icon} />
-      <Text style={styles.valueText}>{value} {extra && <Text style={styles.extraText}>{extra}</Text>}</Text>
+      <Text style={[fontStyles.bodyDefault]}>{value} {extra && <Text style={styles.extraText}>{extra}</Text>}</Text>
     </View>
   </View>
 );

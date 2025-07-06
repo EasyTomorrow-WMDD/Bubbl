@@ -6,7 +6,13 @@ const ChildNavbar = ({ navigation, childProfileId }) => {
     <View style={styles.navbar}>
       {/* Activities */}
       <TouchableOpacity onPress={() => navigation.navigate('ChildMain')} style={styles.navItem}>
-        <Image source={require('../../assets/icons/activities.png')} style={styles.navIcon} />
+        <View style={styles.iconWrapper}>
+          <Image
+            source={require('../../assets/icons/activities.png')}
+            style={styles.navIcon}
+            resizeMode="contain"
+          />
+        </View>
         <Text style={styles.navText}>Activities</Text>
       </TouchableOpacity>
 
@@ -15,7 +21,13 @@ const ChildNavbar = ({ navigation, childProfileId }) => {
         onPress={() => navigation.navigate('ChildMood', { childProfileId })}
         style={styles.navItem}
       >
-        <Image source={require('../../assets/icons/paint.png')} style={styles.navIcon} />
+        <View style={styles.iconWrapper}>
+          <Image
+            source={require('../../assets/icons/paint.png')}
+            style={styles.navIcon}
+            resizeMode="contain"
+          />
+        </View>
         <Text style={styles.navText}>Mood Draw</Text>
       </TouchableOpacity>
 
@@ -24,7 +36,13 @@ const ChildNavbar = ({ navigation, childProfileId }) => {
         onPress={() => navigation.navigate('InventoryScreen', { childProfileId })}
         style={styles.navItem}
       >
-        <Image source={require('../../assets/icons/store.png')} style={styles.navIcon} />
+        <View style={styles.iconWrapper}>
+          <Image
+            source={require('../../assets/icons/store.png')}
+            style={styles.navIcon}
+            resizeMode="contain"
+          />
+        </View>
         <Text style={styles.navText}>Quest</Text>
       </TouchableOpacity>
     </View>
@@ -44,21 +62,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     paddingVertical: 12,
+    paddingBottom: 20,
     zIndex: 20,
-    paddingBottom: 20, 
   },
   navItem: {
     alignItems: 'center',
   },
+  iconWrapper: {
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   navIcon: {
-    width: 25,
-    height: 25,
-    marginBottom: 4,
+    width: '100%',
+    height: '100%',
   },
   navText: {
     color: 'black',
     fontSize: 14,
     fontWeight: '600',
-    marginTop: 5
+    marginTop: 5,
   },
 });
