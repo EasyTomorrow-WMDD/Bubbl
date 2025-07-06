@@ -13,6 +13,7 @@ import Avatar from './Avatar';
 import EnergyTimer from './Timer';
 import { fontStyles } from '../../styles/BubblFontStyles';
 
+
 export default function TemporaryMainContainer() {
   const [user, setUser] = useState(null);
   const [modules, setModules] = useState([]);
@@ -22,8 +23,9 @@ export default function TemporaryMainContainer() {
   const navigation = useNavigation();
   const [userEnergy, setUserEnergy] = useState(null);
   const [nextRechargeTime, setNextReachargeTime] = useState(null);
+  const [assets, setAssets] = useState([]);
 
-  console.log('USER ID:', userId);
+  // console.log('USER ID:', userId);
 
   // ================= Load profile info from AsyncStorage ====================
   useEffect(() => {
@@ -131,7 +133,7 @@ export default function TemporaryMainContainer() {
         const data = res.data;
 
         if (data && data.user_energy !== undefined) {
-          console.log('Polled energy status:', data.user_energy);
+          // console.log('Polled energy status:', data.user_energy);
 
           setUser(prev => prev ? { ...prev, user_energy: data.user_energy } : prev);
 
@@ -171,7 +173,7 @@ export default function TemporaryMainContainer() {
   return (
     <View style={{ flex: 1 }}>
       <PatthernHeader />
-      <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 80, paddingTop: 20 }}>
         <View style={{ flex: 1, backgroundColor: '#DFDAFAA' }}>
           <StatusBar style="auto" />
           <ImageBackground
@@ -180,10 +182,15 @@ export default function TemporaryMainContainer() {
             style={styles.background}>
             <View style={styles.backgroundOverlay} />
             <View style={styles.container}>
-              <Avatar userId={userId} userLevel={user ? user.user_level : null} />
+              <Avatar userId={userId} userLevel={user ? user.user_level : null} skinSize={200} skinWidth={200} assets={assets} setAssets={setAssets} hatSize={130} top={-40} positionOverrides={{
+                "red-hat": { top: -10, left: 110, width: 120, height: 120 },
+                "bow": { top: 0, left: 125, },
+                "party": { left: 150, top: -20, transform: [{ rotate: "15deg" }]},
+                "santa-hat": { left: 150, top: -12, transform: [{ rotate: "15deg" }] }
+              }} />
               <Text style={[styles.title, fontStyles.display1]}>Hi, {user ? user.user_nickname : '...'}</Text>
               <StatsPanel user={user} />
-              {user?.user_energy < 3 ? <EnergyTimer userId={userId}/> : null}
+              {user?.user_energy < 3 ? <EnergyTimer userId={userId} /> : null}
             </View>
 
             <Pressable

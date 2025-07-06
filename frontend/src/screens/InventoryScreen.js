@@ -9,6 +9,9 @@ import Avatar from '../components/containers/Avatar';
 import BadgesScreen from './BadgesScreen';
 import Store from '../components/containers/Store';
 import ChildNavbar from '../components/layout/ChildNavbar';
+import { fontStyles } from '../styles/BubblFontStyles';
+import BubblColors from '../styles/BubblColors';
+
 
 
 const InventoryScreen = ({ navigation, route }) => {
@@ -16,34 +19,36 @@ const InventoryScreen = ({ navigation, route }) => {
   const [user, setUser] = useState(null);
   const [badges, setBadges] = useState([]);
   const [section, setSection] = useState('assets');
+  const [assets, setAssets] = useState([]);
+
 
   const fetchUserAndBadges = async () => {
-  const userUrl = `${BASE_URL}/api/childProgress/dashboard/${childProfileId}`;
-  const badgeUrl = `${BASE_URL}/api/users/${childProfileId}/badges`;
+    const userUrl = `${BASE_URL}/api/childProgress/dashboard/${childProfileId}`;
+    const badgeUrl = `${BASE_URL}/api/users/${childProfileId}/badges`;
 
-  try {
-    //console.log('Fetching user from:', userUrl);
-    const userRes = await axios.get(userUrl);
-    setUser(userRes.data);
-  } catch (error) {
-    console.error('Error fetching user:', error.response?.status, error.response?.data);
-  }
+    try {
+      //console.log('Fetching user from:', userUrl);
+      const userRes = await axios.get(userUrl);
+      setUser(userRes.data);
+    } catch (error) {
+      console.error('Error fetching user:', error.response?.status, error.response?.data);
+    }
 
-  try {
-    //console.log('Fetching badges from:', badgeUrl);
-    const badgeRes = await axios.get(badgeUrl);
-    setBadges(badgeRes.data);
-  } catch (error) {
-    console.error('Error fetching badges:', error.response?.status, error.response?.data);
-  }
-};
+    try {
+      //console.log('Fetching badges from:', badgeUrl);
+      const badgeRes = await axios.get(badgeUrl);
+      setBadges(badgeRes.data);
+    } catch (error) {
+      console.error('Error fetching badges:', error.response?.status, error.response?.data);
+    }
+  };
 
 
   const [avatarKey, setAvatarKey] = useState(0);
   console.log('READING USER', user)
   useEffect(() => {
     if (!childProfileId) return;
-    console.log('🔍 childProfileId:', childProfileId);
+    // console.log('childProfileId:', childProfileId);
     fetchUserAndBadges();
   }, [childProfileId]);
 
@@ -56,58 +61,75 @@ const InventoryScreen = ({ navigation, route }) => {
 
   if (!user) return <Text>Loading...</Text>;
 
- return (
-  <>
-    <View>
-      <Header />
-      <View style={{ alignItems: 'center', marginVertical: 20 }}>
-        <Text style={styles.title}>Inventory</Text>
-      </View>
-      <View>
-        <StatsInventory user={user} badges={badges} />
-      </View>
+  return (
+    <>
+      <ScrollView>
+        <View>
+          <Header title={'Shop'} />
+          <View style={{ backgroundColor: BubblColors.BubblPurple500 }}>
+            <View style={{ backgroundColor: 'white', borderTopRightRadius: 50, borderTopLeftRadius: 50 }}>
+              <View style={{ alignItems: 'center', marginVertical: 20 }}>
+                <StatsInventory user={user} badges={badges} section={section} />
+              </View>
+              <View style={styles.container}>
+                <Pressable
+                  style={[styles.toggle, section === 'assets' && styles.activeToggle]}
+                  onPress={() => setSection('assets')}
+                >
+                  <Text style={[styles.text, section === 'assets' && styles.activeText]}>
+                    Assets
+                  </Text>
+                </Pressable>
+                <Pressable
+                  style={[styles.toggle, section === 'badges' && styles.activeToggle]}
+                  onPress={() => setSection('badges')}
+                >
+                  <Text style={[styles.text, section === 'badges' && styles.activeText]}>
+                    Badges
+                  </Text>
+                </Pressable>
+              </View>
 
-      <View style={styles.container}>
-        <Pressable
-          style={[styles.toggle, section === 'assets' && styles.activeToggle]}
-          onPress={() => setSection('assets')}
-        >
-          <Text style={[styles.text, section === 'assets' && styles.activeText]}>
-            Assets
-          </Text>
-        </Pressable>
-        <Pressable
-          style={[styles.toggle, section === 'badges' && styles.activeToggle]}
-          onPress={() => setSection('badges')}
-        >
-          <Text style={[styles.text, section === 'badges' && styles.activeText]}>
-            Badges
-          </Text>
-        </Pressable>
-      </View>
+              {section === 'assets' ? (
+                <View>
+                  <View style={{ alignItems: 'center', marginTop: 85 }}>
+                    <Avatar
+                      key={avatarKey}
+                      userId={user.user_id}
+                      userLevel={user.user_level}
+                      skinSize={250}
+                      skinWidth={250}
+                      assets={assets}
+                      setAssets={setAssets}
+                      hatSize={165}
+                      top={-80}
+                      positionOverrides={{
+                        "red-hat": { top: -70, left: 100, width: 200, height: 170 },
+                        "bow": { top: -25, left: 155,  },
+                        "party": { left: 200, top: -30, transform: [{ rotate: "25deg" }]  },
+                        "santa-hat": { left: 200, top: -30, transform: [{ rotate: "25deg" }] }
+                      }}
+                    />
+                  </View>
+                  <Store
+                    userId={user.user_id}
+                    userLevel={user.user_level}
+                    userStars={user.user_star}
+                    onAssetEquipped={() => setAvatarKey((prev) => prev + 1)}
+                    assets={assets}
+                  />
+                </View>
+              ) : (
+                <BadgesScreen userId={childProfileId} refreshBadges={refreshBadges} />
+              )}
+            </View>
+          </View>
+        </View>
 
-      {section === 'assets' ? (
-        <ScrollView style={{height: 400}}>
-          <Avatar
-            key={avatarKey}
-            userId={user.user_id}
-            userLevel={user.user_level}
-          />
-          <Store
-            userId={user.user_id}
-            userLevel={user.user_level}
-            userStars={user.user_star}
-            onAssetEquipped={() => setAvatarKey((prev) => prev + 1)}
-          />
-        </ScrollView>
-      ) : (
-        <BadgesScreen userId={childProfileId} refreshBadges={refreshBadges} />
-      )}
-    </View>
-
-    <ChildNavbar navigation={navigation} />
-  </>
-);
+      </ScrollView>
+      <ChildNavbar navigation={navigation} />
+    </>
+  );
 
 }
 
@@ -115,12 +137,12 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'center',
-    backgroundColor: '#EEEDFE',
+    backgroundColor: BubblColors.BubblPurple100,
     borderRadius: 12,
     padding: 4,
     margin: 10,
   },
-  
+
   title: {
     fontSize: 40,
     fontWeight: 'bold',
@@ -131,12 +153,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   text: {
-    fontSize: 16,
+    ...fontStyles.bodyDefault,
     color: 'black',
   },
-  
+
   toggle: {
-    paddingVertical: 10,
+    paddingVertical: 8,
     paddingHorizontal: 30,
     borderRadius: 12,
     backgroundColor: 'transparent',
@@ -144,7 +166,7 @@ const styles = StyleSheet.create({
     width: '50%'
   },
   activeToggle: {
-    backgroundColor: '#C5BDF5',
+    backgroundColor: BubblColors.BubblPurple300,
     borderWidth: 2,
     borderColor: '#A997EE',
   },
