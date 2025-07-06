@@ -94,7 +94,7 @@ exports.saveProgress = async (req, res) => {
   }
 
   try {
-    // Check existing progress
+    
     const { data: existing, error: fetchError } = await supabase
       .from('user_progress')
       .select('*')
@@ -130,7 +130,7 @@ exports.saveProgress = async (req, res) => {
       if (updateError) throw updateError;
     }
 
-    // Get topic rewards
+   
     const { data: topicData, error: topicError } = await supabase
       .from('ref_topic')
       .select('topic_xp, topic_star')
@@ -143,7 +143,7 @@ exports.saveProgress = async (req, res) => {
 
     console.log(`Adding XP/Stars for user ${user_id}, topic ${topic_id}: XP=${topic_xp}, Stars=${topic_star}`);
 
-    // Get current user stats
+    
     const { data: currentUser, error: getCurrentUserError } = await supabase
       .from('user')
       .select('user_xp, user_star')
@@ -157,7 +157,7 @@ exports.saveProgress = async (req, res) => {
       return res.status(404).json({ error: 'User not found in the user table. Please make sure the user exists.' });
     }
 
-    // Update XP and Stars
+   
     const newXP = (currentUser.user_xp || 0) + (topic_xp || 0);
     const newStars = (currentUser.user_star || 0) + (topic_star || 0);
 
@@ -173,7 +173,7 @@ exports.saveProgress = async (req, res) => {
 
     console.log(`XP/Stars updated successfully: New XP=${newXP}, New Stars=${newStars}`);
 
-    ///// Determine level /////
+    //////////// Determine level //////////// change ref_level table to get level from xp
     function getLevelFromXp(xp) {
       if (xp >= 150) return 4;
       if (xp >= 100) return 3;
@@ -181,7 +181,7 @@ exports.saveProgress = async (req, res) => {
       return 1;
     }
 
-    // Re-fetch user to get new XP for level calculation
+    //////////// get new XP for level calculation ////////////
     const { data: userData, error: userError } = await supabase
       .from('user')
       .select('user_xp, user_level')
@@ -207,7 +207,7 @@ exports.saveProgress = async (req, res) => {
 
       if (levelUpdateError) throw levelUpdateError;
 
-      ///// Skin level logic /////
+      ////////////  Skin level logic ////////////
       const { data: skinAssetData, error: assetError } = await supabase
         .from('ref_asset')
         .select('asset_id')
@@ -217,7 +217,7 @@ exports.saveProgress = async (req, res) => {
       if (assetError) throw assetError;
       const skinAssetId = skinAssetData.asset_id;
 
-      // Determine skin variation name by level
+      /////////// skin variation name by level ///////////
       let skinName;
       switch (correctLevel) {
         case 1: skinName = "Gotie"; break;
@@ -236,14 +236,14 @@ exports.saveProgress = async (req, res) => {
       if (variationError) throw variationError;
       const variationId = variationData.asset_variation_id;
 
-      // Clean existing active skins
+      /////// Delete old active skins /////// can be change if we dont want to delete old skins 
       await supabase
         .from('user_asset')
         .delete()
         .eq('user_id', user_id)
         .eq('asset_id', skinAssetId);
 
-      // Insert new active skin
+      
       const { error: insertAssetError } = await supabase
         .from('user_asset')
         .insert([{
