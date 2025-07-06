@@ -191,7 +191,7 @@ exports.saveProgress = async (req, res) => {
     if (userError) throw userError;
 
     if (!userData) {
-      console.warn(`❗️ User record not found for user_id during level check: ${user_id}`);
+      console.warn(`User record not found for user_id during level check: ${user_id}`);
       return res.status(404).json({ error: 'User not found when checking level. Please make sure the user exists.' });
     }
 
@@ -223,7 +223,7 @@ exports.saveProgress = async (req, res) => {
         case 1: skinName = "Gotie"; break;
         case 2: skinName = "Gotie Gold"; break;
         case 3: skinName = "Youngie"; break;
-        case 4: skinName = "bubblgom"; break;
+        case 4: skinName = "Bubblgom"; break;
         default: skinName = "Gotie";
       }
 
