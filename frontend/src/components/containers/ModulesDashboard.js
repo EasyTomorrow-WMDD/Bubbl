@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import CircularProgress from './Circle';
 import { useNavigation } from '@react-navigation/native';
 import { getBgClass, getTopicBg, textColor, currentTopicColor } from '../../styles/BubblColors';
+import { fontStyles } from '../../styles/BubblFontStyles';
 
 
 export default function Module({ modules, progress = [], onTopicPress, currentTopicId }) {
@@ -15,7 +16,7 @@ export default function Module({ modules, progress = [], onTopicPress, currentTo
       {modules.map((item) => (
         <View key={item.module_id} style={{ gap: 30, }}>
           <View style={{ backgroundColor: getTopicBg(item.module_number), padding: 10, paddingVertical: 20 }}>
-            <Text style={[styles.title, { color: textColor(item.module_number) }]}>
+            <Text style={[fontStyles.heading1, { color: textColor(item.module_number) }]}>
               Module {item.module_number} - {item.module_name}
             </Text>
 
@@ -56,10 +57,10 @@ export default function Module({ modules, progress = [], onTopicPress, currentTo
                       </View>
 
                       <View style={styles.textContainer}>
-                        <Text style={[styles.title, {color : isCurrent ? 'white' : styles.title}]}>
+                        <Text style={[{color : isCurrent ? 'white' : textColor(item.module_number)}, fontStyles.heading3]}>
                           {topic.topic_title}
                         </Text>
-                        <Text style={[styles.text, {color: isCurrent ? 'white' : styles.text}]}>
+                        <Text style={[{color: isCurrent ? 'white' : textColor(item.module_number)}, fontStyles.bodyDefault]}>
                           {isLocked ? topic.topic_description : topic.topic_description}
                         </Text>
                       </View>
@@ -76,12 +77,7 @@ export default function Module({ modules, progress = [], onTopicPress, currentTo
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'black',
-    marginBottom: 5,
-  },
+
   container: {
     padding: 10,
     borderRadius: 25,
@@ -94,10 +90,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     height: 90,
   },
-  text: {
-    fontSize: 16,
-    color: '#000',
-  },
+
   textContainer: {
     flex: 1,
   },
