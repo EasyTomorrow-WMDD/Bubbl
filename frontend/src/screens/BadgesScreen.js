@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, Alert, Pressable } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Alert, Pressable, ScrollView, ActivityIndicator } from 'react-native';
 import { BASE_URL } from '../utils/config';
 import { URI_URL } from '../utils/config';
+import BubblColors from '../styles/BubblColors';
 
 const BadgesScreen = ({ userId, refreshBadges }) => {
   const [badges, setBadges] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!userId) return;
@@ -15,60 +17,52 @@ const BadgesScreen = ({ userId, refreshBadges }) => {
         const response = await fetch(url);
         if (!response.ok) throw new Error('Failed to fetch badges');
         const data = await response.json();
-
-        let order = 1;
-        const processed = data.map((b) => {
-          if (b.badge_active) {
-            return { ...b, selectionOrder: order++ };
-          } else {
-            return { ...b, selectionOrder: null };
-          }
-        });
-
-        setBadges(processed);
+        setBadges(data);
       } catch (err) {
         console.error('Error fetching badges:', err);
         Alert.alert('Error loading badges');
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchBadges();
   }, [userId]);
 
-  const handleToggleBadge = (badgeId) => {
+  const handleToggleBadge = useCallback((badgeId) => {
     setBadges((prev) => {
-      const updated = [...prev];
-      const selected = updated.find((b) => b.badge_id === badgeId);
-      if (!selected || !selected.has_earned) return prev;
+      const badgeIndex = prev.findIndex(b => b.badge_id === badgeId);
+      if (badgeIndex === -1 || !prev[badgeIndex].has_earned) return prev;
 
-      const active = updated.filter((b) => b.badge_active);
-      if (selected.badge_active) {
-        const oldOrder = selected.selectionOrder;
-        selected.badge_active = false;
-        selected.selectionOrder = null;
+      const activeCount = prev.filter(x => x.badge_active).length;
+      const newBadges = [...prev];
 
-        return updated.map((b) => {
-          if (b.badge_active && b.selectionOrder > oldOrder) {
-            return { ...b, selectionOrder: b.selectionOrder - 1 };
-          }
-          return b;
-        });
+      if (newBadges[badgeIndex].badge_active) {
+        newBadges[badgeIndex] = { 
+          ...newBadges[badgeIndex], 
+          badge_active: false, 
+          selectionOrder: null 
+        };
       } else {
-        if (active.length >= 3) {
+        if (activeCount >= 3) {
           Alert.alert('Only 3 badges can be active at once.');
           return prev;
         }
-        selected.badge_active = true;
-        selected.selectionOrder = active.length + 1;
-        return updated;
+        newBadges[badgeIndex] = { 
+          ...newBadges[badgeIndex], 
+          badge_active: true, 
+          selectionOrder: activeCount + 1 
+        };
       }
+
+      return newBadges;
     });
-  };
+  }, []);
 
   const handleSaveBadges = async () => {
     const activeBadgeIds = badges
       .filter((b) => b.badge_active)
-      .sort((a, b) => a.selectionOrder - b.selectionOrder)
+      .sort((a, b) => (a.selectionOrder || 0) - (b.selectionOrder || 0))
       .map((b) => b.badge_id);
 
     try {
@@ -81,7 +75,7 @@ const BadgesScreen = ({ userId, refreshBadges }) => {
       if (!res.ok) throw new Error('Failed to save badges');
       Alert.alert('Badges saved!');
 
-      if (refreshBadges) refreshBadges(); 
+      if (refreshBadges) refreshBadges();
 
     } catch (err) {
       console.error('Error saving badges:', err);
@@ -89,69 +83,124 @@ const BadgesScreen = ({ userId, refreshBadges }) => {
     }
   };
 
-  const renderItem = ({ item }) => {
-    const badgeImage = (
-      <View style={styles.badgeItem}>
-        <View style={styles.badgeWrapper}>
-          <Image
-            source={{
-              uri: `${URI_URL}/${item.badge_image_url}`,
-            }}
-            style={[
-              styles.image,
-              !item.has_earned && styles.locked,
-              item.has_earned && !item.badge_active && styles.inactive,
-              item.badge_active && styles.selectedBadge,
-            ]}
-          />
-          {item.badge_active && (
-            <View style={styles.selectionCircle}>
-              <Text style={styles.selectionText}>{item.selectionOrder}</Text>
-            </View>
-          )}
+  const renderItem = useCallback(({ item }) => {
+    const imageUrl = item.badge_image_url
+      ? `${URI_URL}/${item.badge_image_url}`
+      : 'https://via.placeholder.com/60x60.png?text=Badge';
+
+    return (
+      <TouchableOpacity
+        disabled={!item.has_earned}
+        onPress={() => handleToggleBadge(item.badge_id)}
+        activeOpacity={0.7}
+      >
+        <View style={styles.badgeItem}>
+          <View style={styles.badgeWrapper}>
+            <Image
+              source={{ uri: imageUrl }}
+              style={[
+                styles.image,
+                !item.has_earned && styles.locked,
+                item.has_earned && !item.badge_active && styles.inactive,
+                item.has_earned && item.badge_active && styles.selectedBadge,
+              ]}
+            />
+            {item.has_earned && item.badge_active && (
+              <View style={styles.selectionCircle}>
+                <Text style={styles.selectionText}>
+                  {item.selectionOrder ?? ''}
+                </Text>
+              </View>
+            )}
+          </View>
+          <Text style={styles.label}>{item.badge_name ?? 'Badge'}</Text>
         </View>
-        <Text style={styles.label}>{item.badge_name}</Text>
+      </TouchableOpacity>
+    );
+  }, [handleToggleBadge]);
+
+  if (loading) {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color={BubblColors?.BubblPurple400 ?? '#6a1b9a'} />
+        <Text style={{ marginTop: 10 }}>Loading badges...</Text>
       </View>
     );
-
-    return item.has_earned ? (
-      <TouchableOpacity onPress={() => handleToggleBadge(item.badge_id)}>
-        {badgeImage}
-      </TouchableOpacity>
-    ) : (
-      badgeImage
-    );
-  };
+  }
 
   return (
-    <View>
-      <Text style={styles.heading}>Your Badges</Text>
-      <FlatList
-        data={badges}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.badge_id}
-        numColumns={3}
-        contentContainerStyle={styles.grid}
-      />
-      <Pressable onPress={handleSaveBadges} style={styles.saveButton}>
+    <ScrollView 
+      contentContainerStyle={styles.screen}
+      showsVerticalScrollIndicator={true}
+      vertical={true}
+      showsHorizontalScrollIndicator={false}
+      // contentContainerStyle={{ paddingHorizontal: 20, flexDirection: 'row' }}
+      style={{ height: 400 }}
+    >
+     
+      <View style={styles.infoBox}>
+        <Text style={styles.infoBoxText}>
+          Choose up to 3 favorites badges to stand out!
+        </Text>
+      </View>
+
+      <View style={styles.grid}>
+        {badges.length > 0 ? (
+          badges.map((item) => (
+            <View key={`badge-${item.badge_id}`}>
+              {renderItem({ item })}
+            </View>
+          ))
+        ) : (
+          <Text>No badges available</Text>
+        )}
+      </View>
+
+      <Pressable
+        onPress={handleSaveBadges}
+        style={({ pressed }) => [
+          styles.saveButton,
+          pressed && styles.saveButtonPressed
+        ]}
+      >
         <Text style={styles.saveButtonText}>Save</Text>
       </Pressable>
-    </View>
+    </ScrollView>
   );
 };
 
 export default BadgesScreen;
 
 const styles = StyleSheet.create({
-  heading: {
-    fontSize: 22,
-    fontWeight: 'bold',
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  screen: {
+    paddingHorizontal: 16,
+    paddingVertical: 20,
+    alignItems: 'center',
+  },
+  infoBox: {
+    width: '100%',
+    backgroundColor: BubblColors.BubblOrange100,
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  infoBoxText: {
+    fontSize: 16,
+    color: BubblColors.BubblNeutralDark,
     textAlign: 'center',
-    marginVertical: 10,
+    fontWeight: '400',
   },
   grid: {
-    alignItems: 'center',
-    paddingBottom: 60,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginBottom: 20,
   },
   badgeItem: {
     alignItems: 'center',
@@ -167,8 +216,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
   },
   locked: {
     opacity: 0.2,
@@ -178,14 +227,14 @@ const styles = StyleSheet.create({
   },
   selectedBadge: {
     borderWidth: 2,
-    borderColor: 'green',
+    borderColor: BubblColors.BubblPurple500,
     borderRadius: 8,
   },
   selectionCircle: {
     position: 'absolute',
     top: -6,
     right: -6,
-    backgroundColor: 'green',
+    backgroundColor: BubblColors.BubblPurple800,
     borderRadius: 10,
     width: 20,
     height: 20,
@@ -193,7 +242,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   selectionText: {
-    color: 'white',
+    color: BubblColors.BubblNeutralWhite,
     fontSize: 12,
     fontWeight: 'bold',
   },
@@ -203,15 +252,23 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   saveButton: {
-    backgroundColor: '#007bff',
-    padding: 10,
-    marginHorizontal: 60,
-    borderRadius: 10,
-    marginTop: 10,
+    backgroundColor: BubblColors?.BubblPurple300,
+    width: 358,
+    height: 56,
+    borderRadius: 12,
+    marginHorizontal: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  saveButtonPressed: {
+    backgroundColor: BubblColors?.BubblPurple400,
   },
   saveButtonText: {
-    textAlign: 'center',
-    color: 'white',
-    fontWeight: 'bold',
+    color: BubblColors.BubblNeutralDark,
+    fontSize: 16,
+    fontWeight: '500',
   },
 });
