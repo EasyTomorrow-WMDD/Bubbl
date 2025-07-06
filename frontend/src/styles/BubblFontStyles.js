@@ -34,6 +34,7 @@ export const fontStyles = StyleSheet.create({
     fontFamily: BubblFonts.headingTypeface,
     fontSize: BubblFonts.sizes.heading1,
     lineHeight: BubblFonts.lineHeights.heading1,
+
   },
   heading2: {
     fontFamily: BubblFonts.headingTypeface,

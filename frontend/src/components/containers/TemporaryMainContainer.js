@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import { BASE_URL } from '../../utils/config';
 import Avatar from './Avatar';
 import EnergyTimer from './Timer';
+import { fontStyles } from '../../styles/BubblFontStyles';
 
 export default function TemporaryMainContainer() {
   const [user, setUser] = useState(null);
@@ -180,7 +181,7 @@ export default function TemporaryMainContainer() {
             <View style={styles.backgroundOverlay} />
             <View style={styles.container}>
               <Avatar userId={userId} userLevel={user ? user.user_level : null} />
-              <Text style={styles.title}>Hi, {user ? user.user_nickname : '...'}</Text>
+              <Text style={[styles.title, fontStyles.display1]}>Hi, {user ? user.user_nickname : '...'}</Text>
               <StatsPanel user={user} />
               {user?.user_energy < 3 ? <EnergyTimer userId={userId}/> : null}
             </View>
@@ -204,7 +205,7 @@ export default function TemporaryMainContainer() {
                   handleTopicPress({ topic_id: currentTopicId });
                 }
               }}>
-              <Text style={{ fontSize: 16, color: '#7A310D' }}>Continue from where you left</Text>
+              <Text style={[fontStyles.bodyMedium, { color: '#7A310D' }]}>Continue from where you left</Text>
               <Image source={require('../../assets/icons/play_icon.png')} style={{ height: 20, width: 20 }} />
             </Pressable>
           </ImageBackground>
@@ -240,7 +241,6 @@ const styles = StyleSheet.create({
     width: 140,
   },
   title: {
-    fontSize: 40,
     fontWeight: 'bold',
     color: 'white',
   },

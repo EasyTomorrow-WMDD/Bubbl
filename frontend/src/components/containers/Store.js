@@ -86,6 +86,7 @@ const handleEquip = async (item) => {
             try {
                 const response = await axios.get(`${BASE_URL}/api/shop/owned?userId=${userId}`);
                 const owned = response.data.map(item => item.ref_asset_variation_level_id);
+                console.log('🔎 Owned from API:', owned);
                 setOwnedLevels(owned);
             } catch (err) {
                 console.error('Error fetching owned:', err);
@@ -101,6 +102,11 @@ const handleEquip = async (item) => {
   <View style={styles.elementContainer}>
     {skins.length > 0 ? (
       skins.map((skin, index) => {
+        console.log('📦 Comparando', {
+  ownedLevels,
+  skinId: skin.asset_variation_level_id,
+  match: ownedLevels.includes(skin.asset_variation_level_id)
+});
         const owned = ownedLevels.includes(skin.asset_variation_level_id);
         return (
           <Pressable
