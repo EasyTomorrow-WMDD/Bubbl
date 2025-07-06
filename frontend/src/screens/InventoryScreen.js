@@ -63,9 +63,9 @@ const InventoryScreen = ({ navigation, route }) => {
 
   return (
     <>
-      <ScrollView>
-        <View>
-          <Header title={'Shop'} />
+      <View style={{ backgroundColor: BubblColors.BubblPurple500 }}>
+        <Header title={'Shop'} />
+        <ScrollView >
           <View style={{ backgroundColor: BubblColors.BubblPurple500 }}>
             <View style={{ backgroundColor: 'white', borderTopRightRadius: 50, borderTopLeftRadius: 50 }}>
               <View style={{ alignItems: 'center', marginVertical: 20 }}>
@@ -91,7 +91,7 @@ const InventoryScreen = ({ navigation, route }) => {
               </View>
 
               {section === 'assets' ? (
-                <View>
+                <View >
                   <View style={{ alignItems: 'center', marginTop: 85 }}>
                     <Avatar
                       key={avatarKey}
@@ -104,10 +104,10 @@ const InventoryScreen = ({ navigation, route }) => {
                       hatSize={165}
                       top={-80}
                       positionOverrides={{
-                        "red-hat": { top: -70, left: 100, width: 200, height: 170 },
-                        "bow": { top: -25, left: 155,  },
-                        "party": { left: 200, top: -30, transform: [{ rotate: "25deg" }]  },
-                        "santa-hat": { left: 200, top: -30, transform: [{ rotate: "25deg" }] }
+                        "Beannie": { top: -70, left: 100, width: 200, height: 170 },
+                        "Bow": { top: -25, left: 155, },
+                        "Confetti": { left: 200, top: -40, transform: [{ rotate: "25deg" }] },
+                        "Santa Hat": { left: 200, top: -30, transform: [{ rotate: "25deg" }] }
                       }}
                     />
                   </View>
@@ -124,9 +124,8 @@ const InventoryScreen = ({ navigation, route }) => {
               )}
             </View>
           </View>
-        </View>
-
-      </ScrollView>
+        </ScrollView>
+      </View>
       <ChildNavbar navigation={navigation} />
     </>
   );
