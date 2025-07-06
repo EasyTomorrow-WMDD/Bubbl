@@ -33,6 +33,7 @@ const BubblFonts = {
     bodySmall:    12 * 1.5, // 18 (150% of font size 12)
     bodyTiny:     10 * 1.5, // 15 (150% of font size 10)
   },
+
 }
 
 export default BubblFonts;
