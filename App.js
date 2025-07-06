@@ -30,6 +30,7 @@ import TemporaryMainContainer from './frontend/src/components/containers/Tempora
 import Previsualization from './frontend/src/screens/Previsualization';
 import PurchaseSuccess from './frontend/src/screens/PurchaseSucess';
 import StreakScreen from './frontend/src/screens/StreakScreen';
+import EvolutionScreen from './frontend/src/screens/EvolutionScreen';
 
 
 // SplashScreen.preventAutoHideAsync(); // Keep splash screen until fonts are loaded
@@ -85,6 +86,7 @@ export default function App() {
             <Stack.Screen name="PrevScreen" component={Previsualization} />
             <Stack.Screen name="PurchaseSuccess" component={PurchaseSuccess} />
             <Stack.Screen name="Streak" component={StreakScreen} />
+            <Stack.Screen name="EvolutionScreen" component={EvolutionScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </ChildProvider>
