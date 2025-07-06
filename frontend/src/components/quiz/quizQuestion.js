@@ -45,6 +45,19 @@ export default function QuizQuestion({ data, onAnswer }) {
     setSelectionReady(true);
   };
 
+  const getImageStyle = () => {
+    switch (type) {
+      case 'true_false':
+        return styles.truefalse_img;
+      case 'multiple_choice':
+        return styles.multiplechoice_img;
+      case 'fill_blank':
+        return styles.fillblank_img;
+      default:
+        return styles.img;
+    }
+  };
+
   const renderOptions = () => {
     switch (type) {
       case 'multiple_choice':
@@ -128,7 +141,7 @@ export default function QuizQuestion({ data, onAnswer }) {
               <Text style={styles.question}>{quiz.question}</Text>
             )}
             {quiz?.image && (
-              <Image source={{ uri: quiz.image }} style={styles.img} />
+              <Image source={{ uri: quiz.image }} style={getImageStyle()} />
             )}
           </>
         )}
@@ -245,6 +258,27 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     resizeMode: 'cover',
     alignSelf: 'center',
+    marginBottom: 12,
+  },
+  truefalse_img: {
+    width: '100%',
+    height: 250,
+    borderRadius: 16,
+    resizeMode: 'contain',
+    marginBottom: 12,
+  },
+  multiplechoice_img: {
+    width: '100%',
+    height: 230,
+    borderRadius: 20,
+    resizeMode: 'cover',
+    marginBottom: 12,
+  },
+  fillblank_img: {
+    width: '100%',
+    height: 250,
+    borderRadius: 18,
+    resizeMode: 'contain',
     marginBottom: 12,
   },
   optionButton: {

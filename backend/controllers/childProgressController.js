@@ -129,7 +129,7 @@ exports.saveProgress = async (req, res) => {
       if (updateError) throw updateError;
     }
 
-    // always add XP/Stars
+    
     const { data: topicData, error: topicError } = await supabase
       .from('ref_topic')
       .select('topic_xp, topic_star')
@@ -165,7 +165,7 @@ exports.saveProgress = async (req, res) => {
 
     console.log(`XP/Stars updated successfully: New XP=${newXP}, New Stars=${newStars}`);
 
-    // Determine level
+    ///// Determine level /////
     function getLevelFromXp(xp) {
       if (xp >= 150) return 4;
       if (xp >= 100) return 3;
@@ -203,7 +203,7 @@ exports.saveProgress = async (req, res) => {
       if (assetError) throw assetError;
       const skinAssetId = skinAssetData.asset_id;
 
-      // Choose skin name by level
+      ///////////skin name by level/////////
       let skinName;
       switch (correctLevel) {
         case 1:
