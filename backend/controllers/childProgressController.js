@@ -94,7 +94,7 @@ exports.saveProgress = async (req, res) => {
   }
 
   try {
-    // Check existing progress
+    
     const { data: existing, error: fetchError } = await supabase
       .from('user_progress')
       .select('*')
@@ -130,7 +130,7 @@ exports.saveProgress = async (req, res) => {
       if (updateError) throw updateError;
     }
 
-    // Get topic rewards
+   
     const { data: topicData, error: topicError } = await supabase
       .from('ref_topic')
       .select('topic_xp, topic_star')
@@ -143,7 +143,7 @@ exports.saveProgress = async (req, res) => {
 
     console.log(`Adding XP/Stars for user ${user_id}, topic ${topic_id}: XP=${topic_xp}, Stars=${topic_star}`);
 
-    // Get current user stats
+    
     const { data: currentUser, error: getCurrentUserError } = await supabase
       .from('user')
       .select('user_xp, user_star, user_level')
@@ -197,7 +197,7 @@ exports.saveProgress = async (req, res) => {
 
       if (levelUpdateError) throw levelUpdateError;
 
-      ///// Skin level logic /////
+      ////////////  Skin level logic ////////////
       const { data: skinAssetData, error: assetError } = await supabase
         .from('ref_asset')
         .select('asset_id')
@@ -207,7 +207,7 @@ exports.saveProgress = async (req, res) => {
       if (assetError) throw assetError;
       const skinAssetId = skinAssetData.asset_id;
 
-      // Determine skin variation name by level
+      /////////// skin variation name by level ///////////
       let skinName;
       switch (correctLevel) {
         case 1:
@@ -252,7 +252,7 @@ exports.saveProgress = async (req, res) => {
         .eq('user_id', user_id)
         .eq('asset_id', skinAssetId);
 
-      // Insert new active skin
+      
       const { error: insertAssetError } = await supabase
         .from('user_asset')
         .insert([{
