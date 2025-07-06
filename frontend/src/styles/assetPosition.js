@@ -9,11 +9,11 @@ export const assetPositionMap = {
         height: 80,
     },
     "Bow": {
-        top: -10,
-        left: 190,
+        top: 20,
+        left: 230,
         width: 90,
         height: 85,
-        transform: "rotate(-1deg)",
+        transform: "rotate(15deg)",
     },
     "Confetti": {
         top: -50,
