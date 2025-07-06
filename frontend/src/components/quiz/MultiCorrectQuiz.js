@@ -1,23 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import BubblColors from '../../styles/BubblColors';
 
-export default function MultiCorrectQuiz({ data, onSelect, disabled }) {
+export default function MultiCorrectQuiz({ data, onSelect, disabled, isCorrect, onSelecting }) {
   const { quiz } = data;
   const [selected, setSelected] = useState([]);
 
+  // ✅ Reset when question changes
   useEffect(() => {
     setSelected([]);
   }, [data]);
 
+  // ✅ Reset when entering feedback for incorrect answer
+  useEffect(() => {
+    if (disabled && isCorrect === false) {
+      setSelected([]);
+    }
+  }, [disabled, isCorrect]);
+
+  // ✅ Check answer when 3 selected
   useEffect(() => {
     if (selected.length === 3) {
       const selectedLabels = selected.map(o => o.label).sort();
       const correctLabels = quiz.correct.sort();
-      const isCorrect = JSON.stringify(selectedLabels) === JSON.stringify(correctLabels);
+      const isCorrectAnswer = JSON.stringify(selectedLabels) === JSON.stringify(correctLabels);
 
-      const message = isCorrect ? quiz.message_correct : quiz.message_wrong;
+      const message = isCorrectAnswer ? quiz.message_correct : quiz.message_wrong;
 
-      onSelect(isCorrect, message);
+      onSelect(isCorrectAnswer, message);
     }
   }, [selected]);
 
@@ -25,32 +35,33 @@ export default function MultiCorrectQuiz({ data, onSelect, disabled }) {
     if (disabled || selected.find(item => item.label === option.label)) return;
     if (selected.length >= 3) return;
 
+    // ✅ NEW: Notify parent we're starting over
+    if (onSelecting) {
+      onSelecting();
+    }
+
     setSelected([...selected, option]);
   };
 
-  const renderOptions = (start, end) => quiz.options.slice(start, end).map((option, idx) => (
-    <TouchableOpacity
-      key={idx}
-      style={[
-        styles.option,
-        selected.find(s => s.label === option.label) && styles.selectedOption
-      ]}
-      onPress={() => handleSelect(option)}
-      disabled={disabled}
-    >
-      <Text>{option.label}</Text>
-    </TouchableOpacity>
-  ));
+  const renderOptions = (start, end) =>
+    quiz.options.slice(start, end).map((option, idx) => (
+      <TouchableOpacity
+        key={idx}
+        style={[
+          styles.option,
+          selected.find(s => s.label === option.label) && styles.selectedOption
+        ]}
+        onPress={() => handleSelect(option)}
+        disabled={disabled}
+      >
+        <Text>{option.label}</Text>
+      </TouchableOpacity>
+    ));
 
   return (
     <View style={styles.container}>
-      {/* ✅ 1. TYPE */}
       {data.text && <Text style={styles.typeText}>{data.text}</Text>}
-
-      {/* ✅ 2. QUESTION */}
       {quiz.question && <Text style={styles.questionText}>{quiz.question}</Text>}
-
-      {/* ✅ 3. IMAGE (optional) */}
       {quiz.image && (
         <Image source={{ uri: quiz.image }} style={styles.image} />
       )}
@@ -73,20 +84,21 @@ export default function MultiCorrectQuiz({ data, onSelect, disabled }) {
   );
 }
 
+
 const styles = StyleSheet.create({
   container: { padding: 20 },
   typeText: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 6,
-    textAlign: 'center',
+    textAlign: 'left',
     color: '#333',
   },
   questionText: {
     fontSize: 18,
-    marginBottom: 12,
+    marginBottom: 32,
     color: '#000',
-    textAlign: 'center',
+    textAlign: 'left',
   },
   image: {
     width: '100%',
@@ -95,43 +107,47 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 12,
   },
-  optionsRow: { 
-    flexDirection: 'row', 
+  optionsRow: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 10,
   },
-  column: { 
-    flex: 1, 
-    gap: 10 
+  column: {
+    flex: 1,
+    gap: 10,
   },
   option: {
     padding: 12,
     backgroundColor: '#eee',
-    borderRadius: 8,
+    borderRadius: 12,
     margin: 5,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: BubblColors.BubblPurple400,
   },
   selectedOption: {
-    backgroundColor: '#cdeffd',
+    backgroundColor: BubblColors.BubblPurple200,
   },
   selectedBox: {
-    marginTop: 20,
+    marginTop: 50,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 10
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
   },
   selectedItem: {
     borderWidth: 1,
-    borderColor: 'black',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-    backgroundColor: 'white',
+    borderColor: BubblColors.BubblPurple400,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 12,
+    margin: 5,
+    backgroundColor: BubblColors.BubblPurple700,
+    alignItems: 'center',
   },
   selectedText: {
-    fontSize: 16,
-    fontWeight: '600'
-  }
-})
+    color: BubblColors.BubblNeutralWhite,
+    fontSize: 12,
+    fontWeight: '400',
+  },
+});
