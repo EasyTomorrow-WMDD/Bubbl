@@ -5,6 +5,7 @@
 const BubblFonts = {
   headingTypeface:  'MuseoSansRounded',
   bodyTypeface:     'ABeeZee', 
+  heavyTypeface:    '9942',
   sizes: {
     display1:     40,
     display2:     36,
