@@ -37,12 +37,12 @@ export const fontStyles = StyleSheet.create({
 
   },
   heading2: {
-    fontFamily: BubblFonts.headingTypeface,
+    fontFamily: BubblFonts.heavyTypeface,
     fontSize: BubblFonts.sizes.heading2,
     lineHeight: BubblFonts.lineHeights.heading2,
   },
   heading3: {
-    fontFamily: BubblFonts.headingTypeface,
+    fontFamily: BubblFonts.heavyTypeface,
     fontSize: BubblFonts.sizes.heading3,
     lineHeight: BubblFonts.lineHeights.heading3,
   },

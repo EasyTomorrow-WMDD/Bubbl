@@ -30,16 +30,17 @@ export default function StatsPanel({ user }) {
   );
 }
 
-export function StatsInventory({ user, badges }) {
+export function StatsInventory({ user, badges, section }) {
   if (!user) return null;
 
   return (
     <View>
       <View style={styles.container}>
-        <StatCard label="Total Stars" icon={require('../../assets/icons/star.png')} value={user.user_star} bgHeader={'#11BBB8'} bgColor={'#CBFCF6'}/>
-        <StatCard label="Badges" icon={require('../../assets/icons/badge.png')} value={user.user_badge ?? 0} bgHeader={'#EE47EB'} bgColor={'#FDE8FF'}/>
+        <StatCard label="Total Stars" icon={require('../../assets/icons/star.png')} value={user.user_star} bgHeader={'#F99707'} bgColor={'#FFF2C6'}/>
+        <StatCard label="Badges" icon={require('../../assets/icons/badge.png')} value={user.user_badge ?? 0} bgHeader={'#25A249'} bgColor={'#D3ECDB'}/>
       </View>
-      <FavoriteBadgesDisplay badges={badges} />
+      {section === 'badges' ? <FavoriteBadgesDisplay badges={badges} /> : null }
+      
     </View>
   )
 }
