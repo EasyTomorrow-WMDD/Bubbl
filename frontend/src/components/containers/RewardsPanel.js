@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
+import BubblColors from '../../styles/BubblColors';
 
 const RewardCard = ({ label, icon, value, countIcons, bgHeader, bgColor }) => (
   <View style={[styles.cardWrapper, { backgroundColor: bgHeader }]}>
@@ -18,10 +19,10 @@ const RewardCard = ({ label, icon, value, countIcons, bgHeader, bgColor }) => (
           ))}
         </View>
       ) : (
-        <>
+        <View style={styles.inlineRow}>
           <Image source={icon} style={styles.icon} />
           <Text style={styles.valueText}>{`+${value}`}</Text>
-        </>
+        </View>
       )}
     </View>
   </View>
@@ -31,21 +32,21 @@ export default function RewardsPanel({ xp = 0, star = 0 }) {
   return (
     <View style={styles.wrapper}>
       <RewardCard
-        label="Stars Earned"
-        icon={require('../../assets/icons/star.png')}
+        label="STARS"
+        icon={require('../../assets/icons/star_pirple.png')}
         value={star}
         countIcons={true}
-        bgHeader={'#F99707'}
-        bgColor={'#FFF2C6'}
+        bgHeader={BubblColors.BubblOrange300}
+        bgColor={BubblColors.BubblOrange100}
       />
 
       <RewardCard
-        label="XP Earned"
-        icon={require('../../assets/icons/flash.png')}
+        label="Total XP"
+        icon={require('../../assets/icons/flash_gold.png')}
         value={xp}
         countIcons={false}
-        bgHeader={'#11BBB8'}
-        bgColor={'#CBFCF6'}
+        bgHeader={BubblColors.BubblOrange300}
+        bgColor={BubblColors.BubblOrange100}
       />
     </View>
   );
@@ -80,14 +81,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerText: {
-    color: 'white',
+    color: BubblColors.BubblNeutralDark,
     fontWeight: 'bold',
     fontSize: 14,
-  },
-  icon: {
-    width: 20,
-    height: 20,
-    marginBottom: 2,
   },
   iconRow: {
     flexDirection: 'row',
@@ -95,13 +91,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 3,
   },
+  inlineRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  icon: {
+    width: 26,
+    height: 26,
+  },
   smallIcon: {
-    width: 18,
-    height: 18,
+    width: 24,
+    height: 22,
     marginHorizontal: 1,
   },
   valueText: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '400',
+    color: BubblColors.BubblNeutralDarker,
   },
 });

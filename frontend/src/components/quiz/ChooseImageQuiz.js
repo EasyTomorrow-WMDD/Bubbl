@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import BubblColors from '../../styles/BubblColors';
 
 export default function ChooseImageQuiz({ data, onSelect, disabled }) {
   const [selected, setSelected] = useState(null);
@@ -20,10 +21,10 @@ export default function ChooseImageQuiz({ data, onSelect, disabled }) {
 
   return (
     <View style={styles.container}>
-      {/* Título con el tipo de pregunta */}
+      
       {data.text && <Text style={styles.typeText}>{data.text}</Text>}
 
-      {/* Pregunta específica */}
+      
       {data.quiz?.question && <Text style={styles.questionText}>{data.quiz.question}</Text>}
 
       <View style={styles.gridContainer}>
@@ -55,14 +56,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 4,
-    color: '#333',
-    textAlign: 'center',
+    color: BubblColors.BubblNeutralDark,
+    textAlign: 'left',
   },
   questionText: {
     fontSize: 16,
-    marginBottom: 12,
-    color: '#333',
-    textAlign: 'center',
+    marginBottom: 40,
+    color: BubblColors.BubblNeutralDark,
+    textAlign: 'left',
   },
   gridContainer: {
     flexDirection: 'row',
@@ -74,14 +75,14 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     marginBottom: 12,
     alignItems: 'center',
-    backgroundColor: '#f8f8f8',
+    backgroundColor: BubblColors.BubblPurple100,
     borderRadius: 8,
     padding: 8,
   },
   selectedItem: {
     borderWidth: 2,
-    borderColor: '#4CAF50',
-    backgroundColor: '#e8f5e9',
+    borderColor: BubblColors.BubblNeutralDark,
+    backgroundColor: BubblColors.BubblPurple300,
   },
   image: {
     width: '100%',
