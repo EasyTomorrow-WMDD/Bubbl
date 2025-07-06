@@ -3,48 +3,55 @@ const supabase = require('../utils/supabaseClient');
 exports.getAllBadgesWithUserStatus = async (req, res) => {
   const { userId } = req.params;
 
-  // 1. Get all available badges
-  const { data: allBadges, error: badgeError } = await supabase
-    .from('ref_badge')
-    .select('badge_id, badge_name, badge_image_url');
+  try {
+    const { data: allBadges, error: badgeError } = await supabase
+      .from('ref_badge')
+      .select('badge_id, badge_name, badge_image_url');
 
-  if (badgeError) return res.status(500).json({ error: badgeError.message });
+    if (badgeError) throw badgeError;
 
-  // 2. Get the badges that the user has earned
-  const { data: userBadges, error: userBadgeError } = await supabase
-    .from('user_badge')
-    .select('badge_id, user_badge_active')
-    .eq('user_id', userId);
+    const { data: userBadges = [], error: userBadgeError } = await supabase
+      .from('user_badge')
+      .select('badge_id, user_badge_active')
+      .eq('user_id', userId);
 
-  if (userBadgeError) return res.status(500).json({ error: userBadgeError.message });
+    if (userBadgeError) throw userBadgeError;
 
-  // 3. Create quick map and array for active order
-  const userBadgeMap = {};
-  const activeBadgesOrdered = [];
+  
+    const userBadgeMap = {};
+    userBadges.forEach(b => {
+      userBadgeMap[b.badge_id] = b.user_badge_active;
+    });
 
-  userBadges.forEach((b) => {
-    userBadgeMap[b.badge_id] = b.user_badge_active;
-    if (b.user_badge_active) {
-      activeBadgesOrdered.push(b.badge_id);
-    }
-  });
+  
+    const activeBadgeOrder = userBadges
+      .filter(b => b.user_badge_active)
+      .map(b => b.badge_id);
 
-  // 4. Combine everything with order
-  const result = allBadges.map((badge) => {
-    const isEarned = badge.badge_id in userBadgeMap;
-    const isActive = userBadgeMap[badge.badge_id] || false;
-    const order = isActive ? activeBadgesOrdered.indexOf(badge.badge_id) + 1 : null;
+  
+    const result = allBadges.map(badge => {
+      const hasEarned = badge.badge_id in userBadgeMap;
+      const isActive = userBadgeMap[badge.badge_id] === true;
+      const order = isActive ? activeBadgeOrder.indexOf(badge.badge_id) + 1 : null;
 
-    return {
-      ...badge,
-      has_earned: isEarned,
-      badge_active: isActive,
-      selection_order: order,
-    };
-  });
+      return {
+        badge_id: badge.badge_id,
+        badge_name: badge.badge_name,
+        badge_image_url: badge.badge_image_url,
+        has_earned: hasEarned,
+        badge_active: isActive,
+        selectionOrder: order
+      };
+    });
 
-  return res.json(result);
+    return res.json(result);
+
+  } catch (err) {
+    console.error('Error in getAllBadgesWithUserStatus:', err);
+    return res.status(500).json({ error: err.message || 'Failed to fetch badges' });
+  }
 };
+
 
 exports.saveUserBadges = async (req, res) => {
   const { userId } = req.params;
@@ -55,7 +62,7 @@ exports.saveUserBadges = async (req, res) => {
   }
 
   try {
-    // deactivate all badges for the user
+    
     const { error: deactivateError } = await supabase
       .from('user_badge')
       .update({ user_badge_active: false })
@@ -63,21 +70,25 @@ exports.saveUserBadges = async (req, res) => {
 
     if (deactivateError) throw deactivateError;
 
-    // Activate badges that are in the activeBadgeIds array
-    const { error: activateError } = await supabase
-      .from('user_badge')
-      .update({ user_badge_active: true })
-      .in('badge_id', activeBadgeIds)
-      .eq('user_id', userId);
+  
+    if (activeBadgeIds.length > 0) {
+      const { error: activateError } = await supabase
+        .from('user_badge')
+        .update({ user_badge_active: true })
+        .in('badge_id', activeBadgeIds)
+        .eq('user_id', userId);
 
-    if (activateError) throw activateError;
+      if (activateError) throw activateError;
+    }
 
-    res.json({ message: 'Badges updated successfully' });
+    return res.json({ message: 'Badges updated successfully' });
+
   } catch (err) {
-    console.error('Error saving badges:', err.message);
-    res.status(500).json({ error: 'Failed to save badges' });
+    console.error('Error saving badges:', err);
+    return res.status(500).json({ error: err.message || 'Failed to save badges' });
   }
 };
+
 
 exports.awardBadgeToUser = async (req, res) => {
   const { userId } = req.params;
@@ -88,20 +99,20 @@ exports.awardBadgeToUser = async (req, res) => {
   }
 
   try {
-    // 1. Check if the user_badge already exists
+  
     const { data: existing, error: selectError } = await supabase
       .from('user_badge')
       .select('*')
       .eq('user_id', userId)
       .eq('badge_id', badge_id)
-      .single();
+      .maybeSingle();
 
     if (selectError && selectError.code !== 'PGRST116') {
       throw selectError;
     }
 
     if (existing) {
-      // 2. Update if it exists
+    
       const { error: updateError } = await supabase
         .from('user_badge')
         .update({ user_badge_active })
@@ -109,8 +120,9 @@ exports.awardBadgeToUser = async (req, res) => {
         .eq('badge_id', badge_id);
 
       if (updateError) throw updateError;
+
     } else {
-      // 3. Insert if it does not exist
+    
       const { error: insertError } = await supabase
         .from('user_badge')
         .insert([
@@ -121,8 +133,9 @@ exports.awardBadgeToUser = async (req, res) => {
     }
 
     return res.json({ message: 'Badge awarded successfully.' });
+
   } catch (error) {
-    console.error('[awardBadgeToUser] Error:', error.message);
-    return res.status(500).json({ error: 'Failed to award badge' });
+    console.error('[awardBadgeToUser] Error:', error);
+    return res.status(500).json({ error: error.message || 'Failed to award badge' });
   }
 };
