@@ -16,7 +16,7 @@ import BubblFonts from './BubblFonts';
 
 export const fontStyles = StyleSheet.create({
   display1: {
-    fontFamily: BubblFonts.headingTypeface,
+    fontFamily: BubblFonts.heavyTypeface,
     fontSize: BubblFonts.sizes.display1,
     lineHeight: BubblFonts.lineHeights.display1,
   },
@@ -31,7 +31,7 @@ export const fontStyles = StyleSheet.create({
     lineHeight: BubblFonts.lineHeights.display3,
   },
   heading1: {
-    fontFamily: BubblFonts.headingTypeface,
+    fontFamily: BubblFonts.heavyTypeface,
     fontSize: BubblFonts.sizes.heading1,
     lineHeight: BubblFonts.lineHeights.heading1,
 
