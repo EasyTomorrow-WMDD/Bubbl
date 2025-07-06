@@ -15,8 +15,8 @@ export default function Module({ modules, progress = [], onTopicPress, currentTo
     <View style={{ width: '100%' }}>
       {modules.map((item) => (
         <View key={item.module_id} style={{ gap: 30, }}>
-          <View style={{ backgroundColor: getTopicBg(item.module_number), padding: 10, paddingVertical: 20 }}>
-            <Text style={[fontStyles.heading1, { color: textColor(item.module_number) }]}>
+          <View style={{ backgroundColor: getTopicBg(item.module_number), padding: 15, paddingVertical: 20 }}>
+            <Text style={[fontStyles.heading1, { color: textColor(item.module_number), paddingVertical: 20, fontSize:30 }]}>
               Module {item.module_number} - {item.module_name}
             </Text>
 
