@@ -4,10 +4,6 @@ const BubblConfig = {
   // Backend API
   // For development, check the local IP address with `ifconfig | grep inet` or `ipconfig` command and replace the IP address in the URL with the IP address of localhost.
   BACKEND_URL: isDev
-    // ? 'http://10.10.10.10:3000'
-    // ? 'http://10.128.198.35:3000'
-    // ? 'http://10.100.2.107:3000'
-    // ? 'http://10.128.228.82:3000'
     ? 'http://bubbl.wmdd4950.com/app-backend'
     : 'https://some-url-in-aws-to-be-created.com',
 
