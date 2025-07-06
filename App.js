@@ -44,6 +44,8 @@ export default function App() {
     Font.loadAsync({
       'MuseoSansRounded': require('./assets/fonts/MuseoSansRounded700.otf'),
       'ABeeZee': require('./assets/fonts/ABeeZee-Regular.otf'),
+      '9939': require('./assets/fonts/9939.otf'),
+      '9942': require('./assets/fonts/9942.otf'),
     }).then(() => setFontsLoaded(true));
   }, []);
 
@@ -53,11 +55,11 @@ export default function App() {
 
   if (!fontsLoaded) return null;
 
-//  <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
-    // </View>
+  //  <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
+  // </View>
 
   return (
-  <SafeAreaProvider>
+    <SafeAreaProvider>
       <ChildProvider>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false }}>
@@ -82,7 +84,7 @@ export default function App() {
             <Stack.Screen name="BadgesScreen" component={BadgesScreen} />
             <Stack.Screen name="PrevScreen" component={Previsualization} />
             <Stack.Screen name="PurchaseSuccess" component={PurchaseSuccess} />
-            <Stack.Screen name="Streak" component={StreakScreen}/>
+            <Stack.Screen name="Streak" component={StreakScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </ChildProvider>
