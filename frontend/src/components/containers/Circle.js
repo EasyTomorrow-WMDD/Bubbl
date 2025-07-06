@@ -3,6 +3,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import {textColor, getCompleted, getTopicBg, getBgClass} from '../../styles/BubblColors'
+import { fontStyles } from '../../styles/BubblFontStyles';
 
 const CircularProgress = ({ topic_number, completed, moduleNumber }) => {
   const radius = 30;
@@ -35,7 +36,7 @@ return (
       </Svg>
 
       <View style={styles.center}>
-        <Text style={[styles.text, { color: textColor(moduleNumber) }]}>
+        <Text style={[fontStyles.heading1, { color: textColor(moduleNumber) }]}>
           {topic_number}
         </Text>
       </View>
