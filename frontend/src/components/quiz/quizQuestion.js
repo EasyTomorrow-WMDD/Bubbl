@@ -5,7 +5,6 @@ import ChooseImageQuiz from './ChooseImageQuiz';
 import BubblColors from '../../styles/BubblColors';
 
 export default function QuizQuestion({ data, onAnswer }) {
-
   if (!data || !data.quiz) {
     return (
       <View style={styles.loaderContainer}>
@@ -44,6 +43,19 @@ export default function QuizQuestion({ data, onAnswer }) {
     setIsCorrect(correct);
     setFeedbackMessage(message);
     setSelectionReady(true);
+  };
+
+  const getImageStyle = () => {
+    switch (type) {
+      case 'true_false':
+        return styles.truefalse_img;
+      case 'multiple_choice':
+        return styles.multiplechoice_img;
+      case 'fill_blank':
+        return styles.fillblank_img;
+      default:
+        return styles.img;
+    }
   };
 
   const renderOptions = () => {
@@ -129,7 +141,7 @@ export default function QuizQuestion({ data, onAnswer }) {
               <Text style={styles.question}>{quiz.question}</Text>
             )}
             {quiz?.image && (
-              <Image source={{ uri: quiz.image }} style={styles.img} />
+              <Image source={{ uri: quiz.image }} style={getImageStyle()} />
             )}
           </>
         )}
@@ -146,12 +158,14 @@ export default function QuizQuestion({ data, onAnswer }) {
         {hasChecked && feedbackMessage && (
           <View style={styles.feedbackContainer}>
             <View style={styles.feedbackContent}>
-              {isCorrect && (
-                <Image
-                  source={require('../../assets/icons/correct.png')}
-                  style={styles.feedbackIcon}
-                />
-              )}
+              <Image
+                source={
+                  isCorrect
+                    ? require('../../assets/icons/correct.png')
+                    : require('../../assets/icons/wrong.png')
+                }
+                style={styles.feedbackIcon}
+              />
               <Text style={styles.feedbackText}>{feedbackMessage}</Text>
             </View>
           </View>
@@ -228,22 +242,43 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: BubblColors.BubblBlack,
-    textAlign: 'center',
+    textAlign: 'left',
     marginBottom: 8,
   },
   question: {
     fontSize: 18,
     fontWeight: '400',
-    textAlign: 'center',
-    marginBottom: 10,
+    textAlign: 'left',
+    marginBottom: 12,
     color: BubblColors.BubblBlack,
   },
   img: {
     width: '100%',
-    height: 160,
+    height: 230,
     borderRadius: 20,
     resizeMode: 'cover',
     alignSelf: 'center',
+    marginBottom: 12,
+  },
+  truefalse_img: {
+    width: '100%',
+    height: 250,
+    borderRadius: 16,
+    resizeMode: 'contain',
+    marginBottom: 12,
+  },
+  multiplechoice_img: {
+    width: '100%',
+    height: 230,
+    borderRadius: 20,
+    resizeMode: 'cover',
+    marginBottom: 12,
+  },
+  fillblank_img: {
+    width: '100%',
+    height: 250,
+    borderRadius: 18,
+    resizeMode: 'contain',
     marginBottom: 12,
   },
   optionButton: {
@@ -275,7 +310,7 @@ const styles = StyleSheet.create({
     color: BubblColors.BubblBlack,
   },
   optionTextChecked: {
-    fontWeight: 'bold',
+    fontWeight: '400',
   },
   checkButton: {
     borderRadius: 12,
@@ -300,7 +335,7 @@ const styles = StyleSheet.create({
   },
   checkButtonText: {
     color: 'white',
-    fontWeight: 'bold',
+    fontWeight: '400',
     fontSize: 16,
   },
   emptyText: {

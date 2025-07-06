@@ -2,78 +2,93 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import RewardsPanel from '../components/containers/RewardsPanel';
-import TemporaryMainContainer from '../components/containers/TemporaryMainContainer';
-
+import BubblColors from '../styles/BubblColors';
 
 export default function TopicComplete({ route }) {
   const navigation = useNavigation(); 
   const { heading, text, topic_xp, topic_star } = route.params;
-
-  console.log('TopicComplete → topic_xp:', topic_xp);
-  console.log('TopicComplete → topic_star:', topic_star);
 
   const handleBackToHome = () => {
     navigation.navigate('Modules');
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.container}>
-        <Image
-          //source={require('../../assets/images/confetti.png')}
-          style={styles.image}
-        />
-        <Text style={styles.heading}>{heading || 'Well Done!'}</Text>
-        <Text style={styles.message}>{text || 'You finished this topic! Great job!'}</Text>
+    <View style={styles.screen}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.container}>
+          <Image
+            source={require('../assets/icons/flash_gold.png')}
+            style={styles.image}
+          />
+          <Text style={styles.heading}>
+            {heading || "You're a Kindness Champion!"}
+          </Text>
+          <Text style={styles.message}>
+            {text || 'You spotted bullying, stood up for others, and showed what it means to be a real friend.'}
+          </Text>
 
-        <RewardsPanel xp={topic_xp} star={topic_star} />
+          <RewardsPanel xp={topic_xp} star={topic_star} />
+        </View>
+      </ScrollView>
 
+      <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={handleBackToHome}>
           <Text style={styles.buttonText}>Claim Rewards</Text>
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: BubblColors.BubblNeutralWhite,
+  },
   scrollContainer: {
     flexGrow: 1,
-    backgroundColor: '#EFE8FF',
+    justifyContent: 'center',
+    padding: 20,
   },
   container: {
-    flex: 1,
     alignItems: 'center',
-    padding: 30,
   },
   image: {
-    width: 200,
-    height: 200,
-    marginBottom: 30,
-  },
-  heading: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: '#7C4DFF',
-    textAlign: 'center',
+    width: 150,
+    height: 150,
     marginBottom: 20,
   },
-  message: {
-    fontSize: 18,
-    color: '#555',
+  heading: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: BubblColors.BubblBlack,
     textAlign: 'center',
-    marginBottom: 30,
+    marginBottom: 12,
+  },
+  message: {
+    fontSize: 16,
+    color: BubblColors.BubblBlack,
+    textAlign: 'center',
+    marginBottom: 20,
+    paddingHorizontal: 10,
+  },
+  buttonContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: BubblColors.BubblNeutralWhite,
   },
   button: {
-    marginTop: 40,
-    backgroundColor: '#FFC670',
+    backgroundColor: BubblColors.BubblPurple500,
     paddingVertical: 14,
-    paddingHorizontal: 30,
-    borderRadius: 20,
+    paddingHorizontal:20,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginBottom:28,
+    marginTop:-30
   },
   buttonText: {
-    fontSize: 16,
-    color: '#333',
-    fontWeight: '600',
+    fontSize: 18,
+    color: BubblColors.BubblNeutralWhite,
+    fontWeight: '400',
   },
 });
