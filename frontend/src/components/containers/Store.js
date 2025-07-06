@@ -58,7 +58,7 @@ const Skins = ({ userId, userLevel, userStars, onAssetEquipped, assets }) => {
 
 
   // console.log('SKINS', skins);
-  // console.log('ACCESORIES', accesories);
+  console.log('ACCESORIES', accesories);
   useEffect(() => {
     const fetchSkins = async () => {
       try {
@@ -133,6 +133,9 @@ const Skins = ({ userId, userLevel, userStars, onAssetEquipped, assets }) => {
                   borderRadius: 24
                 }}
               >
+              <Text style={[fontStyles.bodyMedium, {color: BubblColors.BubblPurple950}]}>
+                {skin.ref_asset_variation.asset_variation_name}
+              </Text>
                 <Image
                   source={{ uri: skin.asset_image_url }}
                   style={{ width: 90, height: 120, resizeMode: 'contain' }}
@@ -141,13 +144,13 @@ const Skins = ({ userId, userLevel, userStars, onAssetEquipped, assets }) => {
                   {owned ? (
                     <Text style={[{ color: BubblColors.BubblPurple900 }, fontStyles.heading3]}>Owned</Text>
                   ) : (
-                    <>
-                      <Text style={{ color: 'black' }}>{skin.ref_asset_variation.asset_variation_price}</Text>
+                    <View style={{flexDirection:'row', alignItems:'center' }}>
+                      <Text style={[{ color: BubblColors.BubblPurple900 }, fontStyles.heading3]}>{skin.ref_asset_variation.asset_variation_price}</Text>
                       <Image
                         source={starIcon}
                         style={{ width: 20, height: 20, resizeMode: 'contain' }}
                       />
-                    </>
+                    </View>
                   )}
                 </View>
               </Pressable>
@@ -164,7 +167,7 @@ const Skins = ({ userId, userLevel, userStars, onAssetEquipped, assets }) => {
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ flexDirection: 'row', gap: 20 }}
-          style={{ height: 200 }}
+          style={{ height: 500 }}
         >
           {accesories.map((accessory, index) => {
             const owned = ownedLevels.includes(accessory.asset_variation_level_id);
@@ -178,27 +181,30 @@ const Skins = ({ userId, userLevel, userStars, onAssetEquipped, assets }) => {
                   justifyContent: 'center',
                   height: 204,
                   width: 132,
-                  borderColor: owned ? BubblColors.BubblPurple400 : BubblColors.BubblPurple200,
-                  borderWidth: 1,
+                  borderColor: isEquipped(accessory) ? BubblColors.BubblPurple400 : BubblColors.BubblPurple200,
+                  borderWidth: 3,
                   backgroundColor: BubblColors.BubblPurple100,
                   borderRadius: 24
                 }}
               >
+              <Text style={[fontStyles.bodyMedium, {color: BubblColors.BubblPurple950}]}>
+                {accessory.ref_asset_variation.asset_variation_name}
+              </Text>
                 <Image
                   source={{ uri: accessory.asset_image_url }}
                   style={{ width: 60, height: 80, resizeMode: 'contain' }}
                 />
                 <View style={{ flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
                   {owned ? (
-                    <Text style={{ color: 'gray', fontWeight: 'bold' }}>Owned</Text>
+                    <Text style={[{ color: BubblColors.BubblPurple900 }, fontStyles.heading3]}>Owned</Text>
                   ) : (
-                    <>
-                      <Text style={{ color: 'black' }}>{accessory.ref_asset_variation.asset_variation_price}</Text>
+                    <View >
+                      <Text style={[{ color: BubblColors.BubblPurple900 }, fontStyles.heading3]}>{accessory.ref_asset_variation.asset_variation_price}</Text>
                       <Image
                         source={starIcon}
                         style={{ width: 20, height: 20, resizeMode: 'contain' }}
                       />
-                    </>
+                    </View>
                   )}
                 </View>
               </Pressable>

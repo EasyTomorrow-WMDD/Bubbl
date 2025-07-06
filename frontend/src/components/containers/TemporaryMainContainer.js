@@ -183,10 +183,10 @@ export default function TemporaryMainContainer() {
             <View style={styles.backgroundOverlay} />
             <View style={styles.container}>
               <Avatar userId={userId} userLevel={user ? user.user_level : null} skinSize={200} skinWidth={200} assets={assets} setAssets={setAssets} hatSize={130} top={-40} positionOverrides={{
-                "red-hat": { top: -10, left: 110, width: 120, height: 120 },
-                "bow": { top: 0, left: 125, },
-                "party": { left: 150, top: -20, transform: [{ rotate: "15deg" }]},
-                "santa-hat": { left: 150, top: -12, transform: [{ rotate: "15deg" }] }
+                "Beannie": { top: -10, left: 110, width: 120, height: 120 },
+                "Bow": { top: 0, left: 125, },
+                "Confetti": { left: 150, top: -20, transform: [{ rotate: "15deg" }]},
+                "Santa Hat": { left: 150, top: -12, transform: [{ rotate: "15deg" }] }
               }} />
               <Text style={[styles.title, fontStyles.display1]}>Hi, {user ? user.user_nickname : '...'}</Text>
               <StatsPanel user={user} />
