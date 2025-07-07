@@ -22,7 +22,6 @@ export default function TopicScreen({ route, navigation }) {
   const [countdown, setCountdown] = useState(null);
   const [correctStreak, setCorrectStreak] = useState(0);
   const [showRestart, setShowRestart] = useState(false);
-
   const [isLoadingTopic, setIsLoadingTopic] = useState(true);
   const [isLoadingEnergy, setIsLoadingEnergy] = useState(true);
 
@@ -79,13 +78,10 @@ export default function TopicScreen({ route, navigation }) {
       const res = await axios.get(`${BASE_URL}/api/energy/status`, {
         params: { user_id: currentChild.user_id }
       });
-
       const userEnergy = res.data.user_energy;
       const timeRemaining = res.data.time_to_next_recharge_ms;
-
       setEnergy(userEnergy);
       setTimeToNext(timeRemaining);
-
       if (userEnergy === 0) {
         startCountdown(timeRemaining);
       } else {
@@ -101,7 +97,6 @@ export default function TopicScreen({ route, navigation }) {
   const startCountdown = (ms) => {
     if (!ms || ms <= 0) return;
     let remaining = ms;
-
     const interval = setInterval(() => {
       remaining -= 1000;
       if (remaining <= 0) {
@@ -118,19 +113,12 @@ export default function TopicScreen({ route, navigation }) {
   const loadQuestions = async () => {
     const allQuestions = topic?.topic_activities || [];
     const savedKey = `correctAnswers_${currentChild.user_id}_${topic.topic_id}`;
-
     try {
       const saved = await AsyncStorage.getItem(savedKey);
       const correctIds = saved ? JSON.parse(saved) : [];
       const filtered = allQuestions.filter(q => !correctIds.includes(q.id));
       setQuestions(filtered);
-
-      if (filtered.length === 0) {
-        setShowRestart(true);
-      } else {
-        setShowRestart(false);
-      }
-
+      setShowRestart(filtered.length === 0);
     } catch (err) {
       setQuestions(allQuestions);
       setShowRestart(false);
@@ -143,9 +131,7 @@ export default function TopicScreen({ route, navigation }) {
         badge_id: FOUR_IN_A_ROW_BADGE_ID,
         user_badge_active: true
       });
-    } catch (error) {
-      console.error('[TopicScreen] Error awarding badge:', error);
-    }
+    } catch {}
   };
 
   const checkIfBadgeAlreadyEarned = async () => {
@@ -156,8 +142,7 @@ export default function TopicScreen({ route, navigation }) {
         (b) => b.badge_id === FOUR_IN_A_ROW_BADGE_ID && b.badge_active === true
       );
       return !!alreadyEarned;
-    } catch (error) {
-      console.error('[TopicScreen] Error checking badge:', error);
+    } catch {
       return false;
     }
   };
@@ -167,10 +152,8 @@ export default function TopicScreen({ route, navigation }) {
       const res = await axios.post(`${BASE_URL}/api/energy/reduce`, {
         user_id: currentChild.user_id,
       });
-
       const newEnergy = res.data.user_energy;
       setEnergy(newEnergy);
-
       if (newEnergy === 0) {
         setTimeout(() => {
           navigation.goBack();
@@ -182,16 +165,13 @@ export default function TopicScreen({ route, navigation }) {
         setQuestions(updated);
         setCurrentIndex(0);
       }
-    } catch (err) {
-      console.error('[TopicScreen] Error reducing energy:', err.response?.data || err.message);
-    }
+    } catch {}
   };
 
   const handleAnswer = async (isCorrect) => {
     if (isCorrect) {
       const newStreak = correctStreak + 1;
       setCorrectStreak(newStreak);
-
       if (newStreak >= 4) {
         const alreadyHasBadge = await checkIfBadgeAlreadyEarned();
         if (!alreadyHasBadge) {
@@ -199,8 +179,6 @@ export default function TopicScreen({ route, navigation }) {
           setCorrectStreak(0);
           navigation.navigate('Streak');
           return;
-        } else {
-          console.log('Badge already earned. Not showing Streak screen again.');
         }
         setCorrectStreak(0);
       }
@@ -214,19 +192,28 @@ export default function TopicScreen({ route, navigation }) {
         const savedIds = saved ? JSON.parse(saved) : [];
         const updatedIds = [...savedIds, questions[currentIndex].id];
         await AsyncStorage.setItem(key, JSON.stringify(updatedIds));
-      } catch (err) {
-        console.error('[TopicScreen] Error saving correct answer:', err);
-      }
+      } catch {}
 
       if (updated.length === 0) {
         try {
-          await axios.post(`${BASE_URL}/api/childProgress/saveProgress`, {
+          const res = await axios.post(`${BASE_URL}/api/childProgress/saveProgress`, {
             user_id: currentChild.user_id,
             topic_id: topic.topic_id
           });
-        } catch (error) {
-          console.error('[TopicScreen] Error saving progress:', error);
-        }
+
+          if (res.data.levelChanged) {
+            let animationType;
+            if (res.data.previousLevel === 1 && res.data.newLevel === 2) animationType = 'evolution1';
+            else if (res.data.previousLevel === 2 && res.data.newLevel === 3) animationType = 'evolution2';
+            else if (res.data.previousLevel === 3 && res.data.newLevel === 4) animationType = 'evolution3';
+
+            if (animationType) {
+              navigation.navigate('EvolutionScreen', { animationType });
+              return;
+            }
+          }
+
+        } catch {}
 
         navigation.navigate('TopicComplete', {
           topicId: topic.topic_id,
@@ -286,7 +273,6 @@ export default function TopicScreen({ route, navigation }) {
       <View style={{ paddingTop: 40, paddingHorizontal: 20 }}>
         <EnergyBarContainer energy={energy} maxEnergy={3} />
       </View>
-
       <View style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <QuizQuestion
@@ -310,3 +296,4 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
 });
+
