@@ -41,14 +41,14 @@ const Previsualization = ({ route }) => {
     }
   });
 
- let overrideStyle = {};
+  let overrideStyle = {};
 
-if (assetType !== 'skin' && assetName && currentSkinName) {
-  const styleBySkin = assetPositionMap[assetName];
-  if (styleBySkin) {
-    overrideStyle = styleBySkin[currentSkinName] || styleBySkin["default"] || {};
+  if (assetType !== 'skin' && assetName && currentSkinName) {
+    const styleBySkin = assetPositionMap[assetName];
+    if (styleBySkin) {
+      overrideStyle = styleBySkin[currentSkinName] || styleBySkin["default"] || {};
+    }
   }
-}
 
   useEffect(() => {
     const fetchAvatar = async () => {
@@ -195,11 +195,13 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   skin: {
+    marginTop:40,
     width: 300,
     height: 300,
     position: 'absolute',
-    left: 50,
-    top: 50,
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -150 }, { translateY: -150 }],
   },
   hat: {
     width: 100,
