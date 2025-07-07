@@ -92,7 +92,7 @@ const InventoryScreen = ({ navigation, route }) => {
 
               {section === 'assets' ? (
                 <View >
-                  <View style={{ alignItems: 'center', marginTop: 85 }}>
+                  <View style={{ alignItems: 'center', marginTop: 55 }}>
                     <Avatar
                       key={avatarKey}
                       userId={user.user_id}
