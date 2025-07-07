@@ -9,10 +9,10 @@ const AuthWelcomeContainer = ({ navigation }) => {
   const animationRef = useRef(null);
   const [animationFinished, setAnimationFinished] = useState(false);
   
-//   // This component serves as the welcome screen for authentication.
-//   // Here, users are navigating to either login or signup. There is no state management or logic for the moment. 
+// This component serves as the welcome screen for authentication.
+// Here, users are navigating to either login or signup. There is no state management or logic for the moment. 
 
-//   // ==========================================================================
+ // ==========================================================================
 
   useEffect(() => {
     if (animationRef.current) {
@@ -28,7 +28,7 @@ const AuthWelcomeContainer = ({ navigation }) => {
         style={globalStyles.backgroundLogin}
       >
 
-//   // Render the welcome screen
+{/* Render the welcome screen */}
         <View style={globalStyles.animationContainer}>
           <AuthLoginAnimation />
         </View>
