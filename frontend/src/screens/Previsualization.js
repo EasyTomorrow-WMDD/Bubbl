@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import starIcon from '../assets/icons/star.png';
 import BubblColors from '../styles/BubblColors';
 import { fontStyles } from '../styles/BubblFontStyles';
-import { assetPositionMap } from '../styles/assetPosition'; // 👈 Importas el mapa
+import { assetPositionMap } from '../styles/assetPosition'; 
 
 const Previsualization = ({ route }) => {
   const navigation = useNavigation();
@@ -59,6 +59,7 @@ const Previsualization = ({ route }) => {
         navigation.navigate('PurchaseSuccess', {
           item,
           userStars: userStars - item.ref_asset_variation.asset_variation_price,
+          userId
         });
       } else {
         console.error('Purchase failed:', response.data.message);
@@ -112,24 +113,24 @@ const Previsualization = ({ route }) => {
         {/* SUMMARY */}
         <View style={{ backgroundColor: BubblColors.BubblPurple100, marginTop: 60, borderColor: BubblColors.BubblPurple200, borderWidth: 2, marginHorizontal: 15, borderRadius: 24 }}>
           <View style={styles.row}>
-            <Text style={styles.label}>Your current stars</Text>
+            <Text style={[fontStyles.bodyMedium, {color: BubblColors.BubblBlack}]}>Your current stars</Text>
             <View style={styles.inline}>
-              <Text style={styles.label}>{userStars}</Text>
+              <Text style={[fontStyles.bodyMedium, {color: BubblColors.BubblBlack}]}>{userStars}</Text>
               <Image source={starIcon} style={styles.starIcon} />
             </View>
           </View>
           <View style={styles.row}>
-            <Text style={styles.label}>Purchase total</Text>
+            <Text style={[fontStyles.bodyMedium, {color: BubblColors.BubblBlack}]}>Purchase total</Text>
             <View style={styles.inline}>
-              <Text style={styles.label}>{item.ref_asset_variation.asset_variation_price}</Text>
+              <Text style={[fontStyles.bodyMedium, {color: BubblColors.BubblBlack}]}>{item.ref_asset_variation.asset_variation_price}</Text>
               <Image source={starIcon} style={styles.starIcon} />
             </View>
           </View>
           <View style={styles.divider} />
           <View style={styles.row}>
-            <Text style={styles.label}>You will have</Text>
+            <Text style={[fontStyles.bodyMedium, {color: BubblColors.BubblBlack}]}>You will have</Text>
             <View style={styles.inline}>
-              <Text style={styles.label}>
+              <Text style={[fontStyles.bodyMedium, {color: BubblColors.BubblBlack}]}>
                 {userStars - item.ref_asset_variation.asset_variation_price}
               </Text>
               <Image source={starIcon} style={styles.starIcon} />
