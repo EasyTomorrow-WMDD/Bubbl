@@ -1,0 +1,36 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  deploy:
+    name: Deploy backend to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: SSH into EC2 and deploy
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: 184.169.144.187
+          username: ubuntu
+          key: |
+            -----BEGIN OPENSSH PRIVATE KEY-----
+            b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+            QyNTUxOQAAACCIy5N/mNSF919CAGx1K6EoAHTw240qIIQ/cMPRkBFYXwAAAJhPsrJKT7Ky
+            SgAAAAtzc2gtZWQyNTUxOQAAACCIy5N/mNSF919CAGx1K6EoAHTw240qIIQ/cMPRkBFYXw
+            AAAECOgExyPFO7KcDzudX02rLdZNcNetsO3yRwhADPAo8Br4jLk3+Y1IX3X0IAbHUroSgA
+            dPDbjSoghD9ww9GQEVhfAAAAEWdpdGh1Yi1kZXBsb3kta2V5AQIDBA==
+            -----END OPENSSH PRIVATE KEY-----
+          script: |
+            echo "🚀 Starting deployment on EC2..."
+            cd ~/Bubbl/backend
+            git pull origin development
+            npm install
+            pm2 restart bubbl-backend
+            echo "✅ Deployment complete"
