@@ -41,9 +41,9 @@ const PurchaseSuccess = ({ route, navigation }) => {
                         loop
                         style={styles.starBottomLeft}
                     /> */}
-                    {/* <Image source={require('../assets/animations/Stars.json')} style={styles.starTopRight} />
-                    <Image source={require('../assets/animations/Stars.json')} style={styles.starBottomLeft} />
-                    <Image source={require('../assets/animations/Stars.json')} style={styles.starBottomRight} /> */}
+                    {/* <Image source={require('../assets/images/star.png')} style={styles.starTopRight} />
+                    <Image source={require('../assets/images/star.png')} style={styles.starBottomLeft} />
+                    <Image source={require('../assets/images/star.png')} style={styles.starBottomRight} /> */}
                 </ImageBackground>
                 <Text style={[fontStyles.display1, { color: 'white', marginTop: 80, textAlign: 'center' }]}>Your mascot got a new Item!</Text>
                 <Text style={[fontStyles.bodyLarge, { color: 'white', marginTop: 20, textAlign: 'center' }]}>Now you own this item and can select it at any time!</Text>
