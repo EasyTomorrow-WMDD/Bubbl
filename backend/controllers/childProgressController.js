@@ -167,14 +167,22 @@ exports.saveProgress = async (req, res) => {
     console.log(`XP/Stars updated successfully: New XP=${newXP}, New Stars=${newStars}`);
 
     ///// Determine level /////
-    function getLevelFromXp(xp) {
-      if (xp >= 150) return 4;
-      if (xp >= 100) return 3;
-      if (xp >= 50) return 2;
-      return 1;
-    }
+    const { data: levelRows, error: levelError } = await supabase
+        .from('ref_level')
+        .select('level_value, level_xp_to_next_level')
+        .order('level_xp_to_next_level', { ascending: true });
 
-    const correctLevel = getLevelFromXp(newXP);
+      if (levelError) throw levelError;
+
+      let correctLevel = 1;
+      for (const level of levelRows) {
+        if (newXP >= level.level_xp_to_next_level) {
+          correctLevel = level.level_value;
+        } else {
+          break;
+        }
+      }
+
     let levelChanged = false;
 
     if (previousLevel !== correctLevel) {
