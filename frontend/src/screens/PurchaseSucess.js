@@ -4,6 +4,7 @@ import BubblColors from '../styles/BubblColors';
 import { fontStyles } from '../styles/BubblFontStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import LottieView from 'lottie-react-native';
 
 const PurchaseSuccess = ({ route, navigation }) => {
     const { item, userStars, userId } = route.params;
@@ -28,18 +29,29 @@ const PurchaseSuccess = ({ route, navigation }) => {
                         />
                     </View>
 
-                    <Image source={require('../assets/images/star.png')} style={styles.starTopLeft} />
-                    <Image source={require('../assets/images/star.png')} style={styles.starTopRight} />
-                    <Image source={require('../assets/images/star.png')} style={styles.starBottomLeft} />
-                    <Image source={require('../assets/images/star.png')} style={styles.starBottomRight} />
+                    <LottieView
+                        source={require('../assets/animations/Stars.json')}
+                        autoPlay
+                        loop
+                        style={styles.starBottomRight}
+                    />
+                    {/* <LottieView
+                        source={require('../assets/animations/Stars.json')}
+                        autoPlay
+                        loop
+                        style={styles.starBottomLeft}
+                    /> */}
+                    {/* <Image source={require('../assets/animations/Stars.json')} style={styles.starTopRight} />
+                    <Image source={require('../assets/animations/Stars.json')} style={styles.starBottomLeft} />
+                    <Image source={require('../assets/animations/Stars.json')} style={styles.starBottomRight} /> */}
                 </ImageBackground>
                 <Text style={[fontStyles.display1, { color: 'white', marginTop: 80, textAlign: 'center' }]}>Your mascot got a new Item!</Text>
                 <Text style={[fontStyles.bodyLarge, { color: 'white', marginTop: 20, textAlign: 'center' }]}>Now you own this item and can select it at any time!</Text>
                 <View style={{ gap: 10, marginTop: 25 }}>
-                    <Pressable style={[fontStyles.bodyMedium, { borderWidth: 1, borderColor: 'white', borderRadius: 12, paddingVertical: 12, paddingHorizontal: 12, width: 350, alignItems: 'center', }]} onPress={() => navigation.navigate('InventoryScreen', {childProfileId: userId})} >
+                    <Pressable style={[fontStyles.bodyMedium, { borderWidth: 1, borderColor: 'white', borderRadius: 12, paddingVertical: 12, paddingHorizontal: 12, width: 350, alignItems: 'center', }]} onPress={() => navigation.navigate('InventoryScreen', { childProfileId: userId })} >
                         <Text style={{ color: 'white' }}>Back to shop</Text>
                     </Pressable>
-                    <Pressable style={[fontStyles.bodyMedium, { borderWidth: 1, borderColor: 'white', borderRadius: 12, paddingVertical: 12, paddingHorizontal: 12, backgroundColor: 'white', width: 350, alignItems: 'center' }]}  onPress={() => navigation.navigate('Modules', {childProfileId: userId})}>
+                    <Pressable style={[fontStyles.bodyMedium, { borderWidth: 1, borderColor: 'white', borderRadius: 12, paddingVertical: 12, paddingHorizontal: 12, backgroundColor: 'white', width: 350, alignItems: 'center' }]} onPress={() => navigation.navigate('Modules', { childProfileId: userId })}>
                         <Text>Close</Text>
                     </Pressable>
                 </View>
@@ -90,9 +102,9 @@ const styles = StyleSheet.create({
     starBottomRight: {
         position: 'absolute',
         bottom: -50,
-        right: -10,
-        width: 100,
-        height: 100,
+        right: -50,
+        width: 350,
+        height: 350,
     },
     centerContent: {
         alignItems: 'center',
