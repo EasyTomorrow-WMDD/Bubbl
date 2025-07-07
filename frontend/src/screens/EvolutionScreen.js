@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import LottieView from 'lottie-react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 
 const EvolutionScreen = ({ route }) => {
-  const { animationType } = route.params; // should be 'evolution1', 'evolution2', or 'evolution3'
+  const navigation = useNavigation();
+  const { animationType } = route.params;
   const animationRef = useRef(null);
   const [text, setText] = useState('');
 
@@ -31,11 +33,13 @@ const EvolutionScreen = ({ route }) => {
 
   useEffect(() => {
     setText(initial);
-
-    // Delay final text until animation ends
-    const duration = 3500; // adjust depending on animation length
-    const timeout = setTimeout(() => setText(final), duration);
-
+    const duration = 3500;
+    const timeout = setTimeout(() => {
+      setText(final);
+      setTimeout(() => {
+        navigation.navigate('Modules');
+      }, 2500);
+    }, duration);
     return () => clearTimeout(timeout);
   }, [animationType]);
 
