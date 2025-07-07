@@ -10,28 +10,45 @@ import { useNavigation } from '@react-navigation/native';
 import starIcon from '../assets/icons/star.png';
 import BubblColors from '../styles/BubblColors';
 import { fontStyles } from '../styles/BubblFontStyles';
-import { assetPositionMap } from '../styles/assetPosition'; 
+import { assetPositionMap } from '../styles/assetPosition';
+import alertIcon from '../assets/icons/alert_icon.png'
 
 const Previsualization = ({ route }) => {
   const navigation = useNavigation();
   const { item, userId, userLevel, userStars } = route.params;
   const [assets, setAssets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const assetType = item?.ref_asset_variation?.ref_asset?.asset_type;
   const assetName = item?.ref_asset_variation?.asset_variation_name;
-  const overrideStyle = assetPositionMap[assetName] || {};
 
   const assetMap = {};
+  let currentSkinName = null;
+
   assets.forEach((asset) => {
     const type = asset.ref_asset.asset_type;
     const levelAsset = asset.ref_asset_variation?.ref_asset_variation_level?.find(
       (img) => img.user_level === userLevel
     );
+
     if (levelAsset) {
       assetMap[type] = levelAsset.asset_image_url;
+
+      if (type === 'skin') {
+        currentSkinName = asset.ref_asset_variation.asset_variation_name;
+      }
     }
   });
+
+ let overrideStyle = {};
+
+if (assetType !== 'skin' && assetName && currentSkinName) {
+  const styleBySkin = assetPositionMap[assetName];
+  if (styleBySkin) {
+    overrideStyle = styleBySkin[currentSkinName] || styleBySkin["default"] || {};
+  }
+}
 
   useEffect(() => {
     const fetchAvatar = async () => {
@@ -54,21 +71,24 @@ const Previsualization = ({ route }) => {
         userId,
         assetVariationLevelId: item.asset_variation_level_id,
       });
-
       if (response.data.success) {
+        setErrorMessage('');
         navigation.navigate('PurchaseSuccess', {
           item,
           userStars: userStars - item.ref_asset_variation.asset_variation_price,
           userId
         });
       } else {
-        console.error('Purchase failed:', response.data.message);
+        setErrorMessage(response.data.message || 'No se pudo completar la compra.');
       }
     } catch (error) {
-      if (error.response) {
-        console.error('Backend error:', error.response.data);
+      const backendMessage = error.response?.data?.error;
+      if (backendMessage === 'Insufficient stars') {
+        setErrorMessage('Ops! You need more stars to get this item');
+      } else if (backendMessage === 'User not found') {
+        setErrorMessage('User not found. Please check your session.');
       } else {
-        console.error('Unknown error:', error.message);
+        setErrorMessage('Unexpected error. Please try again.');
       }
     }
   };
@@ -77,6 +97,16 @@ const Previsualization = ({ route }) => {
     <View style={{ backgroundColor: BubblColors.BubblPurple500 }}>
       <ShopHeader title={'Summary'} childProfileId={userId} />
       <ScrollView style={{ borderTopLeftRadius: 32, borderTopRightRadius: 32, backgroundColor: 'white', height: '100%' }}>
+        {errorMessage !== '' && (
+          <View style={{
+            borderWidth: 1, borderColor: BubblColors.BubblOrange500, backgroundColor: BubblColors.BubblOrange100, flexDirection: 'row', alignItems: 'center', gap: 15, marginHorizontal: 15, paddingVertical: 16,
+            paddingHorizontal: 12, borderRadius: 20, marginTop: 20
+          }}>
+            <Image source={alertIcon} style={{ height: 45, width: 45 }} />
+            <Text style={[fontStyles.bodyMedium, { flexWrap: 'wrap', flex: 1 }]}>{errorMessage}</Text>
+          </View>
+        )}
+
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5, padding: 20 }}>
           <Text style={fontStyles.heading3}>{item.ref_asset_variation.asset_variation_name}</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -85,7 +115,7 @@ const Previsualization = ({ route }) => {
           </View>
         </View>
 
-        {/* RENDER AVATAR */}
+        {/* AVATAR */}
         <View style={styles.avatarContainer}>
           {assetType === 'skin' ? (
             <>
@@ -99,8 +129,6 @@ const Previsualization = ({ route }) => {
               {assetMap.skin && (
                 <Image source={{ uri: assetMap.skin }} style={styles.skin} resizeMode="contain" />
               )}
-
-              {/* Aquí aplicas el estilo por nombre del accesorio */}
               <Image
                 source={{ uri: item.asset_image_url }}
                 style={[styles.accessory, overrideStyle]}
@@ -113,24 +141,24 @@ const Previsualization = ({ route }) => {
         {/* SUMMARY */}
         <View style={{ backgroundColor: BubblColors.BubblPurple100, marginTop: 60, borderColor: BubblColors.BubblPurple200, borderWidth: 2, marginHorizontal: 15, borderRadius: 24 }}>
           <View style={styles.row}>
-            <Text style={[fontStyles.bodyMedium, {color: BubblColors.BubblBlack}]}>Your current stars</Text>
+            <Text style={[fontStyles.bodyMedium, { color: BubblColors.BubblBlack }]}>Your current stars</Text>
             <View style={styles.inline}>
-              <Text style={[fontStyles.bodyMedium, {color: BubblColors.BubblBlack}]}>{userStars}</Text>
+              <Text style={[fontStyles.bodyMedium, { color: BubblColors.BubblBlack }]}>{userStars}</Text>
               <Image source={starIcon} style={styles.starIcon} />
             </View>
           </View>
           <View style={styles.row}>
-            <Text style={[fontStyles.bodyMedium, {color: BubblColors.BubblBlack}]}>Purchase total</Text>
+            <Text style={[fontStyles.bodyMedium, { color: BubblColors.BubblBlack }]}>Purchase total</Text>
             <View style={styles.inline}>
-              <Text style={[fontStyles.bodyMedium, {color: BubblColors.BubblBlack}]}>{item.ref_asset_variation.asset_variation_price}</Text>
+              <Text style={[fontStyles.bodyMedium, { color: BubblColors.BubblBlack }]}>{item.ref_asset_variation.asset_variation_price}</Text>
               <Image source={starIcon} style={styles.starIcon} />
             </View>
           </View>
           <View style={styles.divider} />
           <View style={styles.row}>
-            <Text style={[fontStyles.bodyMedium, {color: BubblColors.BubblBlack}]}>You will have</Text>
+            <Text style={[fontStyles.bodyMedium, { color: BubblColors.BubblBlack }]}>You will have</Text>
             <View style={styles.inline}>
-              <Text style={[fontStyles.bodyMedium, {color: BubblColors.BubblBlack}]}>
+              <Text style={[fontStyles.bodyMedium, { color: BubblColors.BubblBlack }]}>
                 {userStars - item.ref_asset_variation.asset_variation_price}
               </Text>
               <Image source={starIcon} style={styles.starIcon} />
@@ -212,9 +240,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 2,
-  },
-  label: {
-    color: 'black',
   },
   starIcon: {
     width: 20,
