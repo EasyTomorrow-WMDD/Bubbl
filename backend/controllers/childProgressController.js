@@ -144,12 +144,13 @@ exports.saveProgress = async (req, res) => {
 
     const { data: currentUser, error: getCurrentUserError } = await supabase
       .from('user')
-      .select('user_xp, user_star')
+      .select('user_xp, user_star, user_level')
       .eq('user_id', user_id)
       .single();
 
     if (getCurrentUserError) throw getCurrentUserError;
 
+    const previousLevel = currentUser.user_level;
     const newXP = (currentUser.user_xp || 0) + (topic_xp || 0);
     const newStars = (currentUser.user_star || 0) + (topic_star || 0);
 
@@ -173,19 +174,12 @@ exports.saveProgress = async (req, res) => {
       return 1;
     }
 
-    const { data: userData, error: userError } = await supabase
-      .from('user')
-      .select('user_xp, user_level')
-      .eq('user_id', user_id)
-      .single();
+    const correctLevel = getLevelFromXp(newXP);
+    let levelChanged = false;
 
-    if (userError) throw userError;
+    if (previousLevel !== correctLevel) {
+      levelChanged = true;
 
-    const currentXp = userData.user_xp;
-    const currentLevel = userData.user_level;
-    const correctLevel = getLevelFromXp(currentXp);
-
-    if (currentLevel !== correctLevel) {
       const { error: levelUpdateError } = await supabase
         .from('user')
         .update({ user_level: correctLevel })
@@ -207,19 +201,19 @@ exports.saveProgress = async (req, res) => {
       let skinName;
       switch (correctLevel) {
         case 1:
-          skinName = "egg3";
+          skinName = "Gotie";
           break;
         case 2:
-          skinName = "kid-3";
+          skinName = "Gotie Gold";
           break;
         case 3:
-          skinName = "Skin 3";
+          skinName = "Youngie";
           break;
         case 4:
-          skinName = "adult_yellow";
+          skinName = "Bubblgom";
           break;
         default:
-          skinName = "egg3";
+          skinName = "Gotie";
       }
 
       const { data: variationData, error: variationError } = await supabase
@@ -253,7 +247,14 @@ exports.saveProgress = async (req, res) => {
       console.log(`Skin created for user ${user_id} at level ${correctLevel}: ${skinName}`);
     }
 
-    res.json({ message: 'Progress saved!' });
+    res.json({
+      message: 'Progress saved!',
+      levelChanged,
+      previousLevel,
+      newLevel: correctLevel,
+      newXP,
+      newStars
+    });
 
   } catch (err) {
     console.error('Save progress error:', err);
