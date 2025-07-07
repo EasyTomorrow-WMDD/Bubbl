@@ -64,6 +64,8 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingBottom: 20,
     zIndex: 20,
+    borderTopColor: '#c5c5c5aa',
+    borderTopWidth: 1,
   },
   navItem: {
     alignItems: 'center',

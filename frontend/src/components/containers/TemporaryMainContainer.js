@@ -12,6 +12,7 @@ import { BASE_URL } from '../../utils/config';
 import Avatar from './Avatar';
 import EnergyTimer from './Timer';
 import { fontStyles } from '../../styles/BubblFontStyles';
+import BubblColors from '../../styles/BubblColors';
 
 
 export default function TemporaryMainContainer() {
@@ -171,9 +172,9 @@ export default function TemporaryMainContainer() {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor:BubblColors.BubblPurple500 }}>
       <PatthernHeader />
-      <ScrollView contentContainerStyle={{ paddingBottom: 80, paddingTop: 20 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 80, paddingTop: 20, backgroundColor:BubblColors.BubblPurple50 }}>
         <View style={{ flex: 1, backgroundColor: '#DFDAFAA' }}>
           <StatusBar style="auto" />
           <ImageBackground
@@ -201,7 +202,7 @@ export default function TemporaryMainContainer() {
                 justifyContent: 'center',
                 gap: 5,
                 marginHorizontal: 20,
-                marginBottom: 20,
+                marginBottom:50,
                 padding: 20,
                 borderRadius: 15,
                 borderWidth: 2,
