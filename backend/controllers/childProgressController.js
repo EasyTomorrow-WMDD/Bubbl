@@ -225,6 +225,16 @@ exports.saveProgress = async (req, res) => {
       if (variationError) throw variationError;
       const variationId = variationData.asset_variation_id;
 
+      const { data: variationLevelData, error: variationLevelError } = await supabase
+        .from('ref_asset_variation_level')
+        .select('asset_variation_level_id')
+        .eq('asset_variation_id', variationId)
+        .eq('user_level', correctLevel)
+        .single();
+
+      if (variationLevelError) throw variationLevelError;
+      const variationLevelId = variationLevelData.asset_variation_level_id;
+
       ///// Delete any existing active skin rows for this user////
       await supabase
         .from('user_asset')
@@ -239,6 +249,7 @@ exports.saveProgress = async (req, res) => {
           user_id: user_id,
           asset_id: skinAssetId,
           asset_variation_id: variationId,
+          ref_asset_variation_level_id: variationLevelId,
           user_asset_active: true
         }]);
 
