@@ -6,8 +6,9 @@ const BubblConfig = {
   BACKEND_URL: isDev
 
 
-    ? 'http://bubbl.wmdd4950.com/app-backend'
-
+   // ? 'http://bubbl.wmdd4950.com/app-backend'
+    ? 'http://192.168.1.72:3000'
+    
     : 'https://some-url-in-aws-to-be-created.com',
 
   // Supabase URL
