@@ -23,7 +23,7 @@ const ChildNavbar = ({ navigation, childProfileId }) => {
       >
         <View style={styles.iconWrapper}>
           <Image
-            source={require('../../assets/icons/Paint.png')}
+            source={require('../../assets/icons/paint.png')}
             style={styles.navIcon}
             resizeMode="contain"
           />
@@ -43,7 +43,7 @@ const ChildNavbar = ({ navigation, childProfileId }) => {
             resizeMode="contain"
           />
         </View>
-        <Text style={styles.navText}>Quest</Text>
+        <Text style={styles.navText}>Shop</Text>
       </TouchableOpacity>
     </View>
   );
