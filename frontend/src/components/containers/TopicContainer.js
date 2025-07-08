@@ -24,6 +24,7 @@ export default function TopicScreen({ route, navigation }) {
   const [showRestart, setShowRestart] = useState(false);
   const [isLoadingTopic, setIsLoadingTopic] = useState(true);
   const [isLoadingEnergy, setIsLoadingEnergy] = useState(true);
+  const [showTryAgain, setShowTryAgain] = useState(false);
 
   if (isLoadingChild) {
     return (
@@ -119,9 +120,11 @@ export default function TopicScreen({ route, navigation }) {
       const filtered = allQuestions.filter(q => !correctIds.includes(q.id));
       setQuestions(filtered);
       setShowRestart(filtered.length === 0);
+      setShowTryAgain(false);
     } catch (err) {
       setQuestions(allQuestions);
       setShowRestart(false);
+      setShowTryAgain(false);
     }
   };
 
@@ -159,11 +162,15 @@ export default function TopicScreen({ route, navigation }) {
           navigation.goBack();
         }, 500);
       } else {
-        const updated = [...questions];
-        const failed = updated.splice(currentIndex, 1)[0];
-        updated.push(failed);
-        setQuestions(updated);
-        setCurrentIndex(0);
+        if (questions.length === 1) {
+          setShowTryAgain(true);
+        } else {
+          const updated = [...questions];
+          const failed = updated.splice(currentIndex, 1)[0];
+          updated.push(failed);
+          setQuestions(updated);
+          setCurrentIndex(0);
+        }
       }
     } catch {}
   };
@@ -225,6 +232,7 @@ export default function TopicScreen({ route, navigation }) {
       } else {
         setQuestions(updated);
         setCurrentIndex(0);
+        setShowTryAgain(false);
       }
     } else {
       setCorrectStreak(0);
@@ -235,6 +243,8 @@ export default function TopicScreen({ route, navigation }) {
   const resetTopicForTest = async () => {
     const key = `correctAnswers_${currentChild.user_id}_${topic.topic_id}`;
     await AsyncStorage.removeItem(key);
+    setShowRestart(false);
+    setShowTryAgain(false);
     await loadQuestions();
   };
 
@@ -257,11 +267,11 @@ export default function TopicScreen({ route, navigation }) {
     );
   }
 
-  if (showRestart || !questions.length) {
+  if (showRestart || questions.length === 0) {
     return (
       <View style={styles.loaderContainer}>
         <Text style={styles.completedText}>You have already completed this topic!</Text>
-        <Button title="Restart Quiz" onPress={resetTopicForTest} />
+        <Button title="Try Again" onPress={resetTopicForTest} />
       </View>
     );
   }
@@ -278,6 +288,8 @@ export default function TopicScreen({ route, navigation }) {
           <QuizQuestion
             data={currentQuestion}
             onAnswer={(isCorrect) => handleAnswer(isCorrect)}
+            showTryAgain={showTryAgain}
+            onTryAgain={() => setShowTryAgain(false)}
           />
         </ScrollView>
       </View>
@@ -296,4 +308,3 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
 });
-
