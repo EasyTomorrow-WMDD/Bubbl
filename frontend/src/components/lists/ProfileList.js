@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { globalStyles } from '../../styles/BubblStyles';
+import { profileStyles } from '../../styles/ProfileStyles';
 import ProfileCard from '../cards/ProfileCard';
 import ProfileAddCard from '../cards/ProfileAddCard';
 
@@ -16,7 +17,7 @@ import ProfileAddCard from '../cards/ProfileAddCard';
 const ProfileList = ({ profiles, type, navigation, onCardPress, showAddCard = true }) => {
   return (
     // Render a list of profile cards
-    <View style={globalStyles.cardRow}>
+    <View style={profileStyles.cardRow}>
       {profiles.map((profile) => (
         <ProfileCard
           key={profile.user_id}

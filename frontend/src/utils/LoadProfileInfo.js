@@ -23,6 +23,7 @@ const LoadProfileInfo = async () => {
     const nickname = await AsyncStorage.getItem('selected_user_nickname');
     const user_id = await AsyncStorage.getItem('selected_user_id');
     const avatar_id = await AsyncStorage.getItem('selected_avatar_id'); // optional, if stored
+    // console.log('[LoadProfileInfo] Loaded profile from AsyncStorage:', { nickname, user_id, avatar_id, });
     return {
       nickname: nickname || null,
       user_id: user_id || null,

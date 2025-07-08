@@ -1,39 +1,36 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { parentStyles } from '../../styles/BubblParentMainStyles';
+import { fontStyles } from '../../styles/BubblFontStyles';
+import BubblColors from '../../styles/BubblColors';
 
-const ParentBottomNav = ({ activeTab, setActiveTab }) => {
-  return (
-    <View style={styles.container}>
-      <NavItem icon="book-outline" label="Stories" isActive={activeTab === 'Stories'} onPress={() => setActiveTab('Stories')} />
-      <NavItem icon="bar-chart-outline" label="Progress" isActive={activeTab === 'Progress'} onPress={() => setActiveTab('Progress')} />
-      <NavItem icon="settings-outline" label="Settings" isActive={activeTab === 'Settings'} onPress={() => setActiveTab('Settings')} />
-    </View>
-  );
-};
+const PARENT_NAV_ICON_01 = require('../../assets/icons/parent_nav_01.png'); // Path to the first parent navigation icon
+const PARENT_NAV_ICON_02 = require('../../assets/icons/parent_nav_02.png'); // Path to the second parent navigation icon
+const PARENT_NAV_ICON_03 = require('../../assets/icons/parent_nav_03.png'); // Path to the third parent navigation icon
 
+// ============================================================================
+// Method to render one navigation item: 
 const NavItem = ({ icon, label, isActive, onPress }) => (
-  <TouchableOpacity style={styles.item} onPress={onPress}>
-    <Ionicons name={icon} size={22} color={isActive ? '#1e90ff' : '#555'} />
-    <Text style={[styles.label, isActive && { color: '#1e90ff' }]}>{label}</Text>
+  <TouchableOpacity style={parentStyles.parentNavItem} onPress={onPress}>
+    <Image
+      source={icon}
+      style={[ parentStyles.parentNavIcon, isActive ? parentStyles.parentNavIconActive : parentStyles.parentNavIconInactive]}
+      resizeMode="contain"
+    />
+    <Text style={[fontStyles.bodySmall, parentStyles.parentNavLabel, isActive ? parentStyles.parentNavLabelActive : parentStyles.parentNavLabelInactive]}>{label}</Text>
   </TouchableOpacity>
 );
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderColor: '#ccc',
-    backgroundColor: '#fff',
-  },
-  item: {
-    alignItems: 'center',
-  },
-  label: {
-    fontSize: 12,
-    marginTop: 4,
-  },
-});
+// ============================================================================
+// Parent Bottom Navigation Component
+const ParentBottomNav = ({ activeTab, setActiveTab }) => {
+  return (
+    <View style={parentStyles.parentNavContainer}>
+      <NavItem icon={PARENT_NAV_ICON_01} label="Stories" isActive={activeTab === 'Stories'} onPress={() => setActiveTab('Stories')} />
+      <NavItem icon={PARENT_NAV_ICON_02} label="Progress" isActive={activeTab === 'Progress'} onPress={() => setActiveTab('Progress')} />
+      <NavItem icon={PARENT_NAV_ICON_03} label="Settings" isActive={activeTab === 'Settings'} onPress={() => setActiveTab('Settings')} />
+    </View>
+  );
+};
 
 export default ParentBottomNav;

@@ -1,10 +1,15 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Text, Image, StyleSheet } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { globalStyles } from '../../styles/BubblStyles';
+import { profileStyles } from '../../styles/ProfileStyles';
+import { avatarImages } from '../../utils/AvatarMappings';
 
 const ProfileCard = ({ profile, type, onPress, navigation }) => {
+
+  // Get avatar image full path based on the avatar_id
+  const avatarSource = avatarImages[profile.avatar_id] || avatarImages['avatar01'];
 
   // ==========================================================================
   // Method to store selected profile in AsyncStorage (user_id, user_nickname, avatar_id)
@@ -12,7 +17,7 @@ const ProfileCard = ({ profile, type, onPress, navigation }) => {
     try {
       await AsyncStorage.setItem('selected_user_id', profile.user_id);
       await AsyncStorage.setItem('selected_user_nickname', profile.user_nickname);
-      await AsyncStorage.setItem('selected_avatar_id', profile.avatar_id ?? '');
+      await AsyncStorage.setItem('selected_avatar_id', profile.avatar_id ?? 'avatar01');
       await AsyncStorage.setItem('selected_account_id', profile.account_id);
 
       // console.log('[INFO][ProfileCard] Stored profile:', {
@@ -49,9 +54,9 @@ const ProfileCard = ({ profile, type, onPress, navigation }) => {
   // ==========================================================================
   // Render the profile card
   return (
-    <TouchableOpacity onPress={handlePress} style={globalStyles.card}>
-      <View style={globalStyles.avatarPlaceholder} />
-      <Text style={globalStyles.nickname}>{profile.user_nickname}</Text>
+    <TouchableOpacity onPress={handlePress} style={profileStyles.card}>
+      <Image source={avatarSource} style={profileStyles.avatarImage} />
+      <Text style={profileStyles.nickname}>{profile.user_nickname}</Text>
     </TouchableOpacity>
   );
 };
