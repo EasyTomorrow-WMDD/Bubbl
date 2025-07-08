@@ -1,32 +1,70 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Text, Button, StyleSheet, ActivityIndicator, Dimensions } from 'react-native';
 import supabase from '../../services/supabase';
-import { globalStyles } from '../../styles/BubblStyles';
+import axios from 'axios';
+import BubblConfig from '../../config/BubblConfig';
+import ProfileList from '../lists/ProfileList';
 import BubblButton from '../forms/BubblButton';
 import LoadProfileInfo from '../../utils/LoadProfileInfo';
 import LogoutUser from '../../utils/LogoutUser';
+import { profileStyles } from '../../styles/ProfileStyles';
+import { parentStyles } from '../../styles/BubblParentMainStyles';
+import { fontStyles } from '../../styles/BubblFontStyles';
+import BubblColors from '../../styles/BubblColors';
 
+// ============================================================================
+// ParentSettingsContainer Component
 const ParentSettingsContainer = ( {navigation} ) => {
-  // State variables to hold profile information
-  const [nickname, setNickname] = useState('');
-  const [userId, setUserId] = useState('');
-  const [avatarId, setAvatarId] = useState(null); // Optional, if stored
 
-  // ==========================================================================
-  // Load profile from AsyncStorage on component mount.
-  // These are set when the user selects a profile in the Profile screen.
+  // State variables to hold parent and child profiles + current user info
+  const [parentProfiles, setParentProfiles] = useState([]);
+  const [childProfiles, setChildProfiles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [currentUserType, setCurrentUserType] = useState(null);
+  const [accountOwnerId, setAccountOwnerId] = useState(null);
+
+  const screenHeight = Dimensions.get('window').height; // Get the screen height
+  
+  // ----------------------------------------------------------------
+  // Fetch profiles from the backend API on load
   useEffect(() => {
-    const fetchProfile = async () => {
-      const profile = await LoadProfileInfo();
-      setNickname(profile.nickname);
-      setUserId(profile.user_id);
-      setAvatarId(profile.avatar_id);
+    const loadProfiles = async () => {
+      try {
+        // Get the current user's session to retrieve access token
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        // Call the backend API to get user profiles associated with the current user
+        const response = await axios.get(`${BubblConfig.BACKEND_URL}/api/users/profiles`, {
+          headers: {
+            Authorization: `Bearer ${session?.access_token}`,
+          },
+        });
+
+        // Set parent and child profiles from the response
+        setParentProfiles(response.data.parents || []);
+        setChildProfiles(response.data.children || []);
+        setCurrentUserId(response.data.current_user_id);
+        setCurrentUserType(response.data.current_user_type);
+        setAccountOwnerId(response.data.account_owner_id);
+
+        // await AsyncStorage.setItem('account_id', response.data.account_id);
+
+      } catch (err) {
+        console.error('[ERROR][Profile] Failed to load profiles:', err);
+      } finally {
+        setLoading(false);
+      }
     };
-    fetchProfile();
+
+    loadProfiles();
   }, []);
 
-  // ==========================================================================
+  if (loading) return <ActivityIndicator size="large" />;
+  
+  // ----------------------------------------------------------------
   // Method to logout 
   const handleLogout = async () => {
     const success = await LogoutUser(navigation);
@@ -37,29 +75,55 @@ const ParentSettingsContainer = ( {navigation} ) => {
     }
   };
 
-  // ==========================================================================
+  // ----------------------------------------------------------------
   // Render the temporary settings screen    
   return (
-    <View style={globalStyles.welcomeContainer}>
+    <>
+      {/* Workaround to get the purple background behind main container */}
+      <View style={{
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: BubblColors.BubblPurple500,
+        height: screenHeight * 0.2,
+      }} />
 
-      {/* Welcome heading */}
-      <Text style={globalStyles.heading}>Temporary Settings</Text>
+      {/* Main contents */}
+      <View style={parentStyles.parentChildSelectionContainer}>
+        {/* Heading */}
+        <Text style={[fontStyles.display2, parentStyles.parentChildSelectionHeader]}>Settings</Text>
+        <Text style={[fontStyles.bodyDefault, parentStyles.parentChildSelectionSubHeading, {marginBottom:12}]}>Add account</Text>
 
-      {/* Welcome heading */}
-      <Text style={globalStyles.title}>Current profile is: {nickname}</Text>
+        {/* Profile Lists (Parents) */}
+        <Text style={[profileStyles.subheading, {textAlign:'center'}]}>Parents (Guardians)</Text>
+        <ProfileList 
+          profiles={parentProfiles} 
+          type="parent" 
+          navigation={navigation} 
+          showAddCard={true} 
+        />
 
-      {/* Show user ID */}
-      <Text style={globalStyles.title}>user_id of the profile is: {userId}</Text>
+        {/* Profile Lists (Children) */}
+        <Text style={[profileStyles.subheading, {textAlign:'center'}]}>Child(ren)</Text>
+        <ProfileList 
+          profiles={childProfiles} 
+          type="kid" 
+          navigation={navigation} 
+          showAddCard={true}
+        />
 
-      {/* Logout */}
-      <BubblButton 
-        label="Logout" 
-        onPress={handleLogout}
-        style={{ marginTop: 12, backgroundColor: 'red' }}
-      />
+        {/* Logout */}
+        <Text style={[fontStyles.display2, parentStyles.parentChildSelectionHeader]}>Logout</Text>
+        <BubblButton 
+          label="Logout" 
+          onPress={handleLogout}
+          style={{ marginTop: 12, backgroundColor: BubblColors.BubblPink500, alignSelf: 'center' }}
+        />
 
-    </View>
+      </View>
+
+
+    </>
   );
+
 };
 
 export default ParentSettingsContainer;

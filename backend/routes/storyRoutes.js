@@ -6,6 +6,7 @@ const {
   getOneParentStory,
   markStoryAsRead,
   getRelatedStories,
+  searchExternalNews,
 } = require('../controllers/storyController');
 
 
@@ -21,5 +22,7 @@ router.get('/getOneParentStory/:story_id', verifySupabaseToken, getOneParentStor
 router.post('/markStoryAsRead', verifySupabaseToken, markStoryAsRead);
 // Route: GET /api/stories/getRelatedStories/?type=:parent_story_type&exclude=:parent_story_id
 router.get('/getRelatedStories', verifySupabaseToken, getRelatedStories);
+// Route: GET /api/stories/searchExternalNews
+router.get('/searchExternalNews', verifySupabaseToken, searchExternalNews);
 
 module.exports = router;
