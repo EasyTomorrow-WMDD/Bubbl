@@ -1,4 +1,6 @@
 const supabase = require('../utils/supabaseClient');
+const axios = require('axios'); // needed to make request to News API
+const NEWS_API_KEY = process.env.NEWS_API_KEY; // For News API
 
 // ==========================================================================
 // getEssentialsStoriesForUser
@@ -189,5 +191,128 @@ exports.getRelatedStories = async (req, res) => {
   } catch (err) {
     console.error('[ERROR][getRelatedStories]', err.message || err);
     res.status(500).json({ error: 'Failed to fetch related stories' });
+  }
+};
+
+// ==========================================================================
+// searchExternalNews
+// Route: GET /api/stories/searchExternalNews
+// Description: Search for external news articles based on a query string
+// Returns: List of news articles matching the query
+exports.searchExternalNews = async (req, res) => {
+
+  const { text = '', type = 'all' } = req.query;
+  
+  try {
+    // Step 1: Build the query
+    // The query will be a combination of the text entered in search area + the type of news selected
+    let query = text.trim();
+
+    // Append "AND" if a search text is provided. 
+    if (query !== '') {
+      query += ' AND ';
+    }
+
+    /*  // Removing News API -- START 
+    // Then, append more keywords based on the type of news selected
+    switch (type) {
+      case 'bullying':
+        query += 'child AND bully';
+        break;
+      case 'hygiene':
+        query += 'child AND hygiene';
+        break;
+      case 'sex_ed':
+        query += 'child AND sex AND education';
+        break;
+      case 'habit_building':
+        query += 'child AND habit AND build';
+        break;
+      case 'all':
+      default:
+        query += 'child AND (bully OR hygiene OR (sex AND education) OR (habit AND build))';
+    }
+
+    // Step 2: Make API request to NewsAPI
+    const response = await axios.get('https://newsapi.org/v2/everything', {
+      params: {
+        q: query,
+        pageSize: 10,
+        apiKey: NEWS_API_KEY,
+      },
+    });
+
+    // Step 3: Extract only relevant article fields
+    const articles = (response.data.articles || []).map((a) => ({
+      title: a.title,
+      description: a.description,
+      url: a.url,
+      urlToImage: a.urlToImage,
+    }));
+
+    // Removing News API -- END */
+
+    // Using Google Programmable Search API instead of News API: 
+    // Step 2: Append keyword phrases based on the selected type
+    let keywordPhrases = [];
+
+    switch (type) {
+      case 'bullying':
+        keywordPhrases.push('(child bully)');
+        break;
+      case 'hygiene':
+        keywordPhrases.push('(child hygiene)');
+        break;
+      case 'sex_ed':
+        keywordPhrases.push('(child sex education)');
+        break;
+      case 'habit_building':
+        keywordPhrases.push('(child habit)');
+        break;
+      case 'all':
+      default:
+        keywordPhrases.push(
+          '(child bully)',
+          '(child hygiene)',
+          '(child sex education)',
+          '(child habit)'
+        );
+    }
+
+    // Join phrases using OR
+    const keywordQuery = keywordPhrases.join(' OR ');
+
+    // Final query: search text + OR-connected keywords
+    const fullQuery = query ? `(${query}) AND (${keywordQuery})` : keywordQuery;
+
+    // Step 3: Call Google Programmable Search API
+    const response = await axios.get('https://www.googleapis.com/customsearch/v1', {
+      params: {
+        q: fullQuery,
+        cx: process.env.CUSTOM_SEARCH_ENGINE_ID,
+        key: process.env.CUSTOM_SEARCH_API_KEY,
+        num: 10,
+        safe: 'active',
+      },
+    });
+
+    // Step 4: Map result to article fields
+    const articles = (response.data.items || []).map((item) => ({
+      title: item.title,
+      description: item.snippet,
+      url: item.link,
+      urlToImage:
+        item.pagemap?.cse_thumbnail?.[0]?.src ||
+        item.pagemap?.metatags?.[0]?.['og:image'] ||
+        null,
+    }));
+
+
+
+    return res.status(200).json({ articles });
+
+  } catch (error) {
+    console.error('[ERROR][getExternalNews] Error fetching news articles:', error.message);
+    return res.status(500).json({ error: 'Failed to fetch external news.' });
   }
 };
