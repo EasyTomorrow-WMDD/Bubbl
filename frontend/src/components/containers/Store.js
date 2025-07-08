@@ -20,19 +20,36 @@ const Skins = ({ userId, userLevel, userStars, onAssetEquipped, assets }) => {
   // console.log('OWNED LEVELS', ownedLevels);
 
 
-
-  const skins = skin.filter(item =>
-    item.ref_asset_variation?.ref_asset?.asset_type === 'skin'
-  );
-
-  // console.log('SKINS', skins)
-
   const isEquipped = (item) => {
     return assets.some(asset =>
       asset.ref_asset_variation.asset_variation_name ===
       item.ref_asset_variation.asset_variation_name
     );
   };
+
+  const skins = skin
+    .filter(item => item.ref_asset_variation?.ref_asset?.asset_type === 'skin')
+    .sort((a, b) => {
+      const aEquipped = isEquipped(a);
+      const bEquipped = isEquipped(b);
+      if (aEquipped && !bEquipped) return -1;
+      if (!aEquipped && bEquipped) return 1;
+      return 0;
+    });
+
+  const sortedAccessories = accesories.sort((a, b) => {
+    const aEquipped = isEquipped(a);
+    const bEquipped = isEquipped(b);
+    if (aEquipped && !bEquipped) return -1;
+    if (!aEquipped && bEquipped) return 1;
+    return 0;
+  });
+
+
+
+  // console.log('SKINS', skins)
+
+
 
   const handlePress = (item) => {
     navigation.navigate('PrevScreen', {
@@ -133,9 +150,9 @@ const Skins = ({ userId, userLevel, userStars, onAssetEquipped, assets }) => {
                   borderRadius: 24
                 }}
               >
-              <Text style={[fontStyles.bodyMedium, {color: BubblColors.BubblPurple950}]}>
-                {skin.ref_asset_variation.asset_variation_name}
-              </Text>
+                <Text style={[fontStyles.bodyMedium, { color: BubblColors.BubblPurple950 }]}>
+                  {skin.ref_asset_variation.asset_variation_name}
+                </Text>
                 <Image
                   source={{ uri: skin.asset_image_url }}
                   style={{ width: 90, height: 120, resizeMode: 'contain' }}
@@ -144,7 +161,7 @@ const Skins = ({ userId, userLevel, userStars, onAssetEquipped, assets }) => {
                   {owned ? (
                     <Text style={[{ color: BubblColors.BubblPurple900 }, fontStyles.heading3]}>Owned</Text>
                   ) : (
-                    <View style={{flexDirection:'row', alignItems:'center' }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                       <Text style={[{ color: BubblColors.BubblPurple900 }, fontStyles.heading3]}>{skin.ref_asset_variation.asset_variation_price}</Text>
                       <Image
                         source={starIcon}
@@ -162,14 +179,14 @@ const Skins = ({ userId, userLevel, userStars, onAssetEquipped, assets }) => {
       </ScrollView>
 
       <Text style={[fontStyles.heading2, { fontSize: 30, paddingTop: 40 }]}>Accessories</Text>
-      {accesories.length > 0 ? (
+      {sortedAccessories.length > 0 ? (
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ flexDirection: 'row', gap: 20 }}
           style={{ height: 500 }}
         >
-          {accesories.map((accessory, index) => {
+          {sortedAccessories.map((accessory, index) => {
             const owned = ownedLevels.includes(accessory.asset_variation_level_id);
             return (
               <Pressable
@@ -187,9 +204,9 @@ const Skins = ({ userId, userLevel, userStars, onAssetEquipped, assets }) => {
                   borderRadius: 24
                 }}
               >
-              <Text style={[fontStyles.bodyMedium, {color: BubblColors.BubblPurple950}]}>
-                {accessory.ref_asset_variation.asset_variation_name}
-              </Text>
+                <Text style={[fontStyles.bodyMedium, { color: BubblColors.BubblPurple950 }]}>
+                  {accessory.ref_asset_variation.asset_variation_name}
+                </Text>
                 <Image
                   source={{ uri: accessory.asset_image_url }}
                   style={{ width: 60, height: 80, resizeMode: 'contain' }}
