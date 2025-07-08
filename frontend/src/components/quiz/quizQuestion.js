@@ -4,7 +4,7 @@ import MultiCorrectQuiz from './MultiCorrectQuiz';
 import ChooseImageQuiz from './ChooseImageQuiz';
 import BubblColors from '../../styles/BubblColors';
 
-export default function QuizQuestion({ data, onAnswer }) {
+export default function QuizQuestion({ data, onAnswer, showTryAgain, onTryAgain }) {
   if (!data || !data.quiz) {
     return (
       <View style={styles.loaderContainer}>
@@ -29,7 +29,22 @@ export default function QuizQuestion({ data, onAnswer }) {
     setSelectionReady(false);
   }, [data]);
 
+  useEffect(() => {
+    if (showTryAgain) {
+      setHasChecked(false);
+      setSelectedOption(null);
+      setIsCorrect(false);
+      setFeedbackMessage('');
+      setSelectionReady(false);
+    }
+  }, [showTryAgain]);
+
   const handleButtonPress = () => {
+    if (showTryAgain) {
+      onTryAgain();
+      return;
+    }
+
     if (!hasChecked) {
       if (!selectionReady) return;
       setHasChecked(true);
@@ -73,7 +88,7 @@ export default function QuizQuestion({ data, onAnswer }) {
               selectedOption === option && styles.optionButtonSelected,
               hasChecked && selectedOption === option && (isCorrect ? styles.optionButtonCorrect : styles.optionButtonWrong)
             ]}
-            disabled={hasChecked}
+            disabled={hasChecked && !showTryAgain}
             onPress={() => handleSelect(option, option === quiz.correct, option === quiz.correct ? quiz.message_correct : quiz.message_wrong)}
           >
             <Text style={[
@@ -94,7 +109,7 @@ export default function QuizQuestion({ data, onAnswer }) {
               selectedOption === option && styles.optionButtonSelected,
               hasChecked && selectedOption === option && (isCorrect ? styles.optionButtonCorrect : styles.optionButtonWrong)
             ]}
-            disabled={hasChecked}
+            disabled={hasChecked && !showTryAgain}
             onPress={() => handleSelect(option, option === quiz.correct, option === quiz.correct ? quiz.message_correct : quiz.message_wrong)}
           >
             <Text style={[
@@ -111,7 +126,7 @@ export default function QuizQuestion({ data, onAnswer }) {
           <ChooseImageQuiz
             data={data}
             onSelect={(label, correct, message) => handleSelect(label, correct, message)}
-            disabled={hasChecked}
+            disabled={hasChecked && !showTryAgain}
           />
         );
 
@@ -120,13 +135,25 @@ export default function QuizQuestion({ data, onAnswer }) {
           <MultiCorrectQuiz
             data={data}
             onSelect={(correct, message) => handleSelect('multi', correct, message)}
-            disabled={hasChecked}
+            disabled={hasChecked && !showTryAgain}
+            isCorrect={isCorrect}
+            onSelecting={() => {
+              if (!hasChecked || showTryAgain) {
+                setSelectionReady(true);
+              }
+            }}
           />
         );
 
       default:
         return <Text style={styles.emptyText}>Unsupported question type</Text>;
     }
+  };
+
+  const getButtonText = () => {
+    if (showTryAgain) return 'Try Again';
+    if (hasChecked) return 'Continue';
+    return 'Check';
   };
 
   return (
@@ -148,14 +175,14 @@ export default function QuizQuestion({ data, onAnswer }) {
 
         {renderOptions()}
 
-        <View style={{ height: hasChecked ? 120 : 80 }} />
+        <View style={{ height: hasChecked && !showTryAgain ? 120 : 80 }} />
       </ScrollView>
 
       <View style={[
         styles.fixedBottom,
-        hasChecked && (isCorrect ? styles.fixedBottomCorrect : styles.fixedBottomWrong)
+        hasChecked && !showTryAgain && (isCorrect ? styles.fixedBottomCorrect : styles.fixedBottomWrong)
       ]}>
-        {hasChecked && feedbackMessage && (
+        {hasChecked && feedbackMessage && !showTryAgain && (
           <View style={styles.feedbackContainer}>
             <View style={styles.feedbackContent}>
               <Image
@@ -174,14 +201,14 @@ export default function QuizQuestion({ data, onAnswer }) {
         <TouchableOpacity
           style={[
             styles.checkButton,
-            (!selectionReady && !hasChecked) ? styles.checkButtonDisabled : styles.checkButtonActive,
-            hasChecked && (isCorrect ? styles.continueCorrect : styles.continueWrong),
+            (!selectionReady && !hasChecked && !showTryAgain) ? styles.checkButtonDisabled : styles.checkButtonActive,
+            hasChecked && !showTryAgain && (isCorrect ? styles.continueCorrect : styles.continueWrong),
           ]}
           onPress={handleButtonPress}
-          disabled={!selectionReady && !hasChecked}
+          disabled={!selectionReady && !hasChecked && !showTryAgain}
         >
           <Text style={styles.checkButtonText}>
-            {hasChecked ? 'Continue' : 'Check'}
+            {getButtonText()}
           </Text>
         </TouchableOpacity>
       </View>
