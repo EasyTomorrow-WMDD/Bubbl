@@ -4,9 +4,12 @@ import supabase from '../../services/supabase';
 import axios from 'axios';
 import BubblConfig from '../../config/BubblConfig';
 import { globalStyles } from '../../styles/BubblStyles';
+import { profileStyles } from '../../styles/ProfileStyles';
 import PageHeading from '../layout/PageHeading';
 import ProfileList from '../lists/ProfileList';
 
+// ============================================================================
+// ProfileContainer Component
 const ProfileContainer = ({ navigation }) => {
 
   // State variables to hold parent and child profiles + current user info
@@ -17,6 +20,7 @@ const ProfileContainer = ({ navigation }) => {
   const [currentUserType, setCurrentUserType] = useState(null);
   const [accountOwnerId, setAccountOwnerId] = useState(null);
 
+  // ----------------------------------------------------------------
   // Fetch profiles from the backend API on load
   useEffect(() => {
     const loadProfiles = async () => {
@@ -55,30 +59,35 @@ const ProfileContainer = ({ navigation }) => {
   if (loading) return <ActivityIndicator size="large" />;
   
 
-  // ==========================================================================
+  // ----------------------------------------------------------------
   // Render the profile screen  
   return (
-    <ScrollView contentContainerStyle={globalStyles.scrollContainer}>
+    <ScrollView 
+      contentContainerStyle={profileStyles.scrollContent}
+      style={profileStyles.scrollContainer}
+    >
 
       {/* Heading Row */}
       <PageHeading title="Who is using Bubbl?" onBackPress={null} />
 
       {/* Profile Lists (Parents) */}
-      <Text style={globalStyles.subheading}>Parents (Guardians)</Text>
+      <Text style={profileStyles.subheading}>Parents (Guardians)</Text>
       <ProfileList 
         profiles={parentProfiles} 
         type="parent" 
         navigation={navigation} 
-        showAddCard={currentUserId === accountOwnerId} 
+        // showAddCard={currentUserId === accountOwnerId}
+        showAddCard={false} 
       />
 
       {/* Profile Lists (Children) */}
-      <Text style={globalStyles.subheading}>Child(ren)</Text>
+      <Text style={profileStyles.subheading}>Child(ren)</Text>
       <ProfileList 
         profiles={childProfiles} 
         type="kid" 
         navigation={navigation} 
-        showAddCard={currentUserType === 'parent'}
+        // showAddCard={currentUserType === 'parent'}
+        showAddCard={false} 
       />
 
     </ScrollView>

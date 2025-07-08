@@ -7,13 +7,21 @@ import axios from 'axios';
 import BubblConfig from '../../config/BubblConfig';
 
 import ParentStoryCard from '../cards/ParentStoryCard';
+import ParentStoryEssentialCard from '../cards/ParentStoryEssentialCard';
+import { parentStyles } from '../../styles/BubblParentMainStyles';
+import { fontStyles } from '../../styles/BubblFontStyles';
+import BubblColors from '../../styles/BubblColors';
 
+// ============================================================================
+// ParentStoryEssentialsList Component
 const ParentStoryEssentialsList = ({ userId, navigation }) => {
   // State variables to hold story data
   const [stories, setStories] = useState([]);
   const [completedCount, setCompletedCount] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
 
+  // ----------------------------------------------------------------
+  // Function to fetch essential stories for the parent
   const fetchData = async () => {
     try {
       // Step 1: Get the access token from Supabase session
@@ -46,10 +54,14 @@ const ParentStoryEssentialsList = ({ userId, navigation }) => {
     }
   };
 
+  // ----------------------------------------------------------------
+  // Fetch data when the component mounts or userId changes
   useEffect(() => {
     fetchData();
   }, [userId]);
 
+  // ----------------------------------------------------------------
+  // Re-fetch data when the screen comes into focus
   useFocusEffect(
     useCallback(() => {
       // Re-fetch data whenever this screen comes into focus
@@ -57,11 +69,12 @@ const ParentStoryEssentialsList = ({ userId, navigation }) => {
     }, [])
   );
 
-
+  // ----------------------------------------------------------------
+  // Render the list of essential stories
   return (
-    <View style={styles.sectionContainer}>
-      <Text style={styles.sectionHeading}>Essentials for parenting</Text>
-      <Text style={styles.sectionSubHeading}>{completedCount}/{totalCount} articles completed</Text>
+    <View style={parentStyles.parentEssentialListSectionContainer}>
+      <Text style={[fontStyles.heading1, parentStyles.parentEssentialListSectionHeading]}>Essentials for parenting</Text>
+      <Text style={[fontStyles.bodyDefault, parentStyles.parentEssentialListSectionSubHeading]}>{completedCount}/{totalCount} articles completed ✅ </Text>
 
       <FlatList
         horizontal
@@ -69,7 +82,7 @@ const ParentStoryEssentialsList = ({ userId, navigation }) => {
         keyExtractor={(item) => item.parent_story_id}
         renderItem={({ item }) => (
 
-          <ParentStoryCard
+          <ParentStoryEssentialCard
             story={item}
             onPress={() => navigation.navigate('ParentStory', { storyId: item.parent_story_id })}
           />
@@ -80,65 +93,5 @@ const ParentStoryEssentialsList = ({ userId, navigation }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 24,
-  },
-  sectionHeading: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 4,
-  },
-  sectionSubHeading: {
-    fontSize: 14,
-    color: '#444',
-    marginBottom: 12,
-  },
-  card: {
-    width: 240,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    overflow: 'hidden',
-    marginRight: 12,
-    backgroundColor: '#fff',
-  },
-  imageContainer: {
-    position: 'relative',
-    height: 120,
-    backgroundColor: '#eee',
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-  },
-  readTag: {
-    position: 'absolute',
-    top: 8,
-    right: 8,
-    backgroundColor: '#4caf50',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 4,
-  },
-  readTagText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  cardTextContainer: {
-    padding: 8,
-  },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  cardSummary: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 4,
-  },
-});
 
 export default ParentStoryEssentialsList;

@@ -1,38 +1,32 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+// import { Ionicons } from '@expo/vector-icons'; // Was used for alpha release, now using Image 
+import { parentStyles } from '../../styles/BubblParentMainStyles';
+import { fontStyles } from '../../styles/BubblFontStyles';
+import BubblColors from '../../styles/BubblColors';
+
+const PROFILE_ICON = require('../../assets/icons/happy-beaming.png'); // Path to the profile icon 
 
 const ParentHeader = ({ navigation, setActiveTab }) => {
+  // ----------------------------------------------------------------
+  // Render header area for parent screens
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Bubbl</Text>
-      <View style={styles.icons}>
+    <View style={parentStyles.parentHeaderContainer}>
+      <Text style={[parentStyles.parentHeaderTitle, fontStyles.display3 ]}>Bubbl</Text>
+      <View style={parentStyles.parentHeaderIcons}>
         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-          <Ionicons name="person-circle-outline" size={26} color="black" />
+          <Image
+            source={PROFILE_ICON}
+            style={ parentStyles.parentHeaderIcon}
+            resizeMode="contain"
+          />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setActiveTab('Notifications')}>
+        {/* Notification is out of scope for MVP */}
+        {/* <TouchableOpacity onPress={() => setActiveTab('Notifications')}>
           <Ionicons name="notifications-outline" size={26} color="black" style={{ marginLeft: 15 }} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#f0f0f0',
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-  },
-  icons: {
-    flexDirection: 'row',
-  },
-});
 
 export default ParentHeader;

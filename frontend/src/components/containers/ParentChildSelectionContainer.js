@@ -1,14 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import supabase from '../../services/supabase';
 import BubblConfig from '../../config/BubblConfig';
 import axios from 'axios';
 import ProfileList from '../lists/ProfileList';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { parentStyles } from '../../styles/BubblParentMainStyles';
+import { fontStyles } from '../../styles/BubblFontStyles';
+import BubblColors from '../../styles/BubblColors';
 
+
+// ============================================================================
+// ParentChildSelectionContainer Component
 const ParentChildSelectionContainer = ({ navigation }) => {
   const [childProfiles, setChildProfiles] = useState([]);
 
+  const screenHeight = Dimensions.get('window').height; // Get the screen height
+
+  // ----------------------------------------------------------------
+  // Fetch child profiles associated with the authenticated user
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
@@ -36,6 +46,8 @@ const ParentChildSelectionContainer = ({ navigation }) => {
     fetchProfiles();
   }, []);
 
+  // ----------------------------------------------------------------
+  // Handle card press to store selected child profile and navigate
   const onCardPress = async (childUserId, childUserNickname, childUserAvatar) => {
     // console.log('[DEBUG][ParentChildSelectionContainer] Card pressed:', { childUserId, childUserNickname,childUserAvatar, }); 
     try {
@@ -51,25 +63,36 @@ const ParentChildSelectionContainer = ({ navigation }) => {
     }
   };
 
+  // ----------------------------------------------------------------
+  // Render the child profiles list
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Child Progress</Text>
-      <Text style={styles.subHeading}>Child account</Text>
-      <ProfileList
-        profiles={childProfiles}
-        userType="kid"
-        onCardPress={onCardPress}
-        showAddCard={false}
-      />
-    </View>
+    <>
+      {/* Workaround to get the purple background behind main container */}
+      <View style={{
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: BubblColors.BubblPurple500,
+        height: screenHeight * 0.2,
+      }} />
+
+      {/* Main contents */}
+      <View style={parentStyles.parentChildSelectionContainer}>
+
+        {/* Heading */}
+        <Text style={[fontStyles.display2, parentStyles.parentChildSelectionHeader]}>Child Progress</Text>
+        <Text style={[fontStyles.bodyDefault, parentStyles.parentChildSelectionSubHeading]}>See how each child is doing in their learning journey.</Text>
+
+        {/* Profile list */}
+        <ProfileList
+          profiles={childProfiles}
+          userType="kid"
+          onCardPress={onCardPress}
+          showAddCard={false}
+        />
+      </View>
+      
+    </>
   );
 };
 
 export default ParentChildSelectionContainer;
-
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: '#fff' },
-  header: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginVertical: 12 },
-  subHeading: { fontSize: 18, fontWeight: '600', marginBottom: 8 },
-});
 
