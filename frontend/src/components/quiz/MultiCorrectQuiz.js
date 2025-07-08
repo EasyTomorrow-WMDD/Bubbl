@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import BubblColors from '../../styles/BubblColors';
@@ -6,19 +7,16 @@ export default function MultiCorrectQuiz({ data, onSelect, disabled, isCorrect, 
   const { quiz } = data;
   const [selected, setSelected] = useState([]);
 
-  // ✅ Reset when question changes
   useEffect(() => {
     setSelected([]);
   }, [data]);
 
-  // ✅ Reset when entering feedback for incorrect answer
   useEffect(() => {
     if (disabled && isCorrect === false) {
       setSelected([]);
     }
   }, [disabled, isCorrect]);
 
-  // ✅ Check answer when 3 selected
   useEffect(() => {
     if (selected.length === 3) {
       const selectedLabels = selected.map(o => o.label).sort();
@@ -32,15 +30,26 @@ export default function MultiCorrectQuiz({ data, onSelect, disabled, isCorrect, 
   }, [selected]);
 
   const handleSelect = (option) => {
-    if (disabled || selected.find(item => item.label === option.label)) return;
-    if (selected.length >= 3) return;
+    if (disabled) return;
 
-    // ✅ NEW: Notify parent we're starting over
-    if (onSelecting) {
-      onSelecting();
+    const alreadySelected = selected.find(item => item.label === option.label);
+
+    if (alreadySelected) {
+      const newSelected = selected.filter(item => item.label !== option.label);
+      setSelected(newSelected);
+
+      if (onSelecting && newSelected.length === 0) {
+        onSelecting();
+      }
+    } else {
+      if (selected.length >= 3) return;
+
+      if (onSelecting && selected.length === 0) {
+        onSelecting();
+      }
+
+      setSelected([...selected, option]);
     }
-
-    setSelected([...selected, option]);
   };
 
   const renderOptions = (start, end) =>
@@ -83,7 +92,6 @@ export default function MultiCorrectQuiz({ data, onSelect, disabled, isCorrect, 
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: { padding: 20 },
