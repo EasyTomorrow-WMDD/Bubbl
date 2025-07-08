@@ -1,16 +1,11 @@
-// const BASE_URL = 'http://10.100.1.67:3000';
+import BubblConfig from '../config/BubblConfig';
 
- const BASE_URL = 'http://192.168.1.72:3000';
+// Update: Using BubblConfig to get the BASE_URL and URI_URL so that we don't need to change 2 config files every time. 
+// Make sure that the backend url and supabase url are set correctly in the BubblConfig.js file.
 
-// const BASE_URL = 'http://192.168.1.72:3000';
-// const BASE_URL = 'http://10.128.198.35:3000';
-// const BASE_URL = 'http://10.128.201.48:3000';
-const URI_URL = 'https://ogbfgllkkyehcurolhjf.supabase.co/storage/v1/object/public/assets/Badges'
+const BASE_URL = BubblConfig.BACKEND_URL;
+const URI_URL = `${BubblConfig.SUPABASE_URL}/storage/v1/object/public/assets/Badges`;
 
 export { BASE_URL };
 export { URI_URL };
 
-
-// Langara 10.128.230.106
-// Langara-2 10.128.198.35
-// home 192.168.1.72
