@@ -41,7 +41,7 @@ export default function TemporaryMainContainer() {
           navigation.replace('OnboardingSlides');
         }
       } catch (error) {
-        console.error('Error checking onboarding status:', error);
+        console.error('Error checking onboarding status:', error.message);
       }
     };
 
