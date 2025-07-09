@@ -4,8 +4,8 @@ const BubblConfig = {
   // Backend API
   // For development, check the local IP address with `ifconfig | grep inet` or `ipconfig` command and replace the IP address in the URL with the IP address of localhost.
   BACKEND_URL: isDev
-    ? 'http://bubbl.wmdd4950.com/app-backend'
-   // ? 'http://192.168.1.72:3000' // Do not delete this URL, it works for testing
+    // ? 'http://bubbl.wmdd4950.com/app-backend'
+    ? 'http://192.168.1.72:3000' // Do not delete this URL, it works for testing
     : 'http://bubbl.wmdd4950.com/app-backend',
 
   // Supabase URL
