@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { globalStyles } from '../../styles/BubblStyles';
+import { fontStyles } from '../../styles/BubblFontStyles';
 
 // ==========================================================================
 // BubblDatePicker component
@@ -20,7 +21,7 @@ const BubblDatePicker = ({ label, value, onChange }) => {
 
   return (
     <View style={{ marginBottom: 16 }}>
-      <Text style={globalStyles.label}>{label}</Text>
+      <Text style={[fontStyles.tagline, globalStyles.label]}>{label}</Text>
       <TouchableOpacity onPress={() => setShowDatePicker(true)} style={globalStyles.input}>
         <Text>{value ? value.toDateString() : 'Select birth date'}</Text>
       </TouchableOpacity>
