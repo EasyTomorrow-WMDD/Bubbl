@@ -1,49 +1,65 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import BubblColors from '../../styles/BubblColors';
+import { useTab } from '../../utils/TabContext';
 
 const ChildNavbar = ({ navigation, childProfileId }) => {
+  const { activeTab, setActiveTab } = useTab();
+
   return (
     <View style={styles.navbar}>
       {/* Activities */}
-      <TouchableOpacity onPress={() => navigation.navigate('ChildMain')} style={styles.navItem}>
-        <View style={styles.iconWrapper}>
+      <TouchableOpacity
+        onPress={() => {
+          setActiveTab('activities');
+          navigation.navigate('ChildMain');
+        }}
+        style={styles.navItem}
+      >
+        <View style={[activeTab === 'activities' ? styles.iconWrapperActive : styles.iconWrapper]}>
           <Image
             source={require('../../assets/icons/activities.png')}
             style={styles.navIcon}
             resizeMode="contain"
           />
         </View>
-        <Text style={styles.navText}>Activities</Text>
+        <Text style={[activeTab === 'activities' ? styles.activeTab : styles.navText]}>Activities</Text>
       </TouchableOpacity>
 
       {/* Mood Draw */}
       <TouchableOpacity
-        onPress={() => navigation.navigate('ChildMood', { childProfileId })}
+        onPress={() => {
+          setActiveTab('mood');
+          navigation.navigate('ChildMood', { childProfileId });
+        }}
         style={styles.navItem}
       >
-        <View style={styles.iconWrapper}>
+        <View style={[activeTab === 'mood draw' ? styles.iconWrapperActive : styles.iconWrapper]}>
           <Image
             source={require('../../assets/icons/paint.png')}
             style={styles.navIcon}
             resizeMode="contain"
           />
         </View>
-        <Text style={styles.navText}>Mood Draw</Text>
+        <Text style={[activeTab === 'mood draw' ? styles.activeTab : styles.navText]}>Mood Draw</Text>
       </TouchableOpacity>
 
-      {/* Quest */}
+      {/* Shop */}
       <TouchableOpacity
-        onPress={() => navigation.navigate('InventoryScreen', { childProfileId })}
+        onPress={() => {
+          setActiveTab('shop');
+          navigation.navigate('InventoryScreen', { childProfileId });
+        }}
         style={styles.navItem}
       >
-        <View style={styles.iconWrapper}>
+        <View style={[activeTab === 'shop' ? styles.iconWrapperActive : styles.iconWrapper]}>
           <Image
             source={require('../../assets/icons/store.png')}
             style={styles.navIcon}
             resizeMode="contain"
           />
         </View>
-        <Text style={styles.navText}>Shop</Text>
+        <Text style={[activeTab === 'shop' ? styles.activeTab : styles.navText]}>Shop</Text>
       </TouchableOpacity>
     </View>
   );
@@ -76,12 +92,28 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  iconWrapperActive: {
+    width: 36, 
+    height: 36, 
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1.5,
+    borderRadius: 5,
+    borderColor: BubblColors.BubblPurple500,
+    padding: 3, 
+  },
   navIcon: {
     width: '100%',
     height: '100%',
   },
   navText: {
-    color: 'black',
+    color: 'gray',
+    fontSize: 14,
+    fontWeight: '600',
+    marginTop: 5,
+  },
+  activeTab: {
+    color: BubblColors.BubblPurple500,
     fontSize: 14,
     fontWeight: '600',
     marginTop: 5,
