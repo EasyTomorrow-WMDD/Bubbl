@@ -17,7 +17,13 @@ const BadgesScreen = ({ userId, refreshBadges }) => {
         const response = await fetch(url);
         if (!response.ok) throw new Error('Failed to fetch badges');
         const data = await response.json();
-        setBadges(data);
+    
+        const transformed = data.map(b => ({
+          ...b,
+          selectionOrder: b.selection_order ?? null
+        }));
+    
+        setBadges(transformed);
       } catch (err) {
         console.error('Error fetching badges:', err);
         Alert.alert('Error loading badges');
@@ -25,6 +31,7 @@ const BadgesScreen = ({ userId, refreshBadges }) => {
         setLoading(false);
       }
     };
+    
 
     fetchBadges();
   }, [userId]);
