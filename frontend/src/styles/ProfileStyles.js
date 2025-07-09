@@ -75,6 +75,22 @@ export const profileStyles = StyleSheet.create({
     borderRadius: 24,
     justifyContent: 'center',
     marginBottom: 20,
-  }
+  },
+
+  // --------------------------------------------
+  // Onboarding
+  OnboardingLayoutContainer: {
+    padding: 0, 
+    flex: 1,  // Mandatory for the FlatList used in the sub-components. 
+  },
+  OnboardingLayoutTopSafeArea: { 
+    backgroundColor: BubblColors.BubblPurple50,
+    margin: 0,
+    padding: 0,
+  },
+  OnboardingLayoutBottomSafeArea: { 
+    backgroundColor: BubblColors.BubblPurple50,
+  },
+
 
 });
