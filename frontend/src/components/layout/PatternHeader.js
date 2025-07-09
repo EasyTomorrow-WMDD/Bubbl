@@ -7,27 +7,23 @@ const PatthernHeader = () => {
   const navigation = useNavigation();
   return (
 
-      <SafeAreaView style={styles.safeArea}>
         <View style={styles.header}>
           <Text style={[fontStyles.display3, {color:'white'}]}>Bubbl</Text>
           <Pressable style={styles.icons} onPress={() => navigation.navigate('Profile')}>
             <Image source={require('../../assets/icons/happy-beaming.png')} style={styles.icon} />
           </Pressable>
         </View>
-      </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    backgroundColor: '#8361E4',
-  },
+
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 40,
-    paddingVertical: 0,
+    paddingVertical: 20,
   },
   title: {
     color: 'white',
