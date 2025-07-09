@@ -4,6 +4,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import React, { useCallback, useEffect, useState } from 'react';
 // import * as SplashScreen from 'expo-splash-screen';
+import { TabProvider } from './frontend/src/utils/TabContext';
 import * as Font from 'expo-font';
 
 // Import screens and components
@@ -62,34 +63,36 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <ChildProvider>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Welcome" component={AuthWelcomeScreen} />
-            <Stack.Screen name="Login" component={AuthLoginScreen} />
-            <Stack.Screen name="Signup" component={AuthSignupScreen} />
-            <Stack.Screen name="Onboarding" component={AuthOnboardingScreen} />
-            <Stack.Screen name="OnboardingSlides" component={OnboardingSlidesScreen} />
-            <Stack.Screen name="Profile" component={ProfileScreen} />
-            <Stack.Screen name="AddProfile" component={ProfileAddScreen} />
-            <Stack.Screen name="ParentMain" component={ParentLayout} />
-            <Stack.Screen name="ParentStory" component={ParentStoryScreen} />
-            <Stack.Screen name="ParentChildProgress" component={ParentChildProgressScreen} />
-            <Stack.Screen name="ParentSelectedDrawingScreen" component={ParentSelectedDrawingScreen} />
-            <Stack.Screen name="ChildMain" component={ChildMainScreen} />
-            <Stack.Screen name="ChildMood" component={ChildMoodScreen} />
-            <Stack.Screen name="ChildDrawing" component={ChildMoodDrawingScreen} />
-            <Stack.Screen name="ChildDrawingConfirmation" component={ChildDrawingConfirmation} />
-            <Stack.Screen name="TopicScreen" component={TopicContainer} />
-            <Stack.Screen name="Modules" component={TemporaryMainContainer} />
-            <Stack.Screen name="TopicComplete" component={TopicComplete} />
-            <Stack.Screen name="InventoryScreen" component={InventoryScreen} />
-            <Stack.Screen name="BadgesScreen" component={BadgesScreen} />
-            <Stack.Screen name="PrevScreen" component={Previsualization} />
-            <Stack.Screen name="PurchaseSuccess" component={PurchaseSuccess} />
-            <Stack.Screen name="Streak" component={StreakScreen} />
-            <Stack.Screen name="EvolutionScreen" component={EvolutionScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <TabProvider>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Welcome" component={AuthWelcomeScreen} />
+              <Stack.Screen name="Login" component={AuthLoginScreen} />
+              <Stack.Screen name="Signup" component={AuthSignupScreen} />
+              <Stack.Screen name="Onboarding" component={AuthOnboardingScreen} />
+              <Stack.Screen name="OnboardingSlides" component={OnboardingSlidesScreen} />
+              <Stack.Screen name="Profile" component={ProfileScreen} />
+              <Stack.Screen name="AddProfile" component={ProfileAddScreen} />
+              <Stack.Screen name="ParentMain" component={ParentLayout} />
+              <Stack.Screen name="ParentStory" component={ParentStoryScreen} />
+              <Stack.Screen name="ParentChildProgress" component={ParentChildProgressScreen} />
+              <Stack.Screen name="ParentSelectedDrawingScreen" component={ParentSelectedDrawingScreen} />
+              <Stack.Screen name="ChildMain" component={ChildMainScreen} />
+              <Stack.Screen name="ChildMood" component={ChildMoodScreen} />
+              <Stack.Screen name="ChildDrawing" component={ChildMoodDrawingScreen} />
+              <Stack.Screen name="ChildDrawingConfirmation" component={ChildDrawingConfirmation} />
+              <Stack.Screen name="TopicScreen" component={TopicContainer} />
+              <Stack.Screen name="Modules" component={TemporaryMainContainer} />
+              <Stack.Screen name="TopicComplete" component={TopicComplete} />
+              <Stack.Screen name="InventoryScreen" component={InventoryScreen} />
+              <Stack.Screen name="BadgesScreen" component={BadgesScreen} />
+              <Stack.Screen name="PrevScreen" component={Previsualization} />
+              <Stack.Screen name="PurchaseSuccess" component={PurchaseSuccess} />
+              <Stack.Screen name="Streak" component={StreakScreen} />
+              <Stack.Screen name="EvolutionScreen" component={EvolutionScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </TabProvider>
       </ChildProvider>
     </SafeAreaProvider>
   );
