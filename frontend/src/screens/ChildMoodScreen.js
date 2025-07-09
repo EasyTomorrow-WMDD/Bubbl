@@ -10,7 +10,6 @@ const ChildMoodScreen = ({ navigation, route }) => {
   setActiveTab('mood draw');
 }, []);
 
-
   return <ChildMoodConntainer navigation={navigation} childProfileId={childProfileId} />;
 };
 
