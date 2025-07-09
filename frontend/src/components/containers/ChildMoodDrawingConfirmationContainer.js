@@ -79,7 +79,7 @@ export default function ChildMoodDrawingConfirmationContainer({ navigation, rout
         <View style={styles.contentInner}>
           {/* Stars animation */}
           <LottieView
-            source={require('../../assets/animations/Stars.json')}
+            source={require('../../assets/animations/DoneStars.json')}
             autoPlay
             loop={false}
             style={styles.starsAnimation}
