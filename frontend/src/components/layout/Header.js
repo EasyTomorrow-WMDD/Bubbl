@@ -4,15 +4,15 @@ import { fontStyles } from '../../styles/BubblFontStyles';
 import { useNavigation } from '@react-navigation/native';
 import BubblColors from '../../styles/BubblColors';
 
-const Header = ({title}) => {
-    const navigation = useNavigation();
+const Header = ({ title }) => {
+  const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.header}>
-        <Text style={[fontStyles.heading3, {color:'white', fontSize: 30, paddingTop:20}]}>{title}</Text>
-          <Pressable style={styles.icons} onPress={() => navigation.navigate('Profile')}>
-            <Image source={require('../../assets/icons/happy-beaming.png')} style={styles.icon} />
-          </Pressable>
+        <Text style={[fontStyles.heading3, { color: 'white', fontSize: 30, paddingTop: 20 }]}>{title}</Text>
+        <Pressable style={styles.icons} onPress={() => navigation.navigate('Profile')}>
+          <Image source={require('../../assets/icons/happy-beaming.png')} style={styles.icon} />
+        </Pressable>
       </View>
     </SafeAreaView>
   );
@@ -22,12 +22,12 @@ const styles = StyleSheet.create({
   safeArea: {
     backgroundColor: BubblColors.BubblPurple500
   },
-header: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center', 
-  paddingHorizontal: 24,
-},
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+  },
 
   title: {
     color: 'white',

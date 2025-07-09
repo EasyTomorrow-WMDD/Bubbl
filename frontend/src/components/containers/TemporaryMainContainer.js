@@ -13,6 +13,7 @@ import Avatar from './Avatar';
 import EnergyTimer from './Timer';
 import { fontStyles } from '../../styles/BubblFontStyles';
 import BubblColors from '../../styles/BubblColors';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 export default function TemporaryMainContainer() {
@@ -26,28 +27,7 @@ export default function TemporaryMainContainer() {
   const [nextRechargeTime, setNextReachargeTime] = useState(null);
   const [assets, setAssets] = useState([]);
 
-  // ================= Check onboarding status ====================
-  useEffect(() => {
-    if (!userId) return;
-
-    const checkOnboardingStatus = async () => {
-      try {
-        const res = await axios.get(`${BASE_URL}/api/onboarding/status`, {
-          headers: { 'x-user-id': userId }
-        });
-
-        console.log('ONBOARDING STATUS RESPONSE:', res.data);
-
-        if (res.data && res.data.completed === false) {
-          navigation.replace('OnboardingSlides');
-        }
-      } catch (error) {
-        console.error('Error checking onboarding status:', error);
-      }
-    };
-
-    checkOnboardingStatus();
-  }, [userId, navigation]);
+  
 
   // console.log('USER ID:', userId);
 
@@ -195,7 +175,7 @@ export default function TemporaryMainContainer() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor:BubblColors.BubblPurple500 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor:BubblColors.BubblPurple500 }}>
       <PatthernHeader />
       <ScrollView contentContainerStyle={{ paddingBottom: 80, paddingTop: 20, backgroundColor:BubblColors.BubblPurple50 }}>
         <View style={{ flex: 1, backgroundColor: '#DFDAFAA' }}>
@@ -247,7 +227,7 @@ export default function TemporaryMainContainer() {
         </View>
       </ScrollView>
       <ChildNavbar navigation={navigation} childProfileId={userId} />
-    </View>
+    </SafeAreaView>
   );
 }
 
