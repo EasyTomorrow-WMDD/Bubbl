@@ -10,37 +10,36 @@ exports.getAllBadgesWithUserStatus = async (req, res) => {
 
     if (badgeError) throw badgeError;
 
+    // 🔥 CAMBIO: Agregar selection_order a la consulta
     const { data: userBadges = [], error: userBadgeError } = await supabase
       .from('user_badge')
-      .select('badge_id, user_badge_active')
+      .select('badge_id, user_badge_active, selection_order')
       .eq('user_id', userId);
 
     if (userBadgeError) throw userBadgeError;
 
-  
     const userBadgeMap = {};
     userBadges.forEach(b => {
-      userBadgeMap[b.badge_id] = b.user_badge_active;
+      userBadgeMap[b.badge_id] = {
+        active: b.user_badge_active,
+        selection_order: b.selection_order
+      };
     });
 
-  
-    const activeBadgeOrder = userBadges
-      .filter(b => b.user_badge_active)
-      .map(b => b.badge_id);
-
-  
     const result = allBadges.map(badge => {
+      const userBadgeInfo = userBadgeMap[badge.badge_id];
       const hasEarned = badge.badge_id in userBadgeMap;
-      const isActive = userBadgeMap[badge.badge_id] === true;
-      const order = isActive ? activeBadgeOrder.indexOf(badge.badge_id) + 1 : null;
+      const isActive = userBadgeInfo?.active === true;
+      const selectionOrder = userBadgeInfo?.selection_order || null;
 
       return {
+        id: badge.badge_id, // 🔥 CAMBIO: Agregar 'id' para compatibilidad con frontend
         badge_id: badge.badge_id,
         badge_name: badge.badge_name,
         badge_image_url: badge.badge_image_url,
         has_earned: hasEarned,
         badge_active: isActive,
-        selectionOrder: order
+        selection_order: selectionOrder // 🔥 CAMBIO: Usar snake_case para consistencia
       };
     });
 
@@ -52,43 +51,53 @@ exports.getAllBadgesWithUserStatus = async (req, res) => {
   }
 };
 
-
+// 🔥 CAMBIO PRINCIPAL: Actualizar saveUserBadges para manejar selection_order
 exports.saveUserBadges = async (req, res) => {
   const { userId } = req.params;
-  const { activeBadgeIds } = req.body;
+  const favorites = req.body;
 
-  if (!Array.isArray(activeBadgeIds) || activeBadgeIds.length > 3) {
-    return res.status(400).json({ error: 'activeBadgeIds must be an array with max 3 items' });
+  // Validar que sea un array con máximo 3 elementos
+  if (!Array.isArray(favorites) || favorites.length > 3) {
+    return res.status(400).json({ error: 'Favorites must be an array with max 3 items' });
+  }
+
+  // Validar que cada elemento tenga badge_id y selection_order
+  for (const fav of favorites) {
+    if (!fav.badge_id || !fav.selection_order || fav.selection_order < 1 || fav.selection_order > 3) {
+      return res.status(400).json({ 
+        error: 'Each favorite must have badge_id and selection_order (1-3)' 
+      });
+    }
   }
 
   try {
-    
-    const { error: deactivateError } = await supabase
+    // Limpiar selection_order y desactivar todos los badges del usuario
+    await supabase
       .from('user_badge')
-      .update({ user_badge_active: false })
+      .update({ 
+        selection_order: null,
+        user_badge_active: false 
+      })
       .eq('user_id', userId);
 
-    if (deactivateError) throw deactivateError;
-
-  
-    if (activeBadgeIds.length > 0) {
-      const { error: activateError } = await supabase
+    // Activar y asignar orden a los badges seleccionados
+    for (const fav of favorites) {
+      await supabase
         .from('user_badge')
-        .update({ user_badge_active: true })
-        .in('badge_id', activeBadgeIds)
-        .eq('user_id', userId);
-
-      if (activateError) throw activateError;
+        .update({
+          user_badge_active: true,
+          selection_order: fav.selection_order
+        })
+        .eq('user_id', userId)
+        .eq('badge_id', fav.badge_id);
     }
 
-    return res.json({ message: 'Badges updated successfully' });
-
+    return res.json({ message: 'Favorites saved successfully' });
   } catch (err) {
-    console.error('Error saving badges:', err);
+    console.error('Error saving badges:', JSON.stringify(err, null, 2));
     return res.status(500).json({ error: err.message || 'Failed to save badges' });
   }
 };
-
 
 exports.awardBadgeToUser = async (req, res) => {
   const { userId } = req.params;
@@ -99,7 +108,6 @@ exports.awardBadgeToUser = async (req, res) => {
   }
 
   try {
-  
     const { data: existing, error: selectError } = await supabase
       .from('user_badge')
       .select('*')
@@ -112,7 +120,6 @@ exports.awardBadgeToUser = async (req, res) => {
     }
 
     if (existing) {
-    
       const { error: updateError } = await supabase
         .from('user_badge')
         .update({ user_badge_active })
@@ -122,7 +129,6 @@ exports.awardBadgeToUser = async (req, res) => {
       if (updateError) throw updateError;
 
     } else {
-    
       const { error: insertError } = await supabase
         .from('user_badge')
         .insert([
