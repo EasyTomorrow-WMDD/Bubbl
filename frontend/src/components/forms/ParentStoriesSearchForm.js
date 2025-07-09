@@ -1,15 +1,13 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { PARENT_STORY_TYPE_LABELS } from '../../constants/BubblConstants';
+import { parentStyles } from '../../styles/BubblParentMainStyles';
+import { fontStyles } from '../../styles/BubblFontStyles';
+import BubblColors from '../../styles/BubblColors';
 
+// ==========================================================================
+// Parent Stories Search Form Component
 const ParentStoriesSearchForm = ({
   searchText,
   setSearchText,
@@ -18,23 +16,36 @@ const ParentStoriesSearchForm = ({
 }) => {
   const tagKeys = ['all', ...Object.keys(PARENT_STORY_TYPE_LABELS)];
 
+  const [inputText, setInputText] = useState(searchText || ''); // Local state for input text
+
+  // ----------------------------------------------------------------
+  // Method to handle search text entry
+  const handleSubmit = () => {
+    setSearchText(inputText.trim());
+  }
+
+  // ----------------------------------------------------------------
+  // Render the search form with search box and tag filter
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Explore articles that interest you</Text>
+    <View style={parentStyles.parentOtherStoriesContainer}>
+      <Text style={[fontStyles.heading1, parentStyles.parentOtherStoriesSectionHeading]}>Explore articles that interest you</Text>
 
       {/* Search Box */}
-      <View style={styles.searchBox}>
-        <Ionicons name="search" size={20} color="#888" style={styles.searchIcon} />
+      <View style={parentStyles.bubblSearchBox}>
+        <Ionicons name="search" size={20} color={BubblColors.BubblNeutralDarkest60} style={parentStyles.bubblSearchIcon} />
         <TextInput
           placeholder="Search articles..."
-          value={searchText}
-          onChangeText={setSearchText}
-          style={styles.input}
+          value={inputText}
+          onChangeText={setInputText}
+          style={[fontStyles.bodyMedium, parentStyles.bubblFormInput]}
+          onSubmitEditing={handleSubmit}
+          onBlur={handleSubmit}
+          returnKeyType="search"
         />
       </View>
 
       {/* Tag Filter */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tagScroll}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={parentStyles.tagScroll}>
         {tagKeys.map((key) => {
           const label = key === 'all' ? 'All' : PARENT_STORY_TYPE_LABELS[key];
           const isSelected = selectedType === key;
@@ -44,14 +55,16 @@ const ParentStoriesSearchForm = ({
               key={key}
               onPress={() => setSelectedType(key)}
               style={[
-                styles.tag,
-                isSelected ? styles.tagSelected : styles.tagUnselected,
+                fontStyles.bodySmall,
+                parentStyles.tag,
+                isSelected ? parentStyles.tagSelected : parentStyles.tagUnselected,
               ]}
             >
               <Text
                 style={[
-                  styles.tagText,
-                  isSelected ? styles.tagTextSelected : styles.tagTextUnselected,
+                  fontStyles.bodySmall,
+                  parentStyles.tagText,
+                  isSelected ? parentStyles.tagTextSelected : parentStyles.tagTextUnselected,
                 ]}
               >
                 {label}
@@ -63,58 +76,5 @@ const ParentStoriesSearchForm = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 24,
-  },
-  heading: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 12,
-  },
-  searchBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderColor: '#aaa',
-    borderWidth: 1,
-    borderRadius: 16,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    marginBottom: 12,
-  },
-  searchIcon: {
-    marginRight: 8,
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-  },
-  tagScroll: {
-    flexDirection: 'row',
-  },
-  tag: {
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    borderRadius: 20,
-    marginRight: 8,
-  },
-  tagSelected: {
-    backgroundColor: '#111',
-  },
-  tagUnselected: {
-    backgroundColor: '#eee',
-  },
-  tagText: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  tagTextSelected: {
-    color: '#fff',
-  },
-  tagTextUnselected: {
-    color: '#333',
-  },
-});
 
 export default ParentStoriesSearchForm;

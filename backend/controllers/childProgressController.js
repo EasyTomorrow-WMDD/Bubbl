@@ -94,7 +94,6 @@ exports.saveProgress = async (req, res) => {
   }
 
   try {
-    // Check existing progress
     const { data: existing, error: fetchError } = await supabase
       .from('user_progress')
       .select('*')
@@ -130,7 +129,7 @@ exports.saveProgress = async (req, res) => {
       if (updateError) throw updateError;
     }
 
-    // Get topic rewards
+    
     const { data: topicData, error: topicError } = await supabase
       .from('ref_topic')
       .select('topic_xp, topic_star')
@@ -143,21 +142,15 @@ exports.saveProgress = async (req, res) => {
 
     console.log(`Adding XP/Stars for user ${user_id}, topic ${topic_id}: XP=${topic_xp}, Stars=${topic_star}`);
 
-    // Get current user stats
     const { data: currentUser, error: getCurrentUserError } = await supabase
       .from('user')
-      .select('user_xp, user_star')
+      .select('user_xp, user_star, user_level')
       .eq('user_id', user_id)
-      .maybeSingle();
+      .single();
 
     if (getCurrentUserError) throw getCurrentUserError;
 
-    if (!currentUser) {
-      console.warn(`❗️ User record not found for user_id: ${user_id}`);
-      return res.status(404).json({ error: 'User not found in the user table. Please make sure the user exists.' });
-    }
-
-    // Update XP and Stars
+    const previousLevel = currentUser.user_level;
     const newXP = (currentUser.user_xp || 0) + (topic_xp || 0);
     const newStars = (currentUser.user_star || 0) + (topic_star || 0);
 
@@ -174,32 +167,27 @@ exports.saveProgress = async (req, res) => {
     console.log(`XP/Stars updated successfully: New XP=${newXP}, New Stars=${newStars}`);
 
     ///// Determine level /////
-    function getLevelFromXp(xp) {
-      if (xp >= 150) return 4;
-      if (xp >= 100) return 3;
-      if (xp >= 50) return 2;
-      return 1;
-    }
+    const { data: levelRows, error: levelError } = await supabase
+        .from('ref_level')
+        .select('level_value, level_xp_to_next_level')
+        .order('level_xp_to_next_level', { ascending: true });
 
-    // Re-fetch user to get new XP for level calculation
-    const { data: userData, error: userError } = await supabase
-      .from('user')
-      .select('user_xp, user_level')
-      .eq('user_id', user_id)
-      .maybeSingle();
+      if (levelError) throw levelError;
 
-    if (userError) throw userError;
+      let correctLevel = 1;
+      for (const level of levelRows) {
+        if (newXP >= level.level_xp_to_next_level) {
+          correctLevel = level.level_value;
+        } else {
+          break;
+        }
+      }
 
-    if (!userData) {
-      console.warn(`❗️ User record not found for user_id during level check: ${user_id}`);
-      return res.status(404).json({ error: 'User not found when checking level. Please make sure the user exists.' });
-    }
+    let levelChanged = false;
 
-    const currentXp = userData.user_xp;
-    const currentLevel = userData.user_level;
-    const correctLevel = getLevelFromXp(currentXp);
+    if (previousLevel !== correctLevel) {
+      levelChanged = true;
 
-    if (currentLevel !== correctLevel) {
       const { error: levelUpdateError } = await supabase
         .from('user')
         .update({ user_level: correctLevel })
@@ -207,7 +195,7 @@ exports.saveProgress = async (req, res) => {
 
       if (levelUpdateError) throw levelUpdateError;
 
-      ///// Skin level logic /////
+      ///// Skin level /////////
       const { data: skinAssetData, error: assetError } = await supabase
         .from('ref_asset')
         .select('asset_id')
@@ -217,14 +205,23 @@ exports.saveProgress = async (req, res) => {
       if (assetError) throw assetError;
       const skinAssetId = skinAssetData.asset_id;
 
-      // Determine skin variation name by level
+      ///////////skin name by level/////////
       let skinName;
       switch (correctLevel) {
-        case 1: skinName = "Gotie"; break;
-        case 2: skinName = "Gotie Gold"; break;
-        case 3: skinName = "Youngie"; break;
-        case 4: skinName = "bubblgom"; break;
-        default: skinName = "Gotie";
+        case 1:
+          skinName = "Gotie";
+          break;
+        case 2:
+          skinName = "Gotie Gold";
+          break;
+        case 3:
+          skinName = "Youngie";
+          break;
+        case 4:
+          skinName = "Bubblgom";
+          break;
+        default:
+          skinName = "Gotie";
       }
 
       const { data: variationData, error: variationError } = await supabase
@@ -236,20 +233,31 @@ exports.saveProgress = async (req, res) => {
       if (variationError) throw variationError;
       const variationId = variationData.asset_variation_id;
 
-      // Clean existing active skins
+      const { data: variationLevelData, error: variationLevelError } = await supabase
+        .from('ref_asset_variation_level')
+        .select('asset_variation_level_id')
+        .eq('asset_variation_id', variationId)
+        .eq('user_level', correctLevel)
+        .single();
+
+      if (variationLevelError) throw variationLevelError;
+      const variationLevelId = variationLevelData.asset_variation_level_id;
+
+      ///// Delete any existing active skin rows for this user////
       await supabase
         .from('user_asset')
         .delete()
         .eq('user_id', user_id)
         .eq('asset_id', skinAssetId);
 
-      // Insert new active skin
+      ////// Insert new skin /////
       const { error: insertAssetError } = await supabase
         .from('user_asset')
         .insert([{
-          user_id,
+          user_id: user_id,
           asset_id: skinAssetId,
           asset_variation_id: variationId,
+          ref_asset_variation_level_id: variationLevelId,
           user_asset_active: true
         }]);
 
@@ -258,7 +266,14 @@ exports.saveProgress = async (req, res) => {
       console.log(`Skin created for user ${user_id} at level ${correctLevel}: ${skinName}`);
     }
 
-    res.json({ message: 'Progress saved!' });
+    res.json({
+      message: 'Progress saved!',
+      levelChanged,
+      previousLevel,
+      newLevel: correctLevel,
+      newXP,
+      newStars
+    });
 
   } catch (err) {
     console.error('Save progress error:', err);
