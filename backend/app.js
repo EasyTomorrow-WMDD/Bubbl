@@ -13,6 +13,7 @@ const modulesRoutes = require('./routes/modulesRoutes');
 const logRoutes = require('./routes/logRoutes');
 const badgeRoutes = require('./routes/badgesRoutes');
 const shopRoutes = require('./routes/shopRoutes');
+const onboardingRoutes = require('./routes/onboardingRoutes');
 
 
 // Increase img size to upload
@@ -35,6 +36,9 @@ app.use('/api/modules', modulesRoutes);
 app.use('/api/logs', logRoutes);
 ///////////////Badges/////////////////
 app.use('/api', badgeRoutes); 
+////////////Oboarding////////////
+app.use('/api/onboarding', onboardingRoutes);
+
 
 app.get('/', (req, res) => {
   res.send('pong ✅ Backend is working!');
