@@ -36,7 +36,7 @@ const ChildNavbar = ({ navigation, childProfileId }) => {
       >
         <View style={[activeTab === 'mood draw' ? styles.iconWrapperActive : styles.iconWrapper]}>
           <Image
-            source={require('../../assets/icons/Paint.png')}
+            source={require('../../assets/icons/paint.png')}
             style={styles.navIcon}
             resizeMode="contain"
           />
