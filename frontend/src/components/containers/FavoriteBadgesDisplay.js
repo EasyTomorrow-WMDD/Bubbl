@@ -4,10 +4,11 @@ import { URI_URL } from '../../utils/config';
 
 const FavoriteBadgesDisplay = ({ badges }) => {
   if (!badges || badges.length === 0) return null;
-
+  
   const selected = badges
-    .filter(b => b.selection_order && b.selection_order <= 3)
-    .sort((a, b) => a.selection_order - b.selection_order);
+  .filter(b => b.selection_order && b.selection_order <= 3)
+  .sort((a, b) => a.selection_order - b.selection_order);
+  
 
   if (selected.length === 0) return null;
 
