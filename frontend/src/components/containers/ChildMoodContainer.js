@@ -71,7 +71,7 @@ export default function ChildMoodContainer({ navigation, childProfileId }) {
               </View>
 
               <View style={styles.moodsPyramid}>
-                {/* Happy (center, a bit lower) */}
+                {/* Happy */}
                 <View style={{ alignItems: 'center', marginTop: 20 }}>
                   <TouchableOpacity onPress={() => setSelected('happy')}>
                     <Image source={moods.happy.icon} style={styles.moodIcon} />
@@ -82,8 +82,8 @@ export default function ChildMoodContainer({ navigation, childProfileId }) {
                 </View>
 
                 <View style={styles.moodsRow}>
-                  {/* Mad (further left) */}
-                  <View style={{ alignItems: 'center', marginLeft: -60 }}>
+                  {/* Mad */}
+                  <View style={{ alignItems: 'center', marginLeft: -80 }}>
                     <TouchableOpacity onPress={() => setSelected('mad')}>
                       <Image source={moods.mad.icon} style={styles.moodIcon} />
                     </TouchableOpacity>
@@ -92,8 +92,8 @@ export default function ChildMoodContainer({ navigation, childProfileId }) {
                     </View>
                   </View>
 
-                  {/* Sad (further right) */}
-                  <View style={{ alignItems: 'center', marginRight: -60 }}>
+                  {/* Sad */}
+                  <View style={{ alignItems: 'center', marginRight: -80 }}>
                     <TouchableOpacity onPress={() => setSelected('sad')}>
                       <Image source={moods.sad.icon} style={styles.moodIcon} />
                     </TouchableOpacity>
@@ -203,7 +203,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: -50,
     gap: 120,
-    // width: '10%',
     justifyContent: 'center',
   },
   moodIcon: {
@@ -258,14 +257,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   animationContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+    position: 'absolute',
+    bottom: 19,
     width: '100%',
+    alignItems: 'center',
   },
   lottie: {
     width: 300,
     height: 300,
-    transform: [{ scale: 0.7 }],
+    transform: [{ scale: 0.8 }],
   },
 });
