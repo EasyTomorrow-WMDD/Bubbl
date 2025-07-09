@@ -41,7 +41,7 @@ app.use('/api/onboarding', onboardingRoutes);
 
 
 app.get('/', (req, res) => {
-  res.send('pong ✅ Backend is working!');
+  res.send('pong Backend is working!');
 });
 
 
