@@ -100,14 +100,14 @@ export const parentStyles = StyleSheet.create({
     width: 84,
     height: 80,
     overflow: 'hidden',
-    borderRadius: 16,
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 8,
     marginBottom: 16,
   },
   parentStoriesAvatarImage: {
-    transform: [{ scale: 0.95 }],
+    transform: [{ scale: 0.47 }],
   },
   parentStoriesHeading: {
     marginBottom: 4,
