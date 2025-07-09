@@ -184,7 +184,7 @@ const Skins = ({ userId, userLevel, userStars, onAssetEquipped, assets }) => {
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ flexDirection: 'row', gap: 20 }}
-          style={{ height: 500 }}
+          style={{ height: 250 }}
         >
           {sortedAccessories.map((accessory, index) => {
             const owned = ownedLevels.includes(accessory.asset_variation_level_id);

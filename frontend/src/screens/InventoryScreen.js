@@ -67,7 +67,8 @@ const InventoryScreen = ({ navigation, route }) => {
         <Header title={'Shop'} />
         <ScrollView
           contentContainerStyle={{
-            paddingBottom: insets.bottom + 80,
+            paddingBottom: insets.bottom + 50,
+
           }}
         >
           <View style={{ backgroundColor: BubblColors.BubblPurple500 }}>
@@ -134,7 +135,6 @@ const InventoryScreen = ({ navigation, route }) => {
         </ScrollView>
         <ChildNavbar navigation={navigation} />
       </View>
-
       <SafeAreaView edges={['bottom']} style={{ backgroundColor: 'white' }} />
     </>
   );
