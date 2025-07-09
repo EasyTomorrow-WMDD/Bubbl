@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Alert } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import supabase from '../../services/supabase';
@@ -9,6 +9,9 @@ import PageHeading from '../layout/PageHeading';
 import BubblTextInput from '../forms/BubblTextInput';
 import BubblDatePicker from '../forms/BubblDatePicker';
 import BubblButton from '../forms/BubblButton';
+import BubblAvatarPicker from '../forms/BubblAvatarPicker';
+import { fontStyles } from '../../styles/BubblFontStyles';
+
 
 const ProfileAddContainer = () => {
   const navigation = useNavigation();
@@ -17,6 +20,7 @@ const ProfileAddContainer = () => {
 
   const [nickname, setNickname] = useState('');
   const [nicknameError, setNicknameError] = useState('');
+  const [avatarId, setAvatarId] = useState('avatar01');
   const [dob, setDob] = useState(null);
 
   // ==========================================================================
@@ -52,7 +56,7 @@ const ProfileAddContainer = () => {
         user_type: profile_type,
         user_nickname: nickname,
         user_dob: dob,
-        avatar_id: null,
+        avatar_id: avatarId,
       };
 
       // Make API call to add profile
@@ -95,6 +99,13 @@ const ProfileAddContainer = () => {
           value={nickname}
           onChangeText={setNickname}
           error={nicknameError}
+        />
+
+        {/* Your avatar */}
+        <Text style={[fontStyles.tagline, globalStyles.label]}>Choose your avatar</Text>
+        <BubblAvatarPicker
+          currentAvatarId={avatarId}
+          onChange={setAvatarId}
         />
 
         {/* Date of Birth */}

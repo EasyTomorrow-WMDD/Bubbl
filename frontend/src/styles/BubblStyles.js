@@ -73,7 +73,9 @@ export const globalStyles = StyleSheet.create({
     textAlign: 'center',
     color: '#999',
   },
-  // Form styles -- START
+
+  // ------------------------------------------------------
+  // Form styles 
   label: {
     marginTop: 10,
   },
@@ -127,7 +129,31 @@ export const globalStyles = StyleSheet.create({
   forgotText: {
     color: BubblColors.BubblNeutralDark,
   },
-  // Form styles -- END
+
+  // ------------------------------------------------------
+  // Avatar picker styles
+  avatarPickerContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    padding: 12,
+  },
+  avatarPickerAvatarWrapper: {
+    margin: 8,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  avatarPickerSelectedAvatar: {
+    borderColor: BubblColors.BubblPurple800,
+  },
+  avatarPickerAvatarImage: {
+    width: 64,
+    height: 64,
+    resizeMode: 'contain',
+  },
+
+  // ------------------------------------------------------
   // The "or" divider styles -- START
   dividerContainer: {    
     flexDirection: 'row',
@@ -162,11 +188,13 @@ export const globalStyles = StyleSheet.create({
     textAlign: 'center'
   },
   // Login page specific styles -- END
+
   // Profile page specific styles -- START
   scrollContainer: {
     padding: 20,
-    backgroundColor: BubblColors.BubblWhite,
+    backgroundColor: BubblColors.BubblPurple50,
     width: '100%',
+    alignItems: 'center',
   },
   subheading: {
     fontSize: 20,
