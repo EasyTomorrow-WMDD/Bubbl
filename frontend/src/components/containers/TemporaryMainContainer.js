@@ -25,6 +25,29 @@ export default function TemporaryMainContainer() {
   const [nextRechargeTime, setNextReachargeTime] = useState(null);
   const [assets, setAssets] = useState([]);
 
+  // ================= Check onboarding status ====================
+  useEffect(() => {
+    if (!userId) return;
+
+    const checkOnboardingStatus = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/api/onboarding/status`, {
+          headers: { 'x-user-id': userId }
+        });
+
+        console.log('ONBOARDING STATUS RESPONSE:', res.data);
+
+        if (res.data && res.data.completed === false) {
+          navigation.replace('OnboardingSlides');
+        }
+      } catch (error) {
+        console.error('Error checking onboarding status:', error);
+      }
+    };
+
+    checkOnboardingStatus();
+  }, [userId, navigation]);
+
   // console.log('USER ID:', userId);
 
   // ================= Load profile info from AsyncStorage ====================
@@ -46,7 +69,7 @@ export default function TemporaryMainContainer() {
   // ================= Fetch user data from backend ====================
   useEffect(() => {
     if (!userId) return;
-
+  
     const fetchUser = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/api/childProgress/dashboard/${userId}`);
@@ -55,9 +78,9 @@ export default function TemporaryMainContainer() {
         console.error('Error fetching user data:', error);
       }
     };
-
+  
     fetchUser();
-  }, [userId]);
+  }, [userId, navigation]);
 
   // ================= Fetch modules data ====================
   useEffect(() => {
