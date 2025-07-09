@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
     height: 30,
     justifyContent: 'center',
     alignItems: 'center',
+    opacity:0.7
   },
   iconWrapperActive: {
     width: 36, 
@@ -101,6 +102,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: BubblColors.BubblPurple500,
     padding: 3, 
+    opacity: 1
   },
   navIcon: {
     width: '100%',
