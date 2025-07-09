@@ -12,23 +12,25 @@ import LottieView from 'lottie-react-native';
 import Header from '../layout/Header';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
-
 const moods = {
   happy: {
     icon: require('../../assets/icons/Moods/Happy.png'),
     animation: require('../../assets/animations/Happy_Mood.json'),
+    label: 'Happy',
     messageLine1: 'Yay!',
     messageLine2: "You're feeling happy.",
   },
   sad: {
     icon: require('../../assets/icons/Moods/Sad.png'),
     animation: require('../../assets/animations/Sad_Mood.json'),
+    label: 'Sad',
     messageLine1: 'Oh, feeling',
     messageLine2: 'a little sad?',
   },
   mad: {
     icon: require('../../assets/icons/Moods/Mad.png'),
     animation: require('../../assets/animations/Mad_Mood.json'),
+    label: 'Mad',
     messageLine1: "It's okay",
     messageLine2: 'to feel angry.',
   },
@@ -49,16 +51,12 @@ export default function ChildMoodContainer({ navigation, childProfileId }) {
     }
   }, [selected]);
 
-return (
+  return (
     <>
       <SafeAreaView edges={['top']} style={{ backgroundColor: '#8361E4' }} />
 
       <View style={{ flex: 1, backgroundColor: '#8361E4' }}>
         <Header title="Mood Canvas" />
-
-        <View style={styles.titleContainer}>
-          <Text style={styles.canvasTitle}>Mood Canvas</Text>
-        </View>
 
         <ImageBackground
           source={require('../../assets/images/DrawingCanvas/Done_Background.png')}
@@ -73,17 +71,36 @@ return (
               </View>
 
               <View style={styles.moodsPyramid}>
-                <TouchableOpacity onPress={() => setSelected('happy')}>
-                  <Image source={moods.happy.icon} style={styles.moodIcon} />
-                </TouchableOpacity>
+                {/* Happy (center, a bit lower) */}
+                <View style={{ alignItems: 'center', marginTop: 20 }}>
+                  <TouchableOpacity onPress={() => setSelected('happy')}>
+                    <Image source={moods.happy.icon} style={styles.moodIcon} />
+                  </TouchableOpacity>
+                  <View style={styles.moodLabelWrapper}>
+                    <Text style={styles.moodLabel}>{moods.happy.label}</Text>
+                  </View>
+                </View>
 
                 <View style={styles.moodsRow}>
-                  <TouchableOpacity onPress={() => setSelected('mad')} style={styles.moodButton}>
-                    <Image source={moods.mad.icon} style={styles.moodIcon} />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => setSelected('sad')} style={styles.moodButton}>
-                    <Image source={moods.sad.icon} style={styles.moodIcon} />
-                  </TouchableOpacity>
+                  {/* Mad (further left) */}
+                  <View style={{ alignItems: 'center', marginLeft: -60 }}>
+                    <TouchableOpacity onPress={() => setSelected('mad')}>
+                      <Image source={moods.mad.icon} style={styles.moodIcon} />
+                    </TouchableOpacity>
+                    <View style={styles.moodLabelWrapper}>
+                      <Text style={styles.moodLabel}>{moods.mad.label}</Text>
+                    </View>
+                  </View>
+
+                  {/* Sad (further right) */}
+                  <View style={{ alignItems: 'center', marginRight: -60 }}>
+                    <TouchableOpacity onPress={() => setSelected('sad')}>
+                      <Image source={moods.sad.icon} style={styles.moodIcon} />
+                    </TouchableOpacity>
+                    <View style={styles.moodLabelWrapper}>
+                      <Text style={styles.moodLabel}>{moods.sad.label}</Text>
+                    </View>
+                  </View>
                 </View>
               </View>
             </>
@@ -139,28 +156,12 @@ return (
         </View>
       </View>
 
-      {/* Bottom SafeArea */}
       <SafeAreaView edges={['bottom']} style={{ backgroundColor: 'white' }} />
     </>
   );
-
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: 'white' },
-
-  titleContainer: {
-    backgroundColor: '#EDEBFC',
-    paddingVertical: 20,
-    alignItems: 'center',
-    paddingBottom: 15,
-  },
-  canvasTitle: {
-    fontSize: 34,
-    fontWeight: 'bold',
-    color: '#2E195C',
-  },
-
   purpleBox: {
     flex: 1,
     width: '100%',
@@ -180,9 +181,8 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
   },
-
   feelTodayContainer: {
-    marginTop: 10,
+    marginTop: -10,
     marginBottom: 20,
     alignItems: 'center',
   },
@@ -196,29 +196,39 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: 'white',
   },
-
   moodsPyramid: {
     alignItems: 'center',
-    marginBottom: 20,
   },
   moodsRow: {
     flexDirection: 'row',
+    marginTop: -50,
+    gap: 120,
+    // width: '10%',
     justifyContent: 'center',
-    marginTop: 24,
-  },
-  moodButton: {
-    marginHorizontal: 40,
   },
   moodIcon: {
     width: 100,
     height: 100,
+  },
+  moodLabelWrapper: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    marginTop: 8,
+    borderWidth: 1,
+    borderColor: 'black',
+  },
+  moodLabel: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#2E195C',
   },
   moodIconSelected: {
     width: 140,
     height: 140,
     marginBottom: 15,
   },
-
   messageBox: {
     alignItems: 'center',
     marginVertical: 20,
@@ -247,7 +257,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-
   animationContainer: {
     flex: 1,
     justifyContent: 'flex-end',
@@ -260,4 +269,3 @@ const styles = StyleSheet.create({
     transform: [{ scale: 0.7 }],
   },
 });
-
