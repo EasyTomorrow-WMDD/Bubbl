@@ -215,7 +215,7 @@ const Skins = ({ userId, userLevel, userStars, onAssetEquipped, assets }) => {
                   {owned ? (
                     <Text style={[{ color: BubblColors.BubblPurple900 }, fontStyles.heading3]}>Owned</Text>
                   ) : (
-                    <View >
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
                       <Text style={[{ color: BubblColors.BubblPurple900 }, fontStyles.heading3]}>{accessory.ref_asset_variation.asset_variation_price}</Text>
                       <Image
                         source={starIcon}

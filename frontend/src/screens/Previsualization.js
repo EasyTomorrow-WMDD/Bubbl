@@ -12,6 +12,7 @@ import BubblColors from '../styles/BubblColors';
 import { fontStyles } from '../styles/BubblFontStyles';
 import { assetPositionMap } from '../styles/assetPosition';
 import alertIcon from '../assets/icons/alert_icon.png'
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Previsualization = ({ route }) => {
   const navigation = useNavigation();
@@ -94,6 +95,7 @@ const Previsualization = ({ route }) => {
   };
 
   return (
+  <SafeAreaView style={{backgroundColor: BubblColors.BubblPurple500}}>
     <View style={{ backgroundColor: BubblColors.BubblPurple500 }}>
       <ShopHeader title={'Summary'} childProfileId={userId} />
       <ScrollView style={{ borderTopLeftRadius: 32, borderTopRightRadius: 32, backgroundColor: 'white', height: '100%' }}>
@@ -183,6 +185,7 @@ const Previsualization = ({ route }) => {
         </Pressable>
       </ScrollView>
     </View>
+    </SafeAreaView>
   );
 };
 

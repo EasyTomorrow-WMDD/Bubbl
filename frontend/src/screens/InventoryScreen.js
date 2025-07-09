@@ -12,6 +12,7 @@ import ChildNavbar from '../components/layout/ChildNavbar';
 import { fontStyles } from '../styles/BubblFontStyles';
 import BubblColors from '../styles/BubblColors';
 import { useTab } from '../utils/TabContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 
