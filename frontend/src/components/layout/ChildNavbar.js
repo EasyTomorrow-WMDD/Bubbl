@@ -43,7 +43,7 @@ const ChildNavbar = ({ navigation, childProfileId }) => {
             resizeMode="contain"
           />
         </View>
-        <Text style={styles.navText}>Quest</Text>
+        <Text style={styles.navText}>Shop</Text>
       </TouchableOpacity>
     </View>
   );
@@ -64,6 +64,8 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingBottom: 20,
     zIndex: 20,
+    borderTopColor: '#c5c5c5aa',
+    borderTopWidth: 1,
   },
   navItem: {
     alignItems: 'center',

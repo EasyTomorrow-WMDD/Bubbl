@@ -1,0 +1,204 @@
+npm ERR! Missing script: "start"
+npm ERR! 
+npm ERR! Did you mean one of these?
+npm ERR!     npm star # Mark your favorite packages
+npm ERR!     npm stars # View packages marked as favorites
+npm ERR! 
+npm ERR! To see a list of scripts, run:
+npm ERR!   npm run
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /home/ubuntu/.npm/_logs/2025-07-05T06_30_05_926Z-debug-0.log
+npm ERR! Missing script: "start"
+npm ERR! 
+npm ERR! Did you mean one of these?
+npm ERR!     npm star # Mark your favorite packages
+npm ERR!     npm stars # View packages marked as favorites
+npm ERR! 
+npm ERR! To see a list of scripts, run:
+npm ERR!   npm run
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /home/ubuntu/.npm/_logs/2025-07-05T06_32_34_615Z-debug-0.log
+npm ERR! Missing script: "start"
+npm ERR! 
+npm ERR! Did you mean one of these?
+npm ERR!     npm star # Mark your favorite packages
+npm ERR!     npm stars # View packages marked as favorites
+npm ERR!     npm run star # run the "star" package script
+npm ERR! 
+npm ERR! To see a list of scripts, run:
+npm ERR!   npm run
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /home/ubuntu/.npm/_logs/2025-07-05T06_35_55_886Z-debug-0.log
+
+> backend@1.0.0 start
+> node app.js
+
+🔐 Using Supabase key: eyJhbGciOiJIUzI1NiIs
+[ROUTER] getChildActivityLog = function
+API running on port 3000
+
+> backend@1.0.0 start
+> node app.js
+
+🔐 Using Supabase key: eyJhbGciOiJIUzI1NiIs
+[ROUTER] getChildActivityLog = function
+API running on port 3000
+
+> backend@1.0.0 start
+> node app.js
+
+🔐 Using Supabase key: eyJhbGciOiJIUzI1NiIs
+[ROUTER] getChildActivityLog = function
+API running on port 3000
+Terminated
+
+> backend@1.0.0 start
+> node app.js
+
+🔐 Using Supabase key: eyJhbGciOiJIUzI1NiIs
+[ROUTER] getChildActivityLog = function
+API running on port 3000
+
+> backend@1.0.0 start
+> node app.js
+
+🔐 Using Supabase key: eyJhbGciOiJIUzI1NiIs
+[ROUTER] getChildActivityLog = function
+API running on port 3000
+[2025-07-05T07:16:52.260Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T07:16:52.868Z] GET request to /api/users/profiles
+[2025-07-05T07:16:54.517Z] POST request to /api/users/updateDayStreak
+[2025-07-05T07:17:32.438Z] POST request to /api/users/updateDayStreak
+[2025-07-05T07:17:41.172Z] POST request to /api/users/updateDayStreak
+[2025-07-05T07:18:18.156Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T07:18:18.574Z] GET request to /api/users/profiles
+[2025-07-05T07:18:19.634Z] POST request to /api/users/updateDayStreak
+[2025-07-05T07:22:51.121Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T07:22:51.380Z] GET request to /api/users/profiles
+[2025-07-05T07:22:52.348Z] POST request to /api/users/updateDayStreak
+[2025-07-05T07:23:09.675Z] POST request to /api/users/updateDayStreak
+[2025-07-05T07:23:50.190Z] POST request to /api/users/updateDayStreak
+[2025-07-05T07:23:50.197Z] POST request to /api/users/updateDayStreak
+[2025-07-05T07:23:52.958Z] POST request to /api/users/updateDayStreak
+[2025-07-05T07:23:52.963Z] POST request to /api/users/updateDayStreak
+[2025-07-05T07:24:02.901Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T07:24:03.272Z] GET request to /api/users/profiles
+[2025-07-05T07:24:04.286Z] POST request to /api/users/updateDayStreak
+[2025-07-05T07:24:15.118Z] POST request to /api/users/updateDayStreak
+[2025-07-05T07:26:09.073Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T07:26:09.435Z] GET request to /api/users/profiles
+[2025-07-05T07:26:10.942Z] POST request to /api/users/updateDayStreak
+[2025-07-05T07:26:23.771Z] POST request to /api/users/updateDayStreak
+[2025-07-05T07:26:33.774Z] POST request to /api/users/updateDayStreak
+[2025-07-05T07:27:47.564Z] POST request to /api/users/updateDayStreak
+[2025-07-05T07:29:31.123Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T07:29:31.335Z] GET request to /api/users/profiles
+[2025-07-05T07:29:32.284Z] POST request to /api/users/updateDayStreak
+[2025-07-05T07:41:48.475Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T07:41:48.736Z] GET request to /api/users/profiles
+[2025-07-05T07:41:50.193Z] POST request to /api/users/updateDayStreak
+[2025-07-05T07:44:07.287Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T07:44:07.723Z] GET request to /api/users/profiles
+[2025-07-05T07:44:08.720Z] POST request to /api/users/updateDayStreak
+[2025-07-05T07:47:55.027Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T07:47:55.439Z] GET request to /api/users/profiles
+[2025-07-05T07:47:56.337Z] POST request to /api/users/updateDayStreak
+[2025-07-05T07:50:15.038Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T07:50:15.229Z] GET request to /api/users/profiles
+[2025-07-05T07:50:16.333Z] POST request to /api/users/updateDayStreak
+[2025-07-05T08:00:43.403Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T08:00:43.599Z] GET request to /api/users/profiles
+[2025-07-05T08:00:44.914Z] POST request to /api/users/updateDayStreak
+[2025-07-05T08:00:48.030Z] POST request to /api/users/updateDayStreak
+[2025-07-05T08:00:50.500Z] POST request to /api/users/updateDayStreak
+[2025-07-05T08:00:58.720Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T08:00:58.898Z] GET request to /api/users/profiles
+[2025-07-05T08:00:59.913Z] POST request to /api/users/updateDayStreak
+[2025-07-05T08:01:11.807Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T08:01:11.972Z] GET request to /api/users/profiles
+[2025-07-05T08:01:13.187Z] POST request to /api/users/updateDayStreak
+[2025-07-05T08:01:23.203Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T08:01:23.408Z] GET request to /api/users/profiles
+[2025-07-05T08:01:24.385Z] POST request to /api/users/updateDayStreak
+[2025-07-05T08:01:27.582Z] POST request to /api/users/updateDayStreak
+[2025-07-05T08:01:51.222Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T08:01:51.447Z] GET request to /api/users/profiles
+[2025-07-05T08:01:56.144Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T08:01:56.307Z] GET request to /api/users/profiles
+[2025-07-05T08:01:57.573Z] POST request to /api/users/updateDayStreak
+[2025-07-05T08:04:15.935Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T08:04:16.331Z] GET request to /api/users/profiles
+[2025-07-05T08:05:22.265Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T08:05:22.703Z] GET request to /api/users/profiles
+[2025-07-05T08:05:23.881Z] POST request to /api/users/updateDayStreak
+[2025-07-05T08:05:54.076Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T08:05:54.289Z] GET request to /api/users/profiles
+[2025-07-05T08:05:55.392Z] POST request to /api/users/updateDayStreak
+[2025-07-05T08:06:41.824Z] POST request to /api/users/updateDayStreak
+[2025-07-05T08:06:52.034Z] POST request to /api/users/updateDayStreak
+[2025-07-05T08:07:41.548Z] POST request to /api/users/updateDayStreak
+[2025-07-05T08:14:18.186Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T08:14:18.385Z] GET request to /api/users/profiles
+[2025-07-05T08:14:19.884Z] POST request to /api/users/updateDayStreak
+[2025-07-05T08:15:29.086Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T08:15:29.290Z] GET request to /api/users/profiles
+[2025-07-05T08:15:30.257Z] POST request to /api/users/updateDayStreak
+[2025-07-05T08:16:29.546Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T08:16:29.826Z] GET request to /api/users/profiles
+[2025-07-05T08:16:30.777Z] POST request to /api/users/updateDayStreak
+[2025-07-05T08:21:57.843Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T08:21:58.039Z] GET request to /api/users/profiles
+[2025-07-05T08:23:44.499Z] GET request to /api/users/exists
+[DEBUG] checkUserExists - userAuthId: 0d0cda7a-b204-4c8a-894e-16f763ca3344
+[DEBUG] checkUserExists - results: true
+[2025-07-05T08:23:44.948Z] GET request to /api/users/profiles
+[2025-07-05T08:23:45.820Z] POST request to /api/users/updateDayStreak
