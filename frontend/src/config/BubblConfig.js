@@ -8,6 +8,7 @@ const BubblConfig = {
     // ? 'http://192.168.1.72:3000' // Do not delete this URL, it works for testing 
     : 'http://bubbl.wmdd4950.com/app-backend',
 
+
   // Supabase URL
   SUPABASE_URL: isDev
     ? 'https://ogbfgllkkyehcurolhjf.supabase.co' // Dev Supabase URL #1
