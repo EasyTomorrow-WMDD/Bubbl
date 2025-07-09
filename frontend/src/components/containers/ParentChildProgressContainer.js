@@ -80,8 +80,6 @@ const ParentChildProgressContainer = ({ navigation }) => {
         </View>
       </View>
 
-      {/* Safe area for bottom navigation */}
-      <SafeAreaView edges={['bottom']} style={childProgressStyles.childProgressLayoutBottomSafeArea} />
 
     </View>
   );
@@ -105,7 +103,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   content: {
-    flex: 1,
+    padding: 0,
   },
   profileHeader: {
     alignItems: 'center',
@@ -123,7 +121,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   tabSection: {
-    flex: 1,
+    padding: 0,
+
   },
 });
 
