@@ -60,16 +60,19 @@ const BadgesScreen = ({ userId, refreshBadges }) => {
   }, []);
 
   const handleSaveBadges = async () => {
-    const activeBadgeIds = badges
+    const activeBadges = badges
       .filter((b) => b.badge_active)
       .sort((a, b) => (a.selectionOrder || 0) - (b.selectionOrder || 0))
-      .map((b) => b.badge_id);
+      .map((b, idx) => ({
+        badge_id: b.badge_id,
+        selection_order: idx + 1
+      }));
 
     try {
       const res = await fetch(`${BASE_URL}/api/users/${userId}/badges/save`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ activeBadgeIds }),
+        body: JSON.stringify(activeBadges),
       });
 
       if (!res.ok) throw new Error('Failed to save badges');
@@ -134,10 +137,8 @@ const BadgesScreen = ({ userId, refreshBadges }) => {
       showsVerticalScrollIndicator={true}
       vertical={true}
       showsHorizontalScrollIndicator={false}
-      // contentContainerStyle={{ paddingHorizontal: 20, flexDirection: 'row' }}
       style={{ height: 440 }}
     >
-     
       <View style={styles.infoBox}>
         <Text style={styles.infoBoxText}>
           Choose up to 3 favorites badges to stand out!

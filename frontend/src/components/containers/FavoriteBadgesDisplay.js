@@ -6,9 +6,8 @@ const FavoriteBadgesDisplay = ({ badges }) => {
   if (!badges || badges.length === 0) return null;
   
   const selected = badges
-  .filter(b => b.selection_order && b.selection_order <= 3)
-  .sort((a, b) => a.selection_order - b.selection_order);
-  
+    .filter(b => b.selection_order !== null && b.selection_order >= 1 && b.selection_order <= 3)
+    .sort((a, b) => a.selection_order - b.selection_order);
 
   if (selected.length === 0) return null;
 
@@ -17,9 +16,7 @@ const FavoriteBadgesDisplay = ({ badges }) => {
       {selected.map((badge, idx) => (
         <View key={idx} style={styles.badgeContainer}>
           <Image
-            source={{
-              uri: `${URI_URL}/${badge.badge_image_url}`,
-            }}
+            source={{ uri: `${URI_URL}/${badge.badge_image_url}` }}
             style={styles.image}
           />
           <Text style={styles.label}>{badge.badge_name}</Text>
