@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import supabase from '../../services/supabase';
 import axios from 'axios';
@@ -10,7 +11,15 @@ import { Picker } from '@react-native-picker/picker';
 import LoadChildInfo from '../../utils/LoadChildInfo';
 import ActivityLogCard from '../cards/ActivityLogCard';
 import BubblYearMonthPicker from '../forms/BubblYearMonthPicker';
+import { childProgressStyles } from '../../styles/BubblParentChildProgressStyles';
+import { fontStyles } from '../../styles/BubblFontStyles';
+import BubblColors from '../../styles/BubblColors';
+import ParentChildProgressNotFoundCard from '../cards/ParentChildProgressNotFoundCard';
 
+const calendar_icon = require('../../assets/icons/search_calendar.png');
+
+// ============================================================================
+// ParentChildActivityContainer Component
 const ParentChildActivityContainer = () => {
 
   // State to manage activity logs and month picker visibility
@@ -21,6 +30,7 @@ const ParentChildActivityContainer = () => {
   const [selectedYear, setSelectedYear] = useState(null);
   const [showPicker, setShowPicker] = useState(false);
 
+  // ----------------------------------------------------------------
   // Load child info and fetch activity logs on component mount
   useEffect(() => {
     const loadUser = async () => {
@@ -40,6 +50,7 @@ const ParentChildActivityContainer = () => {
     loadUser();
   }, []);
 
+  // ----------------------------------------------------------------
   // Fetch activity logs when userId is set or searchYearMonth changes
   useEffect(() => {
     if (userId) {
@@ -47,6 +58,7 @@ const ParentChildActivityContainer = () => {
     }
   }, [userId, searchYearMonth]);
 
+  // ----------------------------------------------------------------
   // Method to fetch activity logs from the backend
   const fetchActivityLog = async (userId) => {
     try {
@@ -92,6 +104,7 @@ const ParentChildActivityContainer = () => {
     }
   };
 
+  // ----------------------------------------------------------------
   // Method to handle month picker date change
   const handleDateChange = (event, newDate) => {
     if (event === 'dateSetAction') {
@@ -101,37 +114,52 @@ const ParentChildActivityContainer = () => {
     setShowMonthPicker(false);
   };
 
+  // ----------------------------------------------------------------
   // Render each activity log item
   const renderItem = ({ item, index }) => {
     const previousItem = index > 0 ? activityLogs[index - 1] : null;
     return <ActivityLogCard item={item} index={index} previousItem={previousItem} />;
   };
 
+  const insets = useSafeAreaInsets(); // Get safe area insets for top and bottom padding
+
+  // ----------------------------------------------------------------
   // Render the main component
   return (
-    <View style={styles.container}>
+    <View style={childProgressStyles.childActivityContainer}>
       {/* Heading Area */}
-      <View style={styles.headingRow}>
-        <Text style={styles.headingText}>Activity Log</Text>
+      <View style={childProgressStyles.childActivityHeadingRow}>
+        <Text style={[
+          fontStyles.heading1, 
+          childProgressStyles.childActivityHeadingText
+        ]}>
+          Activity Log
+        </Text>
         <TouchableOpacity 
           onPress={() => { setShowPicker(!showPicker); }}
         >
-          <Ionicons name="calendar-outline" size={24} color="black" />
+          {/* Image of calendar */}
+          <Image 
+            source={calendar_icon} 
+            style={childProgressStyles.childActivityHeadingIcon}
+          />
         </TouchableOpacity>
 
       </View>
 
       {/* Log List */}
+      <View style={childProgressStyles.flatListContainer}>
       {activityLogs.length === 0 ? (
-        <Text style={styles.noResultsText}>No results found</Text>
+        <ParentChildProgressNotFoundCard/>
       ) : (
         <FlatList
           data={activityLogs}
           keyExtractor={(item, index) => `${item.log_timestamp}_${index}`}
           renderItem={({ item, index }) => renderItem({ item, index })}
-          contentContainerStyle={{ paddingBottom: 100 }}
+          contentContainerStyle={{ paddingBottom: insets.bottom + 48 }}
         />
       )}
+      </View>
 
       {/* Year & Month Picker */}
       <BubblYearMonthPicker
@@ -149,100 +177,11 @@ const ParentChildActivityContainer = () => {
         onClose={() => setShowPicker(false)}
       />
 
+      {/* Safe area for bottom navigation */}
+      <SafeAreaView edges={['bottom']} style={childProgressStyles.childProgressLayoutBottomSafeArea} />
+
     </View>
   );
 };
 
 export default ParentChildActivityContainer;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    backgroundColor: '#fff',
-  },
-  headingRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  headingText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  noResultsText: {
-    textAlign: 'center',
-    marginTop: 40,
-    fontSize: 16,
-    color: '#888',
-  },
-  dateDividerContainer: {
-    alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 6,
-  },
-  dateDividerText: {
-    backgroundColor: '#eee',
-    borderRadius: 16,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#444',
-  },
-  card: {
-    backgroundColor: '#f9f9f9',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 8,
-  },
-  cardSummary: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginBottom: 4,
-  },
-  cardDetail: {
-    fontSize: 14,
-    color: '#555',
-  },
-  // Modal & Calendar Picker Styles
-  modalOverlay: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-  },
-  pickerContainer: {
-    width: '90%',
-    padding: 16,
-    borderRadius: 12,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'stretch',
-  },
-    pickerContainer: {
-    marginTop: 10,
-    borderRadius: 8,
-    padding: 8,
-    backgroundColor: '#f0f0f0',
-  },
-  picker: {
-    height: 160,
-    width: '100%',
-    marginBottom: 8,
-  },
-  applyButton: {
-    marginTop: 8,
-    backgroundColor: '#333',
-    padding: 8,
-    borderRadius: 6,
-    alignItems: 'center',
-  },
-  applyButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-
-});
-
