@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import LoadProfileInfo from '../../utils/LoadProfileInfo'; 
 import ParentStoryEssentialsList from '../lists/ParentStoryEssentialsList';
 import ParentStoriesSearchForm from '../forms/ParentStoriesSearchForm';
 import ParentStoryArticlesList from '../lists/ParentStoryArticlesList';
+import { parentStyles } from '../../styles/BubblParentMainStyles';
+import { fontStyles } from '../../styles/BubblFontStyles';
+import BubblColors from '../../styles/BubblColors';
+import { avatarImages } from '../../utils/AvatarMappings';
 
 const ParentStoriesContainer = ( {navigation} ) => {
 
@@ -15,7 +19,10 @@ const ParentStoriesContainer = ( {navigation} ) => {
   const [searchText, setSearchText] = useState('');
   const [selectedType, setSelectedType] = useState('all');
 
+  let avatarSource = ''; // Variable to hold the avatar image source
 
+  // ==========================================================================
+  // Fetch profile information when the component mounts
   useEffect(() => {
     const fetchProfile = async () => {
       const data = await LoadProfileInfo();
@@ -23,87 +30,54 @@ const ParentStoriesContainer = ( {navigation} ) => {
     };
 
     fetchProfile();
+    
   }, []);
 
   if (!profile) {
     return null; // or a loading indicator
+  } else {
+    // Get avatar image full path based on the avatar_id
+    avatarSource = avatarImages[profile.avatar_id] || avatarImages['avatar01']; 
   }
 
+
+  // ==========================================================================
+  // Render the main container with sections
   return (
-    <View style={styles.container}>
+    <View style={parentStyles.parentStoriesContainer}>
       {/* Section 1: Heading */}
-      <View style={styles.headerContainer}>
-        <Ionicons name="person-circle-outline" size={64} style={styles.avatar} />
-        {/* <Image source={{ uri: profile.avatar_id }} style={styles.avatarImage} /> */}
-
-
-        <View style={styles.textContainer}>
-          <Text style={styles.heading}>Welcome {profile.nickname}!</Text>
-          <Text style={styles.subheading}>Let's find some articles to read</Text>
+      <View style={parentStyles.parentStoriesHeaderContainer}>
+        {/* <Ionicons name="person-circle-outline" size={64} style={styles.avatar} /> */}
+        <View style={parentStyles.parentStoriesAvatarWrapper}>
+          <Image source={avatarSource} style={parentStyles.parentStoriesAvatarImage} />
         </View>
+        <Text style={[fontStyles.display2, parentStyles.parentStoriesHeading]}>Welcome {profile.nickname}!</Text>
+        <Text style={[fontStyles.bodyMedium, parentStyles.parentStoriesSubheading]}>Let's find some articles to read</Text>
       </View>
-
-      <Text style={styles.divider}>-----------------------</Text>
 
       {/* Section 2: Essential stories - render list */}
       {profile && <ParentStoryEssentialsList userId={profile.user_id}  navigation={navigation} />}
 
-      {/* Section 3: Search for other stories */}
-      <ParentStoriesSearchForm
-        searchText={searchText}
-        setSearchText={setSearchText}
-        selectedType={selectedType}
-        setSelectedType={setSelectedType}
-      />
+      <View style={parentStyles.parentOtherStoriesContainer}>
+        {/* Section 3: Search for other stories */}
+        <ParentStoriesSearchForm
+          searchText={searchText}
+          setSearchText={setSearchText}
+          selectedType={selectedType}
+          setSelectedType={setSelectedType}
+        />
 
-      {/* Section 4: Search results */}
-      <ParentStoryArticlesList
-        searchText={searchText}
-        selectedType={selectedType}
-        userId={profile.user_id}
-        navigation={navigation}
-      />
+        {/* Section 4: Search results */}
+        <ParentStoryArticlesList
+          searchText={searchText}
+          selectedType={selectedType}
+          userId={profile.user_id}
+          navigation={navigation}
+        />
+      </View>
 
     </View>
   );
 };
 
 export default ParentStoriesContainer;
-
-const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  avatar: {
-    marginRight: 15,
-    color: '#888', // tint color for placeholder icon
-  },
-  avatarImage: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    marginRight: 15,
-  },
-  textContainer: {
-    flex: 1,
-  },
-  heading: {
-    fontSize: 22,
-    fontWeight: 'bold',
-  },
-  subheading: {
-    fontSize: 16,
-    color: '#666',
-    marginTop: 4,
-  },
-  divider: {
-    marginTop: 10,
-    marginBottom: 15,
-  },
-});

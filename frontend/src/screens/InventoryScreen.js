@@ -92,7 +92,7 @@ const InventoryScreen = ({ navigation, route }) => {
 
               {section === 'assets' ? (
                 <View >
-                  <View style={{ alignItems: 'center', marginTop: 85 }}>
+                  <View style={{ alignItems: 'center', marginTop: 55 }}>
                     <Avatar
                       key={avatarKey}
                       userId={user.user_id}
@@ -104,10 +104,10 @@ const InventoryScreen = ({ navigation, route }) => {
                       hatSize={165}
                       top={-80}
                       positionOverrides={{
-                        "Beannie": { top: -70, left: 100, width: 200, height: 170 },
-                        "Bow": { top: -25, left: 155, },
-                        "Confetti": { left: 200, top: -40, transform: [{ rotate: "25deg" }] },
-                        "Santa Hat": { left: 200, top: -30, transform: [{ rotate: "25deg" }] }
+                        "Beannie": { top: -40, left: 190, width: 120, height: 120, transform: [{ rotate: "25deg" }] },
+                        "Bow": { top: -45, left: 205, width: 120, height: 120, transform: [{ rotate: "25deg" }]  },
+                        "Confetti": { left: 200, top: -60, width: 120, height: 120, transform: [{ rotate: "25deg" }] },
+                        "Santa Hat": { left: 200, top: -50, width: 120, height: 120, transform: [{ rotate: "25deg" }] }
                       }}
                     />
                   </View>

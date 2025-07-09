@@ -36,6 +36,10 @@ app.use('/api/logs', logRoutes);
 ///////////////Badges/////////////////
 app.use('/api', badgeRoutes); 
 
+app.get('/', (req, res) => {
+  res.send('pong ✅ Backend is working!');
+});
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
