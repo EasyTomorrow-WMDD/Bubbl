@@ -7,14 +7,12 @@ import BubblColors from '../../styles/BubblColors';
 const ShopHeader = ({title, childProfileId}) => {
     const navigation = useNavigation();
   return (
-    <SafeAreaView style={styles.safeArea}>
       <View style={styles.header}>
         <Text style={[fontStyles.heading3, {color:'white', fontSize: 30, paddingTop:20}]}>{title}</Text>
           <Pressable style={styles.icons} onPress={() => navigation.navigate('InventoryScreen', { childProfileId })}>
             <Image source={require('../../assets/icons/close.png')} style={styles.icon} />
           </Pressable>
       </View>
-    </SafeAreaView>
   );
 };
 
@@ -26,7 +24,8 @@ header: {
   flexDirection: 'row',
   justifyContent: 'space-between',
   alignItems: 'center', 
-  paddingHorizontal: 24,
+  marginHorizontal: 24,
+  marginBottom:30
 },
 
   icons: {

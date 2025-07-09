@@ -184,7 +184,7 @@ const Skins = ({ userId, userLevel, userStars, onAssetEquipped, assets }) => {
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ flexDirection: 'row', gap: 20 }}
-          style={{ height: 500 }}
+          style={{ height: 250 }}
         >
           {sortedAccessories.map((accessory, index) => {
             const owned = ownedLevels.includes(accessory.asset_variation_level_id);
@@ -215,7 +215,7 @@ const Skins = ({ userId, userLevel, userStars, onAssetEquipped, assets }) => {
                   {owned ? (
                     <Text style={[{ color: BubblColors.BubblPurple900 }, fontStyles.heading3]}>Owned</Text>
                   ) : (
-                    <View >
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
                       <Text style={[{ color: BubblColors.BubblPurple900 }, fontStyles.heading3]}>{accessory.ref_asset_variation.asset_variation_price}</Text>
                       <Image
                         source={starIcon}
