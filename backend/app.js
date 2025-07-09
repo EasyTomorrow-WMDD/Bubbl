@@ -13,7 +13,7 @@ const modulesRoutes = require('./routes/modulesRoutes');
 const logRoutes = require('./routes/logRoutes');
 const badgeRoutes = require('./routes/badgesRoutes');
 const shopRoutes = require('./routes/shopRoutes');
-const onboardingRoutes = require('./routes/onboardingRoutes');
+const onboardingRoutes = require('./routes/oboardingRoutes');
 
 
 // Increase img size to upload
