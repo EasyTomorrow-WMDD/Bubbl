@@ -12,6 +12,8 @@ import { BASE_URL } from '../../utils/config';
 import Avatar from './Avatar';
 import EnergyTimer from './Timer';
 import { fontStyles } from '../../styles/BubblFontStyles';
+import { se } from 'date-fns/locale';
+import { useTab } from '../../utils/TabContext';
 
 
 export default function TemporaryMainContainer() {
@@ -24,6 +26,7 @@ export default function TemporaryMainContainer() {
   const [userEnergy, setUserEnergy] = useState(null);
   const [nextRechargeTime, setNextReachargeTime] = useState(null);
   const [assets, setAssets] = useState([]);
+  const { setActiveTab } = useTab();
 
   // ================= Check onboarding status ====================
   useEffect(() => {
@@ -41,7 +44,7 @@ export default function TemporaryMainContainer() {
           navigation.replace('OnboardingSlides');
         }
       } catch (error) {
-        console.error('Error checking onboarding status:', error.message);
+        console.error('Error checking onboarding status:', error);
       }
     };
 
@@ -69,7 +72,7 @@ export default function TemporaryMainContainer() {
   // ================= Fetch user data from backend ====================
   useEffect(() => {
     if (!userId) return;
-  
+
     const fetchUser = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/api/childProgress/dashboard/${userId}`);
@@ -78,7 +81,7 @@ export default function TemporaryMainContainer() {
         console.error('Error fetching user data:', error);
       }
     };
-  
+
     fetchUser();
   }, [userId, navigation]);
 
@@ -208,7 +211,7 @@ export default function TemporaryMainContainer() {
               <Avatar userId={userId} userLevel={user ? user.user_level : null} skinSize={200} skinWidth={200} assets={assets} setAssets={setAssets} hatSize={130} top={-40} positionOverrides={{
                 "Beannie": { top: -10, left: 110, width: 120, height: 120 },
                 "Bow": { top: 0, left: 125, },
-                "Confetti": { left: 150, top: -20, transform: [{ rotate: "15deg" }]},
+                "Confetti": { left: 150, top: -20, transform: [{ rotate: "15deg" }] },
                 "Santa Hat": { left: 150, top: -12, transform: [{ rotate: "15deg" }] }
               }} />
               <Text style={[styles.title, fontStyles.display1]}>Hi, {user ? user.user_nickname : '...'}</Text>
@@ -245,7 +248,7 @@ export default function TemporaryMainContainer() {
           </View>
         </View>
       </ScrollView>
-      <ChildNavbar navigation={navigation} childProfileId={userId} />
+      <ChildNavbar navigation={navigation} childProfileId={userId}  />
     </View>
   );
 }

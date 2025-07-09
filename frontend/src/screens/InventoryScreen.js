@@ -11,6 +11,7 @@ import Store from '../components/containers/Store';
 import ChildNavbar from '../components/layout/ChildNavbar';
 import { fontStyles } from '../styles/BubblFontStyles';
 import BubblColors from '../styles/BubblColors';
+import { useTab } from '../utils/TabContext';
 
 
 
@@ -20,6 +21,7 @@ const InventoryScreen = ({ navigation, route }) => {
   const [badges, setBadges] = useState([]);
   const [section, setSection] = useState('assets');
   const [assets, setAssets] = useState([]);
+  const { setActiveTab } = useTab();
 
 
   const fetchUserAndBadges = async () => {
@@ -58,6 +60,11 @@ const InventoryScreen = ({ navigation, route }) => {
       .then(res => setBadges(res.data))
       .catch(err => console.error('Failed to refresh badges', err));
   };
+
+  useEffect(() => {
+  setActiveTab('shop');
+}, []);
+
 
   if (!user) return <Text>Loading...</Text>;
 
