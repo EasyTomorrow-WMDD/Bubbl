@@ -9,14 +9,12 @@ import { fontStyles } from '../../styles/BubblFontStyles';
 export default function Module({ modules, progress = [], onTopicPress, currentTopicId }) {
 
 
-
-
   return (
     <View style={{ width: '100%' }}>
       {modules.map((item) => (
         <View key={item.module_id} style={{ gap: 30, }}>
           <View style={{ backgroundColor: getTopicBg(item.module_number), padding: 15, paddingVertical: 20 }}>
-            <Text style={[fontStyles.heading1, { color: textColor(item.module_number), paddingVertical: 20, fontSize:30 }]}>
+            <Text style={[fontStyles.heading1, { color: textColor(item.module_number), paddingVertical: 20, fontSize: 30 }]}>
               Module {item.module_number} - {item.module_name}
             </Text>
 
@@ -42,9 +40,9 @@ export default function Module({ modules, progress = [], onTopicPress, currentTo
                       style={[
                         styles.card,
                         {
-                          backgroundColor: 
-                          isCurrent ? currentTopicColor(item.module_number) :
-                          getTopicBg(item.module_number),
+                          backgroundColor:
+                            isCurrent ? currentTopicColor(item.module_number) :
+                              getTopicBg(item.module_number),
                           opacity: isLocked ? 0.4 : 1,
                         }
                       ]}
@@ -57,10 +55,14 @@ export default function Module({ modules, progress = [], onTopicPress, currentTo
                       </View>
 
                       <View style={styles.textContainer}>
-                        <Text style={[{color : isCurrent ? 'white' : textColor(item.module_number)}, fontStyles.heading3]}>
-                          {topic.topic_title}
-                        </Text>
-                        <Text style={[{color: isCurrent ? 'white' : textColor(item.module_number)}, fontStyles.bodyDefault]}>
+                        <View style={{flexDirection:"row", alignItems:'center',}}>
+                          <Text style={[{ color: isCurrent ? 'white' : textColor(item.module_number) }, fontStyles.heading3]}>
+                            {topic.topic_title}
+                          </Text>
+                          <Text>Completed</Text>
+                        </View>
+
+                        <Text style={[{ color: isCurrent ? 'white' : textColor(item.module_number) }, fontStyles.bodyDefault]}>
                           {isLocked ? topic.topic_description : topic.topic_description}
                         </Text>
                       </View>
