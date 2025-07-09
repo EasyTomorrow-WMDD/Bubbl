@@ -10,6 +10,8 @@ import {
 import ChildNavbar from '../layout/ChildNavbar';
 import LottieView from 'lottie-react-native';
 import Header from '../layout/Header';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+
 
 const moods = {
   happy: {
@@ -35,6 +37,7 @@ const moods = {
 export default function ChildMoodContainer({ navigation, childProfileId }) {
   const [selected, setSelected] = useState(null);
   const [showDrawPrompt, setShowDrawPrompt] = useState(false);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (selected) {
@@ -46,100 +49,101 @@ export default function ChildMoodContainer({ navigation, childProfileId }) {
     }
   }, [selected]);
 
-  return (
-    <View style={styles.container}>
-      <Header title="Mood" />
+return (
+    <>
+      <SafeAreaView edges={['top']} style={{ backgroundColor: '#8361E4' }} />
 
-      <View style={styles.titleContainer}>
-        <Text style={styles.canvasTitle}>Mood Canvas</Text>
+      <View style={{ flex: 1, backgroundColor: '#8361E4' }}>
+        <Header title="Mood Canvas" />
+
+        <View style={styles.titleContainer}>
+          <Text style={styles.canvasTitle}>Mood Canvas</Text>
+        </View>
+
+        <ImageBackground
+          source={require('../../assets/images/DrawingCanvas/Done_Background.png')}
+          style={styles.purpleBox}
+          imageStyle={styles.imageBackgroundImage}
+        >
+          {!selected && (
+            <>
+              <View style={styles.feelTodayContainer}>
+                <Text style={styles.feelTodayLine1}>How do you</Text>
+                <Text style={styles.feelTodayLine2}>feel today?</Text>
+              </View>
+
+              <View style={styles.moodsPyramid}>
+                <TouchableOpacity onPress={() => setSelected('happy')}>
+                  <Image source={moods.happy.icon} style={styles.moodIcon} />
+                </TouchableOpacity>
+
+                <View style={styles.moodsRow}>
+                  <TouchableOpacity onPress={() => setSelected('mad')} style={styles.moodButton}>
+                    <Image source={moods.mad.icon} style={styles.moodIcon} />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => setSelected('sad')} style={styles.moodButton}>
+                    <Image source={moods.sad.icon} style={styles.moodIcon} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </>
+          )}
+
+          {selected && (
+            <View style={styles.messageBox}>
+              {!showDrawPrompt && (
+                <>
+                  <Image source={moods[selected].icon} style={styles.moodIconSelected} />
+                  <Text style={styles.messageLine1}>{moods[selected].messageLine1}</Text>
+                  <Text style={styles.messageLine2}>{moods[selected].messageLine2}</Text>
+                </>
+              )}
+
+              {showDrawPrompt && (
+                <>
+                  <Text style={styles.messageLine1}>Draw how your</Text>
+                  <Text style={styles.messageLine2}>day feels!</Text>
+                  <TouchableOpacity
+                    style={styles.drawButton}
+                    onPress={() =>
+                      navigation.navigate('ChildDrawing', {
+                        mood: selected,
+                        childProfileId: childProfileId,
+                      })
+                    }
+                  >
+                    <Text style={styles.drawButtonText}>Let's Draw</Text>
+                  </TouchableOpacity>
+                </>
+              )}
+            </View>
+          )}
+
+          {/* Animation */}
+          <View style={styles.animationContainer}>
+            <LottieView
+              source={
+                selected
+                  ? moods[selected].animation
+                  : require('../../assets/animations/Happy_Mood.json')
+              }
+              autoPlay
+              loop
+              style={styles.lottie}
+            />
+          </View>
+        </ImageBackground>
+
+        <View style={{ paddingBottom: insets.bottom }}>
+          <ChildNavbar navigation={navigation} childProfileId={childProfileId} />
+        </View>
       </View>
 
-      <ImageBackground
-        source={require('../../assets/images/DrawingCanvas/Done_Background.png')}
-        style={styles.purpleBox}
-        imageStyle={styles.imageBackgroundImage}
-      >
-        {!selected && (
-          <>
-            <View style={styles.feelTodayContainer}>
-              <Text style={styles.feelTodayLine1}>How do you</Text>
-              <Text style={styles.feelTodayLine2}>feel today?</Text>
-            </View>
-
-            <View style={styles.moodsPyramid}>
-              <TouchableOpacity onPress={() => setSelected('happy')}>
-                <Image source={moods.happy.icon} style={styles.moodIcon} />
-              </TouchableOpacity>
-
-              <View style={styles.moodsRow}>
-                <TouchableOpacity onPress={() => setSelected('mad')} style={styles.moodButton}>
-                  <Image source={moods.mad.icon} style={styles.moodIcon} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setSelected('sad')} style={styles.moodButton}>
-                  <Image source={moods.sad.icon} style={styles.moodIcon} />
-                </TouchableOpacity>
-              </View>
-            </View>
-          </>
-        )}
-
-        {selected && (
-          <View style={styles.messageBox}>
-            {!showDrawPrompt && (
-              <>
-                <Image source={moods[selected].icon} style={styles.moodIconSelected} />
-                <Text style={styles.messageLine1}>{moods[selected].messageLine1}</Text>
-                <Text style={styles.messageLine2}>{moods[selected].messageLine2}</Text>
-              </>
-            )}
-
-            {showDrawPrompt && (
-              <>
-                <Text style={styles.messageLine1}>Draw how your</Text>
-                <Text style={styles.messageLine2}>day feels!</Text>
-                <TouchableOpacity
-                  style={styles.drawButton}
-                  onPress={() =>
-                    navigation.navigate('ChildDrawing', {
-                      mood: selected,
-                      childProfileId: childProfileId,
-                    })
-                  }
-                >
-                  <Text style={styles.drawButtonText}>Let's Draw</Text>
-                </TouchableOpacity>
-              </>
-            )}
-          </View>
-        )}
-
-        {/* Animation section */}
-        {!selected && (
-          <View style={styles.animationContainer}>
-            <LottieView
-              source={require('../../assets/animations/Happy_Mood.json')}
-              autoPlay
-              loop
-              style={styles.lottie}
-            />
-          </View>
-        )}
-
-        {selected && (
-          <View style={styles.animationContainer}>
-            <LottieView
-              source={moods[selected].animation}
-              autoPlay
-              loop
-              style={styles.lottie}
-            />
-          </View>
-        )}
-      </ImageBackground>
-
-      <ChildNavbar navigation={navigation} childProfileId={childProfileId} />
-    </View>
+      {/* Bottom SafeArea */}
+      <SafeAreaView edges={['bottom']} style={{ backgroundColor: 'white' }} />
+    </>
   );
+
 }
 
 const styles = StyleSheet.create({
