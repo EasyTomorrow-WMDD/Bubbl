@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, StatusBar, SafeAreaView } from 'react-native';
 import supabase from '../../services/supabase';
 import axios from 'axios';
 import BubblConfig from '../../config/BubblConfig';
@@ -9,15 +9,19 @@ import BubblTextInput from '../forms/BubblTextInput';
 import BubblDatePicker from '../forms/BubblDatePicker';
 import BubblPicker from '../forms/BubblPicker';
 import BubblButton from '../forms/BubblButton';
+import BubblAvatarPicker from '../forms/BubblAvatarPicker';
+import { profileStyles } from '../../styles/ProfileStyles';
+import BubblColors from '../../styles/BubblColors';
+import { fontStyles } from '../../styles/BubblFontStyles';
 
-
-
+// ============================================================================
+// AuthOnboardingContainer component
 const AuthOnboardingContainer = ({ navigation }) => {
 
   // State variables for form inputs
   const [nickname, setNickname] = useState('');
   const [dob, setDob] = useState(null);
-  const [avatar_id, setAvatarId] = useState(null); // Placeholder for avatar selection
+  const [avatar_id, setAvatarId] = useState('avatar01'); // Placeholder for avatar selection
   const [userType, setUserType] = useState('parent');
   const [isCreatingAccount, setIsCreatingAccount] = useState(true);
   const [accountName, setAccountName] = useState('');
@@ -25,7 +29,7 @@ const AuthOnboardingContainer = ({ navigation }) => {
   const [errors, setErrors] = useState({});
 
 
-  // ==========================================================================
+  // ----------------------------------------------------------------
   // Method to validate inputs and submit the form
   const validateAndSubmit = async () => {
 
@@ -80,92 +84,106 @@ const AuthOnboardingContainer = ({ navigation }) => {
   };
 
 
-  // ==========================================================================
+  // ----------------------------------------------------------------
   // Render the onboarding screen
   return (
-    <ScrollView contentContainerStyle={globalStyles.scrollContainer}>
+    <View style={profileStyles.OnboardingLayoutContainer}>
 
-      {/* Heading Row */}
-      <PageHeading title="Setup account" onBackPress={null} />
+      {/* Status bar */}
+      <StatusBar barStyle="dark-content" backgroundColor={BubblColors.BubblPurple950} />
+      {/* Safe area for parent main contents */}
+      <SafeAreaView edges={['top']} style={profileStyles.OnboardingLayoutTopSafeArea} />
 
-      {/* Form area */}
-      <View style={globalStyles.formContainer}>
+      {/* Main area for parent page */}
+      <ScrollView contentContainerStyle={globalStyles.scrollContainer}>
 
-        {/* Your nickname */}
-        <BubblTextInput
-          label="Your nickname"
-          placeholder="Enter your nickname"
-          value={nickname}
-          onChangeText={setNickname}
-          error={errors.nickname}
-        />
+        {/* Heading Row */}
+        <PageHeading title="Setup account" onBackPress={null} />
 
-        {/* Your avatar */}
-        <Text style={globalStyles.label}>Choose your avatar</Text>
-        <View style={globalStyles.input}><Text>[Avatar selection goes here]</Text></View>
+        {/* Form area */}
+        <View style={globalStyles.formContainer}>
 
-        {/* Date of Birth */}
-        <BubblDatePicker
-          label="Your birth date"
-          value={dob}
-          onChange={setDob}
-        />
+          {/* Your nickname */}
+          <BubblTextInput
+            label="Your nickname"
+            placeholder="Enter your nickname"
+            value={nickname}
+            onChangeText={setNickname}
+            error={errors.nickname}
+          />
 
-        {/* User Type */}
-        <BubblPicker
-          label="User type"
-          selectedValue={userType}
-          onValueChange={setUserType}
-          items={[
-            { label: 'Parent', value: 'parent' },
-            { label: 'Kid', value: 'kid' },
-          ]}
-        />
+          {/* Your avatar */}
+          <Text style={[fontStyles.tagline, globalStyles.label]}>Choose your avatar</Text>
+          <BubblAvatarPicker
+            currentAvatarId={avatar_id}
+            onChange={setAvatarId}
+          />
 
-        {/* Selection: New account creation or Joining existing account */}
-        <BubblPicker
-          label="Are you creating a new account?"
-          selectedValue={isCreatingAccount ? 'yes' : 'no'}
-          onValueChange={(val) => setIsCreatingAccount(val === 'yes')}
-          items={[
-            { label: 'Yes', value: 'yes' },
-            { label: 'No', value: 'no' },
-          ]}
-        />
+          {/* Date of Birth */}
+          <BubblDatePicker
+            label="Your birth date"
+            value={dob}
+            onChange={setDob}
+          />
 
-        {/* Conditional rendering based on account creation choice */}
-        {isCreatingAccount ? (
-          <>
-            {/* Account name for new account */}
-            <BubblTextInput
-              label="Your account name"
-              placeholder="Enter your account name"
-              value={accountName}
-              onChangeText={setAccountName}
-              error={errors.accountName}
-            />
-          </>
-        ) : (
-          <>
-            {/* Invitation code to join existing account */}
-            <BubblTextInput
-              label="Invitation code"
-              placeholder="Enter invitation code"
-              value={invitationCode}
-              onChangeText={setInvitationCode}
-              error={errors.invitationCode}
-            />
-          </>
-        )}
+          {/* User Type */}
+          {/* <BubblPicker
+            label="User type"
+            selectedValue={userType}
+            onValueChange={setUserType}
+            items={[
+              { label: 'Parent', value: 'parent' },
+              { label: 'Kid', value: 'kid' },
+            ]}
+          /> */}
 
-        {/* Button to proceed with account setup */}
-        <BubblButton
-          label="Setup Account"
-          onPress={validateAndSubmit}
-        />
+          {/* Selection: New account creation or Joining existing account */}
+          {/* <BubblPicker
+            label="Are you creating a new account?"
+            selectedValue={isCreatingAccount ? 'yes' : 'no'}
+            onValueChange={(val) => setIsCreatingAccount(val === 'yes')}
+            items={[
+              { label: 'Yes', value: 'yes' },
+              { label: 'No', value: 'no' },
+            ]}
+          /> */}
 
-      </View>
-    </ScrollView>
+          {/* Conditional rendering based on account creation choice */}
+          {isCreatingAccount ? (
+            <>
+              {/* Account name for new account */}
+              {/* <BubblTextInput
+                label="Your account name"
+                placeholder="Enter your account name"
+                value={accountName}
+                onChangeText={setAccountName}
+                error={errors.accountName}
+              /> */}
+            </>
+          ) : (
+            <>
+              {/* Invitation code to join existing account */}
+              {/* <BubblTextInput
+                label="Invitation code"
+                placeholder="Enter invitation code"
+                value={invitationCode}
+                onChangeText={setInvitationCode}
+                error={errors.invitationCode}
+              /> */}
+            </>
+          )}
+
+          {/* Button to proceed with account setup */}
+          <BubblButton
+            label="Setup Account"
+            onPress={validateAndSubmit}
+          />
+
+        </View>
+      </ScrollView>
+
+      <SafeAreaView edges={['bottom']} style={profileStyles.OnboardingLayoutBottomSafeArea} />
+    </View>
   );
 }
 
