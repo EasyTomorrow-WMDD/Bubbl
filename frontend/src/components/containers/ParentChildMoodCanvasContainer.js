@@ -6,15 +6,21 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
+  SafeAreaView,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import supabase from '../../services/supabase';
 import BubblConfig from '../../config/BubblConfig';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import BubblYearMonthPicker from '../forms/BubblYearMonthPicker';
+import { childProgressStyles } from '../../styles/BubblParentChildProgressStyles';
+import { fontStyles } from '../../styles/BubblFontStyles';
+import BubblColors from '../../styles/BubblColors';
+import ParentChildProgressNotFoundCard from '../cards/ParentChildProgressNotFoundCard';
 
+const calendar_icon = require('../../assets/icons/search_calendar.png');
 
 const moodIcons = {
   Happy: require('../../assets/icons/Moods/Happy.png'),
@@ -113,38 +119,47 @@ const ParentChildMoodCanvasContainer = () => {
             </View>
           )}
 
-          <Text style={styles.dateText}>{formattedDate}</Text>
+          <Text style={[fontStyles.bodyTiny, styles.dateText]}>{formattedDate}</Text>
         </View>
       </TouchableOpacity>
     );
   };
 
+  const insets = useSafeAreaInsets(); // Get safe area insets for top and bottom padding
+
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Mood Canvas</Text>
+        <Text style={[fontStyles.heading1, styles.headerTitle]}>Mood Canvas</Text>
         <TouchableOpacity onPress={() => setCalendarVisible(true)}>
-          <Ionicons name="calendar-outline" size={24} color="#8361E4" />
+          <Image 
+            source={calendar_icon} 
+            style={childProgressStyles.childActivityHeadingIcon}
+          />
         </TouchableOpacity>
       </View>
 
       {/* Drawings list */}
-      <FlatList
-        data={drawings}
-        keyExtractor={(item, index) => index.toString()}
-        numColumns={2}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={[styles.listContent, { justifyContent: 'center', alignItems: 'center' }]}
-        renderItem={renderDrawingCard}
-        ListEmptyComponent={
-          !loading && (
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>No drawings found.</Text>
-            </View>
-          )
-        }
-      />
+      <View style={styles.flatListContainer}>
+        <FlatList
+          data={drawings}
+          keyExtractor={(item, index) => index.toString()}
+          numColumns={2}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={[
+            styles.listContent, 
+            { justifyContent: 'center', 
+              alignItems: 'center', 
+              paddingBottom: 100 }]}
+          renderItem={renderDrawingCard}
+          ListEmptyComponent={
+            !loading && (
+              <ParentChildProgressNotFoundCard />
+            )
+          }
+        />
+      </View>
 
       {/* Calendar modal */}
       <BubblYearMonthPicker
@@ -156,6 +171,10 @@ const ParentChildMoodCanvasContainer = () => {
         onApply={handleApplyCalendar}
         onClose={() => setCalendarVisible(false)}
       />
+
+      {/* Safe area for bottom navigation */}
+      <SafeAreaView edges={['bottom']} style={childProgressStyles.childProgressLayoutBottomSafeArea} />
+  
     </View>
   );
 };
@@ -165,9 +184,9 @@ export default ParentChildMoodCanvasContainer;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: BubblColors.BubblPurple200,
     padding: 12,
-    flex: 1,
+    // flex: 1,
   },
   header: {
     flexDirection: 'row',
@@ -177,8 +196,11 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 22,
-    fontWeight: 'bold',
-    color: '#2E195C',
+    color: BubblColors.BubblPurple950,
+  },
+  flatListContainer: {
+    height: 400,
+    minHeight: 400,
   },
   listContent: {
     paddingBottom: 20,
@@ -188,7 +210,7 @@ const styles = StyleSheet.create({
     margin: 8,
   },
   purpleBox: {
-    backgroundColor: '#2E195C',
+    backgroundColor: BubblColors.BubblPurple800,
     borderRadius: 20,
     overflow: 'hidden',
     paddingTop: 12,
@@ -207,11 +229,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 8,
     right: 8,
-    backgroundColor: '#2E195C',
+    backgroundColor: BubblColors.BubblPurple800,
     borderRadius: 50,
     padding: 4,
     borderWidth: 2,
-    borderColor: '#2E195C',
+    borderColor: BubblColors.BubblPurple800,
   },
   moodIcon: {
     width: 40,
