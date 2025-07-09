@@ -27,7 +27,7 @@ export default function TemporaryMainContainer() {
   const [nextRechargeTime, setNextReachargeTime] = useState(null);
   const [assets, setAssets] = useState([]);
 
-  
+
 
   // console.log('USER ID:', userId);
 
@@ -175,59 +175,63 @@ export default function TemporaryMainContainer() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor:BubblColors.BubblPurple500 }}>
-      <PatthernHeader />
-      <ScrollView contentContainerStyle={{ paddingBottom: 80, paddingTop: 20, backgroundColor:BubblColors.BubblPurple50 }}>
-        <View style={{ flex: 1, backgroundColor: '#DFDAFAA' }}>
-          <StatusBar style="auto" />
-          <ImageBackground
-            source={require('../../assets/images/Background_Purple.png')}
-            resizeMode="cover"
-            style={styles.background}>
-            <View style={styles.backgroundOverlay} />
-            <View style={styles.container}>
-              <Avatar userId={userId} userLevel={user ? user.user_level : null} skinSize={200} skinWidth={200} assets={assets} setAssets={setAssets} hatSize={130} top={-40} positionOverrides={{
-                "Beannie": { top: 0, left: 170, width: 80, height: 80, transform: [{ rotate: "15deg" }] },
-                "Bow": { top: 0, left: 190, height: 90, width: 80, transform: [{ rotate: "30deg" }] },
-                "Confetti": { left: 200, top: -20, height: 90, width: 90, transform: [{ rotate: "15deg" }]},
-                "Santa Hat": { left: 150, top: -12,  height: 90, width: 80, transform: [{ rotate: "15deg" }] }
-              }} />
-              <Text style={[styles.title, fontStyles.display1]}>Hi, {user ? user.user_nickname : '...'}</Text>
-              <StatsPanel user={user} />
-              {user?.user_energy < 3 ? <EnergyTimer userId={userId} /> : null}
+    <>
+      <SafeAreaView edges={['top']} style={{ backgroundColor: BubblColors.BubblPurple500 }} />
+      <View style={{ flex: 1, backgroundColor: BubblColors.BubblPurple500 }}>
+        <PatthernHeader />
+        <ScrollView contentContainerStyle={{ paddingBottom: 80, paddingTop: 20, backgroundColor: BubblColors.BubblPurple50 }}>
+          <View style={{ flex: 1, backgroundColor: '#DFDAFAA' }}>
+            <StatusBar style="auto" />
+            <ImageBackground
+              source={require('../../assets/images/Background_Purple.png')}
+              resizeMode="cover"
+              style={styles.background}>
+              <View style={styles.backgroundOverlay} />
+              <View style={styles.container}>
+                <Avatar userId={userId} userLevel={user ? user.user_level : null} skinSize={200} skinWidth={200} assets={assets} setAssets={setAssets} hatSize={130} top={-40} positionOverrides={{
+                  "Beannie": { top: 0, left: 170, width: 80, height: 80, transform: [{ rotate: "15deg" }] },
+                  "Bow": { top: 0, left: 190, height: 90, width: 80, transform: [{ rotate: "30deg" }] },
+                  "Confetti": { left: 200, top: -20, height: 90, width: 90, transform: [{ rotate: "15deg" }] },
+                  "Santa Hat": { left: 150, top: -12, height: 90, width: 80, transform: [{ rotate: "15deg" }] }
+                }} />
+                <Text style={[styles.title, fontStyles.display1]}>Hi, {user ? user.user_nickname : '...'}</Text>
+                <StatsPanel user={user} />
+                {user?.user_energy < 3 ? <EnergyTimer userId={userId} /> : null}
+              </View>
+
+              <Pressable
+                style={{
+                  backgroundColor: "#FFCE48",
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 5,
+                  marginHorizontal: 20,
+                  marginBottom: 50,
+                  padding: 20,
+                  borderRadius: 15,
+                  borderWidth: 2,
+                  borderColor: '#FFBA20'
+                }}
+                onPress={() => {
+                  if (currentTopicId) {
+                    handleTopicPress({ topic_id: currentTopicId });
+                  }
+                }}>
+                <Text style={[fontStyles.bodyMedium, { color: '#7A310D' }]}>Continue from where you left</Text>
+                <Image source={require('../../assets/icons/play_icon.png')} style={{ height: 20, width: 20 }} />
+              </Pressable>
+            </ImageBackground>
+
+            <View>
+              <Module modules={modules} progress={progress} onTopicPress={handleTopicPress} currentTopicId={currentTopicId} />
             </View>
-
-            <Pressable
-              style={{
-                backgroundColor: "#FFCE48",
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 5,
-                marginHorizontal: 20,
-                marginBottom:50,
-                padding: 20,
-                borderRadius: 15,
-                borderWidth: 2,
-                borderColor: '#FFBA20'
-              }}
-              onPress={() => {
-                if (currentTopicId) {
-                  handleTopicPress({ topic_id: currentTopicId });
-                }
-              }}>
-              <Text style={[fontStyles.bodyMedium, { color: '#7A310D' }]}>Continue from where you left</Text>
-              <Image source={require('../../assets/icons/play_icon.png')} style={{ height: 20, width: 20 }} />
-            </Pressable>
-          </ImageBackground>
-
-          <View>
-            <Module modules={modules} progress={progress} onTopicPress={handleTopicPress} currentTopicId={currentTopicId} />
           </View>
-        </View>
-      </ScrollView>
-      <ChildNavbar navigation={navigation} childProfileId={userId} />
-    </SafeAreaView>
+        </ScrollView>
+        <ChildNavbar navigation={navigation} childProfileId={userId} />
+      </View>
+      <SafeAreaView edges={['bottom']} style={{ backgroundColor: 'white' }} />
+    </>
   );
 }
 

@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, ImageBackground, ScrollView, Pressable } from 'react-native';
-import { useState, useEffect, createContext } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from '../components/layout/Header';
 import { BASE_URL } from '../utils/config';
@@ -12,9 +12,7 @@ import ChildNavbar from '../components/layout/ChildNavbar';
 import { fontStyles } from '../styles/BubblFontStyles';
 import BubblColors from '../styles/BubblColors';
 import { useTab } from '../utils/TabContext';
-import { SafeAreaView } from 'react-native-safe-area-context';
-
-
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const InventoryScreen = ({ navigation, route }) => {
   const { childProfileId } = route.params || {};
@@ -23,37 +21,33 @@ const InventoryScreen = ({ navigation, route }) => {
   const [section, setSection] = useState('assets');
   const [assets, setAssets] = useState([]);
   const { setActiveTab } = useTab();
-
+  const insets = useSafeAreaInsets();
+  const [avatarKey, setAvatarKey] = useState(0);
 
   const fetchUserAndBadges = async () => {
-    const userUrl = `${BASE_URL}/api/childProgress/dashboard/${childProfileId}`;
-    const badgeUrl = `${BASE_URL}/api/users/${childProfileId}/badges`;
-
     try {
-      //console.log('Fetching user from:', userUrl);
-      const userRes = await axios.get(userUrl);
+      const userRes = await axios.get(`${BASE_URL}/api/childProgress/dashboard/${childProfileId}`);
       setUser(userRes.data);
     } catch (error) {
       console.error('Error fetching user:', error.response?.status, error.response?.data);
     }
 
     try {
-      //console.log('Fetching badges from:', badgeUrl);
-      const badgeRes = await axios.get(badgeUrl);
+      const badgeRes = await axios.get(`${BASE_URL}/api/users/${childProfileId}/badges`);
       setBadges(badgeRes.data);
     } catch (error) {
       console.error('Error fetching badges:', error.response?.status, error.response?.data);
     }
   };
 
-
-  const [avatarKey, setAvatarKey] = useState(0);
-  console.log('READING USER', user)
   useEffect(() => {
     if (!childProfileId) return;
-    // console.log('childProfileId:', childProfileId);
     fetchUserAndBadges();
   }, [childProfileId]);
+
+  useEffect(() => {
+    setActiveTab('shop');
+  }, []);
 
   const refreshBadges = () => {
     axios
@@ -62,23 +56,27 @@ const InventoryScreen = ({ navigation, route }) => {
       .catch(err => console.error('Failed to refresh badges', err));
   };
 
-  useEffect(() => {
-  setActiveTab('shop');
-}, []);
-
-
   if (!user) return <Text>Loading...</Text>;
 
   return (
     <>
-      <View style={{ backgroundColor: BubblColors.BubblPurple500 }}>
+      {/* Top safe area */}
+      <SafeAreaView edges={['top']} style={{ backgroundColor: BubblColors.BubblPurple500 }} />
+      
+      <View style={{ flex: 1, backgroundColor: BubblColors.BubblPurple500 }}>
         <Header title={'Shop'} />
-        <ScrollView >
+        <ScrollView
+          contentContainerStyle={{
+            paddingBottom: insets.bottom + 80,
+          }}
+        >
           <View style={{ backgroundColor: BubblColors.BubblPurple500 }}>
             <View style={{ backgroundColor: 'white', borderTopRightRadius: 50, borderTopLeftRadius: 50 }}>
               <View style={{ alignItems: 'center', marginVertical: 20 }}>
                 <StatsInventory user={user} badges={badges} section={section} />
               </View>
+
+              {/* Toggle */}
               <View style={styles.container}>
                 <Pressable
                   style={[styles.toggle, section === 'assets' && styles.activeToggle]}
@@ -98,8 +96,9 @@ const InventoryScreen = ({ navigation, route }) => {
                 </Pressable>
               </View>
 
+              {/* Content */}
               {section === 'assets' ? (
-                <View >
+                <View>
                   <View style={{ alignItems: 'center', marginTop: 55 }}>
                     <Avatar
                       key={avatarKey}
@@ -133,12 +132,13 @@ const InventoryScreen = ({ navigation, route }) => {
             </View>
           </View>
         </ScrollView>
+        <ChildNavbar navigation={navigation} />
       </View>
-      <ChildNavbar navigation={navigation} />
+
+      <SafeAreaView edges={['bottom']} style={{ backgroundColor: 'white' }} />
     </>
   );
-
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -149,34 +149,23 @@ const styles = StyleSheet.create({
     padding: 4,
     margin: 10,
   },
-
-  title: {
-    fontSize: 40,
-    fontWeight: 'bold',
-    color: 'black',
-  },
-  subHeading: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
   text: {
     ...fontStyles.bodyDefault,
     color: 'black',
   },
-
   toggle: {
     paddingVertical: 8,
     paddingHorizontal: 30,
     borderRadius: 12,
     backgroundColor: 'transparent',
     alignItems: 'center',
-    width: '50%'
+    width: '50%',
   },
   activeToggle: {
     backgroundColor: BubblColors.BubblPurple300,
     borderWidth: 2,
     borderColor: '#A997EE',
   },
-})
+});
 
 export default InventoryScreen;
