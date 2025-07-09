@@ -18,7 +18,6 @@ exports.getOnboardingStatus = async (req, res) => {
       return res.status(500).json({ error: error.message });
     }
 
-    // If no record found, assume first time → insert with completed = false
     if (!data) {
       await supabase
         .from('user_onboarding')

@@ -31,7 +31,7 @@ import Previsualization from './frontend/src/screens/Previsualization';
 import PurchaseSuccess from './frontend/src/screens/PurchaseSucess';
 import StreakScreen from './frontend/src/screens/StreakScreen';
 import EvolutionScreen from './frontend/src/screens/EvolutionScreen';
-
+import OnboardingSlidesScreen from './frontend/src/screens/OnboardingSlidesScreen';
 
 // SplashScreen.preventAutoHideAsync(); // Keep splash screen until fonts are loaded
 
@@ -68,6 +68,7 @@ export default function App() {
             <Stack.Screen name="Login" component={AuthLoginScreen} />
             <Stack.Screen name="Signup" component={AuthSignupScreen} />
             <Stack.Screen name="Onboarding" component={AuthOnboardingScreen} />
+            <Stack.Screen name="OnboardingSlides" component={OnboardingSlidesScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="AddProfile" component={ProfileAddScreen} />
             <Stack.Screen name="ParentMain" component={ParentLayout} />
