@@ -268,6 +268,7 @@ export default function TopicScreen({ route, navigation }) {
         <Text style={styles.countdownText}>
           {countdown ? `You will regain 1 energy in ${countdown}` : 'Please wait...'}
         </Text>
+        <Button title="Go Back" onPress={() => navigation.goBack()} />
       </View>
     );
   }
@@ -286,7 +287,7 @@ export default function TopicScreen({ route, navigation }) {
   return (
     <View style={{ flex: 1 }}>
       <View style={{ paddingTop: 40, paddingHorizontal: 20 }}>
-        <EnergyBarContainer energy={energy} maxEnergy={3} />
+      <EnergyBarContainer energy={energy} maxEnergy={3} navigation={navigation} />
       </View>
 
       <View style={{ flex: 1 }}>
