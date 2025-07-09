@@ -42,7 +42,7 @@ const ParentChildProgressContainer = ({ navigation }) => {
       {/* Status bar */}
       <StatusBar barStyle="light-content" backgroundColor={BubblColors.BubblPurple50} />
       {/* Safe area for parent main contents */}
-      <SafeAreaView edges={['top']} style={childProgressStyles.childProgressLayoutTopSafeArea} />
+
       
       {/* Main area for parent page */}
       <View style={childProgressStyles.childProgressLayoutMainContainer}>
