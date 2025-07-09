@@ -135,7 +135,7 @@ const BadgesScreen = ({ userId, refreshBadges }) => {
       vertical={true}
       showsHorizontalScrollIndicator={false}
       // contentContainerStyle={{ paddingHorizontal: 20, flexDirection: 'row' }}
-      style={{ height: 450 }}
+      style={{ height: 440 }}
     >
      
       <View style={styles.infoBox}>

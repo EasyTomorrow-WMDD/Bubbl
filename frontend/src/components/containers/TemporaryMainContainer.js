@@ -12,7 +12,6 @@ import { BASE_URL } from '../../utils/config';
 import Avatar from './Avatar';
 import EnergyTimer from './Timer';
 import { fontStyles } from '../../styles/BubblFontStyles';
-import BubblColors from '../../styles/BubblColors';
 
 
 export default function TemporaryMainContainer() {
@@ -25,6 +24,29 @@ export default function TemporaryMainContainer() {
   const [userEnergy, setUserEnergy] = useState(null);
   const [nextRechargeTime, setNextReachargeTime] = useState(null);
   const [assets, setAssets] = useState([]);
+
+  // ================= Check onboarding status ====================
+  useEffect(() => {
+    if (!userId) return;
+
+    const checkOnboardingStatus = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/api/onboarding/status`, {
+          headers: { 'x-user-id': userId }
+        });
+
+        console.log('ONBOARDING STATUS RESPONSE:', res.data);
+
+        if (res.data && res.data.completed === false) {
+          navigation.replace('OnboardingSlides');
+        }
+      } catch (error) {
+        console.error('Error checking onboarding status:', error);
+      }
+    };
+
+    checkOnboardingStatus();
+  }, [userId, navigation]);
 
   // console.log('USER ID:', userId);
 
@@ -47,7 +69,7 @@ export default function TemporaryMainContainer() {
   // ================= Fetch user data from backend ====================
   useEffect(() => {
     if (!userId) return;
-
+  
     const fetchUser = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/api/childProgress/dashboard/${userId}`);
@@ -56,9 +78,9 @@ export default function TemporaryMainContainer() {
         console.error('Error fetching user data:', error);
       }
     };
-
+  
     fetchUser();
-  }, [userId]);
+  }, [userId, navigation]);
 
   // ================= Fetch modules data ====================
   useEffect(() => {
@@ -172,9 +194,9 @@ export default function TemporaryMainContainer() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor:BubblColors.BubblPurple500 }}>
+    <View style={{ flex: 1 }}>
       <PatthernHeader />
-      <ScrollView contentContainerStyle={{ paddingBottom: 80, paddingTop: 20, backgroundColor:BubblColors.BubblPurple50 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 80, paddingTop: 20 }}>
         <View style={{ flex: 1, backgroundColor: '#DFDAFAA' }}>
           <StatusBar style="auto" />
           <ImageBackground
@@ -184,10 +206,10 @@ export default function TemporaryMainContainer() {
             <View style={styles.backgroundOverlay} />
             <View style={styles.container}>
               <Avatar userId={userId} userLevel={user ? user.user_level : null} skinSize={200} skinWidth={200} assets={assets} setAssets={setAssets} hatSize={130} top={-40} positionOverrides={{
-                "Beannie": { top: 0, left: 170, width: 80, height: 80, transform: [{ rotate: "15deg" }] },
-                "Bow": { top: 0, left: 190, height: 90, width: 80, transform: [{ rotate: "30deg" }] },
-                "Confetti": { left: 200, top: -20, height: 90, width: 90, transform: [{ rotate: "15deg" }]},
-                "Santa Hat": { left: 150, top: -12,  height: 90, width: 80, transform: [{ rotate: "15deg" }] }
+                "Beannie": { top: -10, left: 110, width: 120, height: 120 },
+                "Bow": { top: 0, left: 125, },
+                "Confetti": { left: 150, top: -20, transform: [{ rotate: "15deg" }]},
+                "Santa Hat": { left: 150, top: -12, transform: [{ rotate: "15deg" }] }
               }} />
               <Text style={[styles.title, fontStyles.display1]}>Hi, {user ? user.user_nickname : '...'}</Text>
               <StatsPanel user={user} />
@@ -202,7 +224,7 @@ export default function TemporaryMainContainer() {
                 justifyContent: 'center',
                 gap: 5,
                 marginHorizontal: 20,
-                marginBottom:50,
+                marginBottom: 20,
                 padding: 20,
                 borderRadius: 15,
                 borderWidth: 2,
