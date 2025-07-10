@@ -26,9 +26,9 @@
 
 -- {
 --   "module_id": "71e898ac-132c-4256-9b69-800540550319",
---   "topic_number": 2,
---   "topic_title": "Quiz Demo - All Types",
---   "topic_description": "This topic contains a demo of all quiz types.",
+--   "topic_number": 1,
+--   "topic_title": "Bullying",
+--   "topic_description": "Learn about Bullying.",
 --   "topic_completion_heading": "Well done!",
 --   "topic_completion_text": "You completed all the question types. You're amazing!",
 --   "topic_xp": 50,
@@ -155,3 +155,239 @@
 --     }
 --   ]
 -- }
+
+
+////.. DEMO QUESTION /////////
+
+
+-- {
+--   "module_id": "71e898ac-132c-4256-9b69-800540550319",
+--   "topic_number": 1,
+--   "topic_title": "Bullying",
+--   "topic_description": "Learn about Bullying.",
+--   "topic_completion_heading": "Well done!",
+--   "topic_completion_text": "You completed all the question types. You're amazing!",
+--   "topic_xp": 50,
+--   "topic_star": 3,
+--   "topic_activities": [
+--     {
+--       "id": "q1",
+--       "quiz": {
+--         "image": "https://ogbfgllkkyehcurolhjf.supabase.co/storage/v1/object/public/quiz-images/module-one/hit.png",
+--         "correct": "Pushing someone on purpose",
+--         "options": [
+--           "Asking someone to play",
+--           "Pushing someone on purpose",
+--           "Sharing your toys"
+--         ],
+--         "question": "Which one is bullying?",
+--         "message_wrong": "Try again. Think about your safety.",
+--         "message_correct": "Exactly! Telling a trusted adult is the right move."
+--       },
+--       "text": "Multiple Choice",
+--       "type": "multiple_choice"
+--     },
+--     {
+--       "id": "q2",
+--       "quiz": {
+--         "image": "https://ogbfgllkkyehcurolhjf.supabase.co/storage/v1/object/public/quiz-images/module-one/kit-hit-true-false.png",
+--         "correct": "False",
+--         "options": [
+--           "True",
+--           "False"
+--         ],
+--         "question": "Bullying only happens when someone hits you.",
+--         "message_wrong": "Wrong! Bullying can also be words, mean jokes, or leaving someone out",
+--         "message_correct": "Correct! Bullying can also happen online, mean jokes or leaving someone out."
+--       },
+--       "text": "True or False",
+--       "type": "true_false"
+--     },
+--     {
+--       "id": "q3",
+--       "quiz": {
+--         "image": "https://ogbfgllkkyehcurolhjf.supabase.co/storage/v1/object/public/quiz-images/module-one/mom-kit-fill-the-blank.png",
+--         "correct": "safe",
+--         "options": [
+--           "left out",
+--           "safe",
+--           "scared"
+--         ],
+--         "question": "Everyone deserves to feel ______ at school.",
+--         "message_wrong": "Not quite. Think about staying safe first.",
+--         "message_correct": "Yes! Safe and happy. That's how it should be."
+--       },
+--       "text": "Fill in the Blank",
+--       "type": "fill_blank"
+--     }, {
+--       "id": "q4",
+--       "quiz": {
+--         "image": "https://ogbfgllkkyehcurolhjf.supabase.co/storage/v1/object/public/quiz-images/module-one/kid_sad.png",
+--         "correct": "Yes",
+--         "options": [
+--           "Yes",
+--           "No"
+--         ],
+--         "question": "Can someone be bullied by messages on a phone or computer?",
+--         "message_wrong": "Wrong! Bullying can also be online",
+--         "message_correct": "Yes!That’s called cyberbullying. It’s not okay either!"
+--       },
+--       "text": "Yes or No?",
+--       "type": "true_false"
+--     },
+
+
+--     {
+--       "id": "q5",
+--       "quiz": {
+--         "correct": [
+--           "Helping a friend",
+--           "Saying sorry",
+--           "Sharing a snack"
+--         ],
+--         "options": [
+--           {
+--             "label": "Helping a friend"
+--           },
+--           {
+--             "label": "Sharing a snack"
+--           },
+--           {
+--             "label": "Name-calling"
+--           },
+--           {
+--             "label": "Tripping someone"
+--           },
+--           {
+--             "label": "Saying sorry"
+--           },
+--           {
+--             "label": "Laugh at someone "
+--           }
+--         ],
+--         "question": "Choose the kind actions in the bubble (Select 3)",
+--         "message_wrong": "Not quite. Try again and think about kind actions.",
+--         "message_correct": "Awesome! You bubbled up kindness! You're doing great."
+--       },
+--       "text": "Select the Correct Options",
+--       "type": "select_correct"
+--     }
+--   ]
+-- }
+
+
+---------DEMO QUIZ VERSION 2---------------
+-- UPDATE public.ref_topic
+-- SET
+--   topic_number = 3,
+--   topic_title = 'Speaking Up',
+--   topic_description = 'Saying No',
+--   topic_completion_heading = 'Well done!',
+--   topic_completion_text = 'You completed all the question types. You''re amazing!',
+--   topic_xp = 50,
+--   topic_star = 3,
+--   topic_activities = '[
+--     {
+--       "id": "q1",
+--       "quiz": {
+--         "image": "https://ogbfgllkkyehcurolhjf.supabase.co/storage/v1/object/public/quiz-images/module-one/hit.png",
+--         "correct": "Pushing someone on purpose",
+--         "options": [
+--           "Asking someone to play",
+--           "Pushing someone on purpose",
+--           "Sharing your toys"
+--         ],
+--         "question": "Which one is bullying?",
+--         "message_wrong": "Try again. Think about your safety.",
+--         "message_correct": "Exactly! Telling a trusted adult is the right move."
+--       },
+--       "text": "Multiple Choice",
+--       "type": "multiple_choice"
+--     },
+--     {
+--       "id": "q2",
+--       "quiz": {
+--         "image": "https://ogbfgllkkyehcurolhjf.supabase.co/storage/v1/object/public/quiz-images/module-one/kit-hit-true-false.png",
+--         "correct": "False",
+--         "options": [
+--           "True",
+--           "False"
+--         ],
+--         "question": "Bullying only happens when someone hits you.",
+--         "message_wrong": "Wrong! Bullying can also be words, mean jokes, or leaving someone out",
+--         "message_correct": "Correct! Bullying can also happen online, mean jokes or leaving someone out."
+--       },
+--       "text": "True or False",
+--       "type": "true_false"
+--     },
+--     {
+--       "id": "q3",
+--       "quiz": {
+--         "image": "https://ogbfgllkkyehcurolhjf.supabase.co/storage/v1/object/public/quiz-images/module-one/mom-kit-fill-the-blank.png",
+--         "correct": "safe",
+--         "options": [
+--           "left out",
+--           "safe",
+--           "scared"
+--         ],
+--         "question": "Everyone deserves to feel ______ at school.",
+--         "message_wrong": "Not quite. Think about staying safe first.",
+--         "message_correct": "Yes! Safe and happy. That''s how it should be."
+--       },
+--       "text": "Fill in the Blank",
+--       "type": "fill_blank"
+--     },
+--     {
+--       "id": "q4",
+--       "quiz": {
+--         "image": "https://ogbfgllkkyehcurolhjf.supabase.co/storage/v1/object/public/quiz-images/module-one/kid_sad.png",
+--         "correct": "Yes",
+--         "options": [
+--           "Yes",
+--           "No"
+--         ],
+--         "question": "Can someone be bullied by messages on a phone or computer?",
+--         "message_wrong": "Wrong! Bullying can also be online",
+--         "message_correct": "Yes! That''s called cyberbullying. It''s not okay either!"
+--       },
+--       "text": "Yes or No?",
+--       "type": "true_false"
+--     },
+--     {
+--       "id": "q5",
+--       "quiz": {
+--         "correct": [
+--           "Helping a friend",
+--           "Saying sorry",
+--           "Sharing a snack"
+--         ],
+--         "options": [
+--           {
+--             "label": "Helping a friend"
+--           },
+--           {
+--             "label": "Sharing a snack"
+--           },
+--           {
+--             "label": "Name-calling"
+--           },
+--           {
+--             "label": "Tripping someone"
+--           },
+--           {
+--             "label": "Saying sorry"
+--           },
+--           {
+--             "label": "Laugh at someone "
+--           }
+--         ],
+--         "question": "Choose the kind actions in the bubble (Select 3)",
+--         "message_wrong": "Not quite. Try again and think about kind actions.",
+--         "message_correct": "Awesome! You bubbled up kindness! You''re doing great."
+--       },
+--       "text": "Select the Correct Options",
+--       "type": "select_correct"
+--     }
+--   ]'::jsonb
+-- WHERE module_id = 'c6b8ae1b-fbed-484c-9a36-68464b42d012' AND topic_number = 3;
+
