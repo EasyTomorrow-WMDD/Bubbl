@@ -117,14 +117,14 @@ export default function QuizQuestion({ data, onAnswer, showTryAgain, onTryAgain 
           </TouchableOpacity>
         ));
 
-      case 'choose_image':
-        return (
-          <ChooseImageQuiz
-            data={data}
-            onSelect={(label, correct, message) => handleSelect(label, correct, message)}
-            disabled={hasChecked && !showTryAgain}
-          />
-        );
+      // case 'choose_image':
+      //   return (
+      //     <ChooseImageQuiz
+      //       data={data}
+      //       onSelect={(label, correct, message) => handleSelect(label, correct, message)}
+      //       disabled={hasChecked && !showTryAgain}
+      //     />
+      //   );
 
       case 'select_correct':
         return (
