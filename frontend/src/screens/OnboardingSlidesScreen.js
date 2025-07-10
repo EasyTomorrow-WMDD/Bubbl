@@ -9,6 +9,34 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width } = Dimensions.get('window');
 
+const styles = StyleSheet.create({
+  slide: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  title: {
+    color: 'white',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  text: {
+    color: 'white',
+    textAlign: 'center',
+    marginTop: 20,
+    fontSize: 22,
+  },
+  image: {
+    width: width * 0.6,
+    height: width * 0.6,
+  },
+  image_1: {
+    width: width * 0.8,
+    height: width * 0.8,
+  },
+});
+
 const slides = [
   {
     key: '1',
@@ -40,9 +68,10 @@ const slides = [
   },
   {
     key: '5',
-    title: 'Activities',
-    text: 'Play quizzes and explore topics in the Activities section!',
+    title: 'Activities, Draw Mood and Shop',
+    text: 'Play fun quizzes, get creative in Draw Mood, and customize your mascot!',
     image: require('../assets/images/Child_Bottom_Navigation.png'),
+    imageStyle: styles.image_1,
     backgroundColor: '#6B46C1',
   },
 ];
@@ -51,7 +80,11 @@ export default function OnboardingSlidesScreen({ navigation }) {
   const renderItem = ({ item }) => (
     <View style={[styles.slide, { backgroundColor: item.backgroundColor }]}>
       <Text style={[fontStyles.display1, styles.title]}>{item.title}</Text>
-      <Image source={item.image} style={styles.image} resizeMode="contain" />
+      <Image
+        source={item.image}
+        style={item.imageStyle || styles.image}
+        resizeMode="contain"
+      />
       <Text style={[fontStyles.bodyDefault, styles.text]}>{item.text}</Text>
     </View>
   );
@@ -62,7 +95,7 @@ export default function OnboardingSlidesScreen({ navigation }) {
       if (userId) {
         await axios.post(`${BASE_URL}/api/onboarding/complete`, {
           user_id: userId,
-          completed: true
+          completed: true,
         });
       }
     } catch (error) {
@@ -83,26 +116,3 @@ export default function OnboardingSlidesScreen({ navigation }) {
     />
   );
 }
-
-const styles = StyleSheet.create({
-  slide: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  title: {
-    color: 'white',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  text: {
-    color: 'white',
-    textAlign: 'center',
-    marginTop: 20,
-  },
-  image: {
-    width: width * 0.6,
-    height: width * 0.6,
-  },
-});
