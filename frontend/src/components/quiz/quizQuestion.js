@@ -6,11 +6,7 @@ import BubblColors from '../../styles/BubblColors';
 
 export default function QuizQuestion({ data, onAnswer, showTryAgain, onTryAgain }) {
   if (!data || !data.quiz) {
-    return (
-      <View style={styles.loaderContainer}>
-        <Text style={styles.emptyText}>Loading question...</Text>
-      </View>
-    );
+    return null;
   }
 
   const { type, text, quiz } = data;
