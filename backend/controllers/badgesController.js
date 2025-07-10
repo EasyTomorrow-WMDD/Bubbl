@@ -10,7 +10,6 @@ exports.getAllBadgesWithUserStatus = async (req, res) => {
 
     if (badgeError) throw badgeError;
 
-    // 🔥 CAMBIO: Agregar selection_order a la consulta
     const { data: userBadges = [], error: userBadgeError } = await supabase
       .from('user_badge')
       .select('badge_id, user_badge_active, selection_order')
@@ -33,13 +32,13 @@ exports.getAllBadgesWithUserStatus = async (req, res) => {
       const selectionOrder = userBadgeInfo?.selection_order || null;
 
       return {
-        id: badge.badge_id, // 🔥 CAMBIO: Agregar 'id' para compatibilidad con frontend
+        id: badge.badge_id, 
         badge_id: badge.badge_id,
         badge_name: badge.badge_name,
         badge_image_url: badge.badge_image_url,
         has_earned: hasEarned,
         badge_active: isActive,
-        selection_order: selectionOrder // 🔥 CAMBIO: Usar snake_case para consistencia
+        selection_order: selectionOrder 
       };
     });
 
@@ -51,17 +50,15 @@ exports.getAllBadgesWithUserStatus = async (req, res) => {
   }
 };
 
-// 🔥 CAMBIO PRINCIPAL: Actualizar saveUserBadges para manejar selection_order
+
 exports.saveUserBadges = async (req, res) => {
   const { userId } = req.params;
   const favorites = req.body;
 
-  // Validar que sea un array con máximo 3 elementos
   if (!Array.isArray(favorites) || favorites.length > 3) {
     return res.status(400).json({ error: 'Favorites must be an array with max 3 items' });
   }
 
-  // Validar que cada elemento tenga badge_id y selection_order
   for (const fav of favorites) {
     if (!fav.badge_id || !fav.selection_order || fav.selection_order < 1 || fav.selection_order > 3) {
       return res.status(400).json({ 
@@ -71,7 +68,6 @@ exports.saveUserBadges = async (req, res) => {
   }
 
   try {
-    // Limpiar selection_order y desactivar todos los badges del usuario
     await supabase
       .from('user_badge')
       .update({ 
@@ -80,7 +76,6 @@ exports.saveUserBadges = async (req, res) => {
       })
       .eq('user_id', userId);
 
-    // Activar y asignar orden a los badges seleccionados
     for (const fav of favorites) {
       await supabase
         .from('user_badge')
