@@ -12,20 +12,17 @@ import Header from '../layout/Header';
 import ChildNavbar from '../layout/ChildNavbar';
 import supabase from '../../services/supabase';
 import BubblConfig from '../../config/BubblConfig';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const { height } = Dimensions.get('window');
 
 export default function ChildMoodDrawingConfirmationContainer({ navigation, route }) {
   const { childProfileId } = route.params || {};
-
-  console.log('[addStars] childProfileId:', childProfileId);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     const addStars = async () => {
-      if (!childProfileId) {
-        console.warn('[addStars] No childProfileId provided');
-        return;
-      }
+      if (!childProfileId) return;
 
       try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -38,16 +35,13 @@ export default function ChildMoodDrawingConfirmationContainer({ navigation, rout
           },
           body: JSON.stringify({
             user_id: childProfileId,
-            starsToAdd: 3, // pass 3 stars
+            starsToAdd: 3,
           }),
         });
 
         const text = await response.text();
-        console.log('[addStars] Raw Response:', text);
-
         try {
-          const result = JSON.parse(text);
-          console.log('[addStars] JSON:', result);
+          JSON.parse(text); // just log parsing for debug
         } catch (err) {
           console.error('[addStars] JSON Parse Error:', err.message);
         }
@@ -61,135 +55,112 @@ export default function ChildMoodDrawingConfirmationContainer({ navigation, rout
   }, [childProfileId]);
 
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <Header title="Mood" />
+    <>
+      {/* Safe area with Header */}
+      <SafeAreaView edges={['top']} style={{ backgroundColor: '#8361E4' }}>
+        <Header title="Mood" />
+      </SafeAreaView>
 
-      {/* Mood Canvas Title */}
-      <View style={styles.titleContainer}>
-        <Text style={styles.canvasTitle}>Mood Canvas</Text>
-      </View>
+      <View style={styles.container}>
+        <ImageBackground
+          source={require('../../assets/images/DrawingCanvas/Done_Background.png')}
+          style={styles.backgroundImage}
+          imageStyle={styles.imageBackground}
+        >
+          <View style={styles.card}>
+            <LottieView
+              source={require('../../assets/animations/DoneStars.json')}
+              autoPlay
+              loop={false}
+              style={styles.starsAnimation}
+            />
 
-      {/* Purple content box with background image */}
-      <ImageBackground
-        source={require('../../assets/images/DrawingCanvas/Done_Background.png')}
-        style={styles.contentBox}
-        imageStyle={styles.imageBackgroundImage}
-      >
-        <View style={styles.contentInner}>
-          {/* Stars animation */}
-          <LottieView
-            source={require('../../assets/animations/DoneStars.json')}
-            autoPlay
-            loop={false}
-            style={styles.starsAnimation}
-          />
+            <Text style={styles.title}>Awesome Drawing!</Text>
+            <Text style={styles.subtitle}>You got 3 stars today.</Text>
 
-          {/* Title */}
-          <Text style={styles.title}>Awesome Drawing!</Text>
-          <Text style={styles.subtitle}>You got 3 stars today.</Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate('ChildMain')}
+            >
+              <Text style={styles.buttonText}>Back to journey</Text>
+            </TouchableOpacity>
+          </View>
 
-          {/* Middle Lottie */}
+          {/* Happy animation below the card */}
           <LottieView
             source={require('../../assets/animations/Happy_Mood.json')}
             autoPlay
             loop
-            style={styles.animation}
+            style={styles.happyAnimation}
           />
+        </ImageBackground>
 
-          {/* Button */}
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('ChildMain')}
-          >
-            <Text style={styles.buttonText}>Back to journey</Text>
-          </TouchableOpacity>
-        </View>
-      </ImageBackground>
+        <ChildNavbar navigation={navigation} />
+      </View>
 
-      {/* Navbar */}
-      <ChildNavbar navigation={navigation} />
-    </View>
+      <SafeAreaView edges={['bottom']} style={{ backgroundColor: 'white' }} />
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-  },
-  titleContainer: {
-    backgroundColor: '#EDEBFC',
-    paddingVertical: 20,
-    alignItems: 'center',
-    paddingBottom: 15,
-  },
-  canvasTitle: {
-    fontSize: 34,
-    fontWeight: 'bold',
-    color: '#2E195C',
-  },
-  contentBox: {
-    flex: 1,
-    width: '100%',
-    height: height * 0.8,
     backgroundColor: '#8361E4',
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-    overflow: 'hidden',
+  },
+  backgroundImage: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingVertical: 20,
   },
-  imageBackgroundImage: {
-    resizeMode: 'contain',
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    top: 0,
-    left: 0,
+  imageBackground: {
+    resizeMode: 'cover',
   },
-  contentInner: {
-    flexGrow: 1,
-    justifyContent: 'flex-start',
+  card: {
+    backgroundColor: 'white',
+    borderWidth: 3,
+    borderColor: '#FFC670',
+    borderRadius: 20,
+    padding: 20,
+    marginTop: 30,
     alignItems: 'center',
-    paddingVertical: 10,
+    width: '85%',
+    zIndex: 2,
   },
   starsAnimation: {
-    width: 220 * 0.7,
-    height: 220 * 0.7,
+    width: 154,
+    height: 154,
     marginBottom: 10,
   },
   title: {
-    fontSize: 34,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 10,
-    color: 'white',
+    marginBottom: 6,
+    color: '#2E195C',
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: 18,
-    color: 'white',
-    marginBottom: 20,
+    fontSize: 16,
+    color: '#2E195C',
+    marginBottom: 18,
     textAlign: 'center',
   },
-  animation: {
-    width: 200,
-    height: 200,
-    marginBottom: 20,
-  },
   button: {
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: '#AAAAAA',
-    paddingVertical: 14,
+    backgroundColor: '#8361E4',
+    paddingVertical: 12,
     paddingHorizontal: 40,
     borderRadius: 10,
-    marginBottom: 10,
   },
   buttonText: {
-    color: 'black',
+    color: 'white',
     fontWeight: '600',
-    fontSize: 18,
+    fontSize: 16,
+  },
+  happyAnimation: {
+    width: 200,
+    height: 200,
+    marginTop: 20,
+    marginBottom: 40,
+    zIndex: 1,
   },
 });
