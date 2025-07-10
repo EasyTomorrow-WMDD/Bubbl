@@ -318,12 +318,14 @@ export default function TopicScreen({ route, navigation }) {
 
       <View style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
+        {currentQuestion && (
           <QuizQuestion
             data={currentQuestion}
             onAnswer={(isCorrect) => handleAnswer(isCorrect)}
             showTryAgain={showTryAgain}
             onTryAgain={() => setShowTryAgain(false)}
           />
+        )}
         </ScrollView>
       </View>
     </View>
