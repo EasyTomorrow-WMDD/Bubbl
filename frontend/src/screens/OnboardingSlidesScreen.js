@@ -40,8 +40,8 @@ const slides = [
   },
   {
     key: '5',
-    title: 'Activities, Mood Draw and Shop',
-    text: 'Play Quizzes, Draw in Mood Draw  and customize your mascot in Shop!',
+    title: 'Activities',
+    text: 'Play quizzes and explore topics in the Activities section!',
     image: require('../assets/images/Child_Bottom_Navigation.png'),
     backgroundColor: '#6B46C1',
   },
@@ -100,7 +100,6 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     marginTop: 20,
-    fontSize: 20
   },
   image: {
     width: width * 0.6,
