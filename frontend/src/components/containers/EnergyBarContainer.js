@@ -1,8 +1,10 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import BubblColors from '../../styles/BubblColors';
 
-const EnergyBarContainer = ({ energy, maxEnergy = 3, navigation }) => {
+const EnergyBarContainer = ({ energy, maxEnergy = 3 }) => {
+  const navigation = useNavigation();
   const fillPercentage = (energy / maxEnergy) * 100;
 
   return (

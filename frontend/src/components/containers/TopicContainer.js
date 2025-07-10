@@ -219,14 +219,40 @@ export default function TopicScreen({ route, navigation }) {
 
       if (updated.length === 0) {
         try {
-          await axios.post(`${BASE_URL}/api/childProgress/saveProgress`, {
+          // AQUÍ ES DONDE SE DEBE DETECTAR EL LEVEL UP
+          const response = await axios.post(`${BASE_URL}/api/childProgress/saveProgress`, {
             user_id: currentChild.user_id,
             topic_id: topic.topic_id
           });
+
+          const { levelChanged, newLevel } = response.data;
+
+          if (levelChanged) {
+            // Determinar tipo de animación basado en el nuevo nivel
+            let animationType;
+            switch (newLevel) {
+              case 2:
+                animationType = 'evolution1';
+                break;
+              case 3:
+                animationType = 'evolution2';
+                break;
+              case 4:
+                animationType = 'evolution3';
+                break;
+              default:
+                animationType = 'evolution1';
+            }
+
+            // Ir directamente a la pantalla de evolución
+            navigation.navigate('EvolutionScreen', { animationType });
+            return; // Importante: no navegar a TopicComplete
+          }
         } catch (error) {
           console.error('[TopicScreen] Error saving progress:', error);
         }
 
+        // Si no hay level up, ir a TopicComplete normalmente
         navigation.navigate('TopicComplete', {
           topicId: topic.topic_id,
           heading: topic.topic_completion_heading,
@@ -287,7 +313,7 @@ export default function TopicScreen({ route, navigation }) {
   return (
     <View style={{ flex: 1 }}>
       <View style={{ paddingTop: 40, paddingHorizontal: 20 }}>
-      <EnergyBarContainer energy={energy} maxEnergy={3} navigation={navigation} />
+        <EnergyBarContainer energy={energy} maxEnergy={3} />
       </View>
 
       <View style={{ flex: 1 }}>
