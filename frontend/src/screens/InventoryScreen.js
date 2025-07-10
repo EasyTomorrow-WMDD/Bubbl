@@ -1,6 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, ImageBackground, ScrollView, Pressable } from 'react-native';
-import { useState, useEffect } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ImageBackground,
+  ScrollView,
+  Pressable
+} from 'react-native';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Header from '../components/layout/Header';
 import { BASE_URL } from '../utils/config';
@@ -16,6 +24,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const InventoryScreen = ({ navigation, route }) => {
   const { childProfileId } = route.params || {};
+  const savedProfileId = useRef(childProfileId);
   const [user, setUser] = useState(null);
   const [badges, setBadges] = useState([]);
   const [section, setSection] = useState('assets');
@@ -24,16 +33,16 @@ const InventoryScreen = ({ navigation, route }) => {
   const insets = useSafeAreaInsets();
   const [avatarKey, setAvatarKey] = useState(0);
 
-  const fetchUserAndBadges = async () => {
+  const fetchUserAndBadges = async (id) => {
     try {
-      const userRes = await axios.get(`${BASE_URL}/api/childProgress/dashboard/${childProfileId}`);
+      const userRes = await axios.get(`${BASE_URL}/api/childProgress/dashboard/${id}`);
       setUser(userRes.data);
     } catch (error) {
       console.error('Error fetching user:', error.response?.status, error.response?.data);
     }
 
     try {
-      const badgeRes = await axios.get(`${BASE_URL}/api/users/${childProfileId}/badges`);
+      const badgeRes = await axios.get(`${BASE_URL}/api/users/${id}/badges`);
       setBadges(badgeRes.data);
     } catch (error) {
       console.error('Error fetching badges:', error.response?.status, error.response?.data);
@@ -41,8 +50,10 @@ const InventoryScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    if (!childProfileId) return;
-    fetchUserAndBadges();
+    const id = childProfileId || savedProfileId.current;
+    if (!id) return;
+    savedProfileId.current = id;
+    fetchUserAndBadges(id);
   }, [childProfileId]);
 
   useEffect(() => {
@@ -51,7 +62,7 @@ const InventoryScreen = ({ navigation, route }) => {
 
   const refreshBadges = () => {
     axios
-      .get(`${BASE_URL}/api/users/${childProfileId}/badges`)
+      .get(`${BASE_URL}/api/users/${savedProfileId.current}/badges`)
       .then(res => setBadges(res.data))
       .catch(err => console.error('Failed to refresh badges', err));
   };
@@ -60,15 +71,13 @@ const InventoryScreen = ({ navigation, route }) => {
 
   return (
     <>
-      {/* Top safe area */}
       <SafeAreaView edges={['top']} style={{ backgroundColor: BubblColors.BubblPurple500 }} />
-      
+
       <View style={{ flex: 1, backgroundColor: BubblColors.BubblPurple500 }}>
         <Header title={'Shop'} />
         <ScrollView
           contentContainerStyle={{
             paddingBottom: insets.bottom + 50,
-
           }}
         >
           <View style={{ backgroundColor: BubblColors.BubblPurple500 }}>
@@ -77,27 +86,21 @@ const InventoryScreen = ({ navigation, route }) => {
                 <StatsInventory user={user} badges={badges} section={section} />
               </View>
 
-              {/* Toggle */}
               <View style={styles.container}>
                 <Pressable
                   style={[styles.toggle, section === 'assets' && styles.activeToggle]}
                   onPress={() => setSection('assets')}
                 >
-                  <Text style={[styles.text, section === 'assets' && styles.activeText]}>
-                    Assets
-                  </Text>
+                  <Text style={[styles.text, section === 'assets' && styles.activeText]}>Assets</Text>
                 </Pressable>
                 <Pressable
                   style={[styles.toggle, section === 'badges' && styles.activeToggle]}
                   onPress={() => setSection('badges')}
                 >
-                  <Text style={[styles.text, section === 'badges' && styles.activeText]}>
-                    Badges
-                  </Text>
+                  <Text style={[styles.text, section === 'badges' && styles.activeText]}>Badges</Text>
                 </Pressable>
               </View>
 
-              {/* Content */}
               {section === 'assets' ? (
                 <View>
                   <View style={{ alignItems: 'center', marginTop: 55 }}>
@@ -113,7 +116,7 @@ const InventoryScreen = ({ navigation, route }) => {
                       top={-80}
                       positionOverrides={{
                         "Beannie": { top: -40, left: 190, width: 120, height: 120, transform: [{ rotate: "25deg" }] },
-                        "Bow": { top: -45, left: 205, width: 120, height: 120, transform: [{ rotate: "25deg" }]  },
+                        "Bow": { top: -45, left: 205, width: 120, height: 120, transform: [{ rotate: "25deg" }] },
                         "Confetti": { left: 200, top: -60, width: 120, height: 120, transform: [{ rotate: "25deg" }] },
                         "Santa Hat": { left: 200, top: -50, width: 120, height: 120, transform: [{ rotate: "25deg" }] }
                       }}
@@ -128,13 +131,14 @@ const InventoryScreen = ({ navigation, route }) => {
                   />
                 </View>
               ) : (
-                <BadgesScreen userId={childProfileId} refreshBadges={refreshBadges} />
+                <BadgesScreen userId={savedProfileId.current} refreshBadges={refreshBadges} />
               )}
             </View>
           </View>
         </ScrollView>
-        <ChildNavbar navigation={navigation} />
+        <ChildNavbar navigation={navigation} childProfileId={savedProfileId.current} />
       </View>
+
       <SafeAreaView edges={['bottom']} style={{ backgroundColor: 'white' }} />
     </>
   );
