@@ -16,7 +16,7 @@ const FavoriteBadgesDisplay = ({ badges }) => {
       {selected.map((badge, idx) => (
         <View key={idx} style={styles.badgeContainer}>
           <Image
-            source={{ uri: `${URI_URL}/${badge.badge_image_url}` }}
+          source={{ uri: `${URI_URL}/${badge.badge_image_url}?v=${Date.now()}` }}
             style={styles.image}
           />
           <Text style={styles.label}>{badge.badge_name}</Text>
