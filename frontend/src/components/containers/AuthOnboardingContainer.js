@@ -24,7 +24,8 @@ const AuthOnboardingContainer = ({ navigation }) => {
   const [avatar_id, setAvatarId] = useState('avatar01'); // Placeholder for avatar selection
   const [userType, setUserType] = useState('parent');
   const [isCreatingAccount, setIsCreatingAccount] = useState(true);
-  const [accountName, setAccountName] = useState('');
+  // const [accountName, setAccountName] = useState('');
+  const [accountName, setAccountName] = useState('dummy');  // temporary: set account name to dummy as we are not using it yet.
   const [invitationCode, setInvitationCode] = useState('');
   const [errors, setErrors] = useState({});
 
@@ -33,11 +34,16 @@ const AuthOnboardingContainer = ({ navigation }) => {
   // Method to validate inputs and submit the form
   const validateAndSubmit = async () => {
 
+    // temporary: set account name to user nickname
+    if (isCreatingAccount) {
+      setAccountName(nickname);
+    }
     // Validate inputs, set errors if any. 
     const errors = {};
     if (!nickname.trim()) errors.nickname = 'Please enter a nickname';
     if (isCreatingAccount && !accountName.trim()) errors.accountName = 'Please enter account name';
     if (!isCreatingAccount && !invitationCode.trim()) errors.invitationCode = 'Please enter invitation code';
+    console.log('[DEBUG][Onboarding] Validation errors:', errors);
 
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
