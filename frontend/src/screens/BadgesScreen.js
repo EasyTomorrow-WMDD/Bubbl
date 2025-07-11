@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
   },
   badgeItem: {
     alignItems: 'center',
-    margin: 10,
+    margin: 15,
     width: 90,
     position: 'relative',
   },
@@ -237,6 +237,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: BubblColors.BubblPurple500,
     borderRadius: 8,
+    width: 50,
+    height: 60
   },
   selectionCircle: {
     position: 'absolute',
