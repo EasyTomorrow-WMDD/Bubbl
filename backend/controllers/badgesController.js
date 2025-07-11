@@ -96,13 +96,25 @@ exports.saveUserBadges = async (req, res) => {
 
 exports.awardBadgeToUser = async (req, res) => {
   const { userId } = req.params;
-  const { badge_id, user_badge_active } = req.body;
+  const { badge_name } = req.body;
 
-  if (!badge_id) {
-    return res.status(400).json({ error: 'badge_id is required' });
+  if (!badge_name) {
+    return res.status(400).json({ error: 'badge_name is required' });
   }
 
   try {
+    const { data: badgeData, error: badgeError } = await supabase
+      .from('ref_badge')
+      .select('badge_id')
+      .eq('badge_name', badge_name)
+      .single();
+
+    if (badgeError || !badgeData) {
+      return res.status(404).json({ error: 'Badge not found' });
+    }
+
+    const badge_id = badgeData.badge_id;
+
     const { data: existing, error: selectError } = await supabase
       .from('user_badge')
       .select('*')
@@ -115,22 +127,17 @@ exports.awardBadgeToUser = async (req, res) => {
     }
 
     if (existing) {
-      const { error: updateError } = await supabase
+      await supabase
         .from('user_badge')
-        .update({ user_badge_active })
+        .update({ user_badge_active: false })
         .eq('user_id', userId)
         .eq('badge_id', badge_id);
-
-      if (updateError) throw updateError;
-
     } else {
-      const { error: insertError } = await supabase
+      await supabase
         .from('user_badge')
         .insert([
-          { user_id: userId, badge_id, user_badge_active }
+          { user_id: userId, badge_id, user_badge_active: false }
         ]);
-
-      if (insertError) throw insertError;
     }
 
     return res.json({ message: 'Badge awarded successfully.' });
