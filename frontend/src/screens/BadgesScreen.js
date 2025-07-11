@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     height: 48,
   },
   locked: {
-    opacity: 0.2,
+    opacity: 1,
   },
   inactive: {
     opacity: 0.9,
@@ -237,8 +237,9 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: BubblColors.BubblPurple500,
     borderRadius: 8,
-    width: 50,
-    height: 60
+    width: 60,
+    height: 67,
+    padding: 8
   },
   selectionCircle: {
     position: 'absolute',
