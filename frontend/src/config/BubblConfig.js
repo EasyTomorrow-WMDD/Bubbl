@@ -28,11 +28,13 @@ const BubblConfig = {
 
   // Dummy user credentials for development
   DUMMY_USER_EMAIL: isDev 
-    ? 'test6@bubbl.com' 
+    ? ''
+    // ? 'test6@bubbl.com' 
     // ? 'test5@bubbl.com' 
     : '',
   DUMMY_USER_PASSWORD: isDev 
-    ? '123456' 
+    ? '' 
+    // ? '123456' 
     : '',
 
 };

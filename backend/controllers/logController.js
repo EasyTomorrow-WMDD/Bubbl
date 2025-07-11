@@ -7,11 +7,14 @@ const supabase = require('../utils/supabaseClient');
 // Returns: { success: true } or error message
 exports.postChildActivityLog = async (req, res) => {
   try {
-    const { user_id, summary, details } = req.body;
+    const { user_id, summary, details, clan_key } = req.body;
     
     // Basic validation
     if (!user_id || !summary || !details) {
       return res.status(400).json({ error: 'Missing required fields: user_id, summary, or details' });
+    }
+    if (!clan_key) {
+      clan_key = 'clan06'; // Default clan key (Bubbl purple) if not provided
     }
 
     // Insert into user_child_activity_log
@@ -21,6 +24,7 @@ exports.postChildActivityLog = async (req, res) => {
         user_id,
         log_event_summary: summary,
         log_event: details,
+        log_clan: clan_key,
       });
 
     if (error) {

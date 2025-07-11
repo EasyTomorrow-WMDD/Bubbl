@@ -5,10 +5,16 @@ import { PARENT_STORY_TYPE_LABELS } from '../../constants/BubblConstants';
 import BubblColors from '../../styles/BubblColors';
 import { fontStyles } from '../../styles/BubblFontStyles';
 import { parentStyles } from '../../styles/BubblParentMainStyles';
+import { ARTICLE_IMAGE_URL } from '../../config/BubblImageConfig';
 
 // ============================================================================
 // ParentStoryCard Component
 const ParentStoryCard = ({ story, onPress, showTypeTag = false }) => {
+
+  // console.log(`Feature image!: ${ARTICLE_IMAGE_URL}${story.parent_story_featured_image_url}`)
+
+  // ----------------------------------------------------------------
+  // Render the ParentStoryCard component
   return (
     <TouchableOpacity style={parentStyles.parentStoryOtherCardContainer} onPress={onPress}>
 
@@ -16,7 +22,7 @@ const ParentStoryCard = ({ story, onPress, showTypeTag = false }) => {
       <View style={parentStyles.parentStoryOtherCardImageContainer}>
         {/* Image */}
         <Image
-          source={story.parent_story_featured_image_url ? { uri: story.parent_story_featured_image_url } : placeholderImage}
+          source={story.parent_story_featured_image_url ? { uri: `${ARTICLE_IMAGE_URL}${story.parent_story_featured_image_url}` } : placeholderImage}
           style={parentStyles.parentStoryOtherCardImage}
           resizeMode="cover"
         />
