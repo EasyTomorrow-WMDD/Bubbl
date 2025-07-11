@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, ActivityIndicator, StyleSheet, Pressable, Image } from 'react-native';
 import supabase from '../../services/supabase';
 import axios from 'axios';
 import BubblConfig from '../../config/BubblConfig';
@@ -7,6 +7,10 @@ import { globalStyles } from '../../styles/BubblStyles';
 import { profileStyles } from '../../styles/ProfileStyles';
 import PageHeading from '../layout/PageHeading';
 import ProfileList from '../lists/ProfileList';
+import BubblColors from '../../styles/BubblColors';
+import { fontStyles } from '../../styles/BubblFontStyles';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import SignOutModal from '../layout/ModalSignOut';
 
 // ============================================================================
 // ProfileContainer Component
@@ -19,6 +23,8 @@ const ProfileContainer = ({ navigation }) => {
   const [currentUserId, setCurrentUserId] = useState(null);
   const [currentUserType, setCurrentUserType] = useState(null);
   const [accountOwnerId, setAccountOwnerId] = useState(null);
+  const [showSignOutModal, setShowSignOutModal] = useState(false);
+
 
   // ----------------------------------------------------------------
   // Fetch profiles from the backend API on load
@@ -57,41 +63,93 @@ const ProfileContainer = ({ navigation }) => {
   }, []);
 
   if (loading) return <ActivityIndicator size="large" />;
-  
+
 
   // ----------------------------------------------------------------
   // Render the profile screen  
   return (
-    <ScrollView 
-      contentContainerStyle={profileStyles.scrollContent}
-      style={profileStyles.scrollContainer}
-    >
+<View style={{ flex: 1, backgroundColor: BubblColors.BubblPurple500 }}>
+  {/* Header */}
+<SafeAreaView edges={['top']} style={{ backgroundColor: BubblColors.BubblPurple500 }}>
+  
+  <View style={[styles.header]}>
+    {/* CTA */}
+    <Pressable onPress={() => setShowSignOutModal(true)} style={{ margin: 0, flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+      <Image source={require('../../assets/icons/log-out.png')} style={styles.icon} />
+      <Text style={[fontStyles.bodyMedium, { color: 'white' }]}>Sign out</Text>
+    </Pressable>
+    {/* TITLE */}
+    <View style={styles.titleWrapper}>
+      <Text style={[fontStyles.heading1, { color: 'white' }]}>Profiles</Text>
+    </View>
+    <Pressable onPress={() => navigation.navigate('Welcome')} style={{ margin: 0, flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+      <Image source={require('../../assets/icons/close.png')} style={[styles.icon, {marginLeft:70, tintColor: BubblColors.BubblPurple500,}]} />
+    </Pressable>
+  </View>
+</SafeAreaView>
 
-      {/* Heading Row */}
-      <PageHeading title="Who is using Bubbl?" onBackPress={null} />
+  {/* Scrollable Content */}
+  <ScrollView
+    style={{ flex: 1 }}
+    contentContainerStyle={{
+      flexGrow: 1,
+      backgroundColor: 'white',
+      borderTopLeftRadius: 40,
+      borderTopRightRadius: 40,
+      padding: 20,
+    }}
+  >
+    <Text style={profileStyles.subheading}>Parents (Guardians)</Text>
+    <ProfileList
+      profiles={parentProfiles}
+      type="parent"
+      navigation={navigation}
+      showAddCard={false}
+    />
+    <Text style={profileStyles.subheading}>Child(ren)</Text>
+    <ProfileList
+      profiles={childProfiles}
+      type="kid"
+      navigation={navigation}
+      showAddCard={false}
+    />
+  </ScrollView>
+  <SignOutModal
+  visible={showSignOutModal}
+  onCancel={() => setShowSignOutModal(false)}
+  onConfirm={async () => {
+    setShowSignOutModal(false);
+    await supabase.auth.signOut();
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Login' }],
+    });
+  }}
+/>
+</View>
 
-      {/* Profile Lists (Parents) */}
-      <Text style={profileStyles.subheading}>Parents (Guardians)</Text>
-      <ProfileList 
-        profiles={parentProfiles} 
-        type="parent" 
-        navigation={navigation} 
-        // showAddCard={currentUserId === accountOwnerId}
-        showAddCard={false} 
-      />
-
-      {/* Profile Lists (Children) */}
-      <Text style={profileStyles.subheading}>Child(ren)</Text>
-      <ProfileList 
-        profiles={childProfiles} 
-        type="kid" 
-        navigation={navigation} 
-        // showAddCard={currentUserType === 'parent'}
-        showAddCard={false} 
-      />
-
-    </ScrollView>
   );
 };
 
 export default ProfileContainer;
+
+const styles = StyleSheet.create({
+  safeArea: {
+
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingVertical: 24,
+    backgroundColor: BubblColors.BubblPurple500
+  },
+
+  icon: {
+    width: 24,
+    height: 24,
+    // marginLeft: 16,
+    tintColor: 'white',
+  },
+});
