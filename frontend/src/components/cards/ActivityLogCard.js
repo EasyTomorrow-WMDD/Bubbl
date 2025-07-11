@@ -26,7 +26,7 @@ const ActivityLogCard = ({ item, index, previousItem }) => {
       <View style={childProgressStyles.activityLogCard}>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
           <Image source={clanImage} style={childProgressStyles.activityLogCardImage} />
-          <View>
+          <View style={childProgressStyles.activityLogCardTextContainer}>
             <Text style={[fontStyles.heading3, childProgressStyles.activityLogCardSummary]}>{item.log_event_summary}</Text>
             <Text style={[fontStyles.bodySmall, childProgressStyles.activityLogCardDetail]}>{item.log_event}</Text>
           </View>

@@ -28,6 +28,8 @@ const ParentChildProgressStatsContainer = ({ userId }) => {
         // Step 1: Get the current user's session to retrieve access token
         const { data: { session } } = await supabase.auth.getSession();
 
+        console.log('[INFO][ChildStats] Fetching stats for userId:', userId);
+
         // Step 2: Call the backend API to get stats for the specified user
         const response = await axios.get(`${BubblConfig.BACKEND_URL}/api/users/${userId}/stats`, {
           headers: {
