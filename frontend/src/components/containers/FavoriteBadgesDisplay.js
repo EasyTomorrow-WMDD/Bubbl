@@ -31,15 +31,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 20,
-    marginTop: 10,
+    marginTop: 25,
   },
   badgeContainer: {
     alignItems: 'center',
     width: 70,
   },
   image: {
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 45,
   },
   label: {
     fontSize: 10,
