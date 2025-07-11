@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, Button, ScrollView } from 'react-native';
 import QuizQuestion from '../quiz/quizQuestion';
 import axios from 'axios';
-import { useCurrentChild } from '../../context/ChildContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_URL } from '../../utils/config';
 import EnergyBarContainer from './EnergyBarContainer';
@@ -10,9 +9,8 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const FOUR_IN_A_ROW_BADGE_ID = 'e80e94c4-9fb1-4984-b401-783a5bcca719';
 
-export default function TopicScreen({ route, navigation }) {
-  const { topicId } = route.params;
-  const { currentChild, isLoadingChild } = useCurrentChild();
+export default function TopicContainer({ route, navigation }) {
+  const { topicId, childProfileId } = route.params;
 
   const [topic, setTopic] = useState(null);
   const [questions, setQuestions] = useState([]);
@@ -22,27 +20,9 @@ export default function TopicScreen({ route, navigation }) {
   const [countdown, setCountdown] = useState(null);
   const [correctStreak, setCorrectStreak] = useState(0);
   const [showRestart, setShowRestart] = useState(false);
-
   const [isLoadingTopic, setIsLoadingTopic] = useState(true);
   const [isLoadingEnergy, setIsLoadingEnergy] = useState(true);
   const [showTryAgain, setShowTryAgain] = useState(false);
-
-  if (isLoadingChild) {
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" />
-        <Text>Loading child profile...</Text>
-      </View>
-    );
-  }
-
-  if (!currentChild?.user_id) {
-    return (
-      <View style={styles.loaderContainer}>
-        <Text>No child profile available.</Text>
-      </View>
-    );
-  }
 
   useEffect(() => {
     if (topicId) {
@@ -70,15 +50,15 @@ export default function TopicScreen({ route, navigation }) {
   };
 
   useEffect(() => {
-    if (currentChild?.user_id && topic) {
+    if (childProfileId && topic) {
       fetchEnergy();
     }
-  }, [topic, currentChild]);
+  }, [topic, childProfileId]);
 
   const fetchEnergy = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/api/energy/status`, {
-        params: { user_id: currentChild.user_id }
+        params: { user_id: childProfileId }
       });
 
       const userEnergy = res.data.user_energy;
@@ -118,7 +98,7 @@ export default function TopicScreen({ route, navigation }) {
 
   const loadQuestions = async () => {
     const allQuestions = topic?.topic_activities || [];
-    const savedKey = `correctAnswers_${currentChild.user_id}_${topic.topic_id}`;
+    const savedKey = `correctAnswers_${childProfileId}_${topic.topic_id}`;
 
     try {
       const saved = await AsyncStorage.getItem(savedKey);
@@ -136,25 +116,25 @@ export default function TopicScreen({ route, navigation }) {
 
   const awardBadge = async () => {
     try {
-      await axios.post(`${BASE_URL}/api/users/${currentChild.user_id}/badges`, {
+      await axios.post(`${BASE_URL}/api/users/${childProfileId}/badges`, {
         badge_id: FOUR_IN_A_ROW_BADGE_ID,
         user_badge_active: true
       });
     } catch (error) {
-      console.error('[TopicScreen] Error awarding badge:', error);
+      console.error('[TopicContainer] Error awarding badge:', error);
     }
   };
 
   const checkIfBadgeAlreadyEarned = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/api/users/${currentChild.user_id}/badges`);
+      const res = await axios.get(`${BASE_URL}/api/users/${childProfileId}/badges`);
       const badges = res.data;
       const alreadyEarned = badges.find(
         (b) => b.badge_id === FOUR_IN_A_ROW_BADGE_ID && b.badge_active === true
       );
       return !!alreadyEarned;
     } catch (error) {
-      console.error('[TopicScreen] Error checking badge:', error);
+      console.error('[TopicContainer] Error checking badge:', error);
       return false;
     }
   };
@@ -162,7 +142,7 @@ export default function TopicScreen({ route, navigation }) {
   const handleWrongAnswer = async () => {
     try {
       const res = await axios.post(`${BASE_URL}/api/energy/reduce`, {
-        user_id: currentChild.user_id,
+        user_id: childProfileId,
       });
 
       const newEnergy = res.data.user_energy;
@@ -207,28 +187,26 @@ export default function TopicScreen({ route, navigation }) {
       const updated = [...questions];
       updated.splice(currentIndex, 1);
 
-      const key = `correctAnswers_${currentChild.user_id}_${topic.topic_id}`;
+      const key = `correctAnswers_${childProfileId}_${topic.topic_id}`;
       try {
         const saved = await AsyncStorage.getItem(key);
         const savedIds = saved ? JSON.parse(saved) : [];
         const updatedIds = [...savedIds, questions[currentIndex].id];
         await AsyncStorage.setItem(key, JSON.stringify(updatedIds));
       } catch (err) {
-        console.error('[TopicScreen] Error saving correct answer:', err);
+        console.error('[TopicContainer] Error saving correct answer:', err);
       }
 
       if (updated.length === 0) {
         try {
-          // AQUÍ ES DONDE SE DEBE DETECTAR EL LEVEL UP
           const response = await axios.post(`${BASE_URL}/api/childProgress/saveProgress`, {
-            user_id: currentChild.user_id,
+            user_id: childProfileId,
             topic_id: topic.topic_id
           });
 
           const { levelChanged, newLevel } = response.data;
 
           if (levelChanged) {
-            // Determinar tipo de animación basado en el nuevo nivel
             let animationType;
             switch (newLevel) {
               case 2:
@@ -244,15 +222,13 @@ export default function TopicScreen({ route, navigation }) {
                 animationType = 'evolution1';
             }
 
-            // Ir directamente a la pantalla de evolución
             navigation.navigate('EvolutionScreen', { animationType });
-            return; // Importante: no navegar a TopicComplete
+            return;
           }
         } catch (error) {
-          console.error('[TopicScreen] Error saving progress:', error);
+          console.error('[TopicContainer] Error saving progress:', error);
         }
 
-        // Si no hay level up, ir a TopicComplete normalmente
         navigation.navigate('TopicComplete', {
           topicId: topic.topic_id,
           heading: topic.topic_completion_heading,
@@ -272,7 +248,7 @@ export default function TopicScreen({ route, navigation }) {
   };
 
   const resetTopicForTest = async () => {
-    const key = `correctAnswers_${currentChild.user_id}_${topic.topic_id}`;
+    const key = `correctAnswers_${childProfileId}_${topic.topic_id}`;
     await AsyncStorage.removeItem(key);
     setShowRestart(false);
     setShowTryAgain(false);
@@ -318,14 +294,14 @@ export default function TopicScreen({ route, navigation }) {
 
       <View style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
-        {currentQuestion && (
-          <QuizQuestion
-            data={currentQuestion}
-            onAnswer={(isCorrect) => handleAnswer(isCorrect)}
-            showTryAgain={showTryAgain}
-            onTryAgain={() => setShowTryAgain(false)}
-          />
-        )}
+          {currentQuestion && (
+            <QuizQuestion
+              data={currentQuestion}
+              onAnswer={(isCorrect) => handleAnswer(isCorrect)}
+              showTryAgain={showTryAgain}
+              onTryAgain={() => setShowTryAgain(false)}
+            />
+          )}
         </ScrollView>
       </View>
     </View>
