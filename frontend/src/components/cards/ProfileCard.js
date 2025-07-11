@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { globalStyles } from '../../styles/BubblStyles';
 import { profileStyles } from '../../styles/ProfileStyles';
 import { avatarImages } from '../../utils/AvatarMappings';
+import LogChildMilestone from '../../utils/LogChildMilestone';
 
 const ProfileCard = ({ profile, type, onPress, navigation }) => {
 
@@ -48,6 +49,7 @@ const ProfileCard = ({ profile, type, onPress, navigation }) => {
 
     await storeProfile(); // Store the selected profile in AsyncStorage
     // console.log('[INFO][ProfileCard] Profile selected:', profile.user_nickname);
+    
     navigation.replace(type === 'parent' ? 'ParentMain' : 'ChildMain');
   };
 
