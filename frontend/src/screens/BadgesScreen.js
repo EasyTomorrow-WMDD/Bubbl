@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     opacity: 0.2,
   },
   inactive: {
-    opacity: 0.5,
+    opacity: 0.9,
   },
   selectedBadge: {
     borderWidth: 2,
