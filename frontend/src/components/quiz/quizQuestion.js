@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
 import MultiCorrectQuiz from './MultiCorrectQuiz';
-import ChooseImageQuiz from './ChooseImageQuiz';
+//import ChooseImageQuiz from './ChooseImageQuiz';
 import BubblColors from '../../styles/BubblColors';
+import { Audio } from 'expo-av';
 
 export default function QuizQuestion({ data, onAnswer, showTryAgain, onTryAgain }) {
   if (!data || !data.quiz) {
@@ -16,6 +17,39 @@ export default function QuizQuestion({ data, onAnswer, showTryAgain, onTryAgain 
   const [isCorrect, setIsCorrect] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState('');
   const [selectionReady, setSelectionReady] = useState(false);
+
+  const [correctSound, setCorrectSound] = useState();
+  const [wrongSound, setWrongSound] = useState();
+
+  useEffect(() => {
+    let correct, wrong;
+
+    const loadSounds = async () => {
+      try {
+        const { sound: correctLoaded } = await Audio.Sound.createAsync(
+          require('../../assets/sounds/correct.mp3')
+        );
+        correct = correctLoaded;
+
+        const { sound: wrongLoaded } = await Audio.Sound.createAsync(
+          require('../../assets/sounds/wrong.mp3')
+        );
+        wrong = wrongLoaded;
+
+        setCorrectSound(correct);
+        setWrongSound(wrong);
+      } catch (error) {
+        console.error('Error loading sounds:', error);
+      }
+    };
+
+    loadSounds();
+
+    return () => {
+      correct?.unloadAsync();
+      wrong?.unloadAsync();
+    };
+  }, []);
 
   useEffect(() => {
     setHasChecked(false);
@@ -35,7 +69,7 @@ export default function QuizQuestion({ data, onAnswer, showTryAgain, onTryAgain 
     }
   }, [showTryAgain]);
 
-  const handleButtonPress = () => {
+  const handleButtonPress = async () => {
     if (showTryAgain) {
       onTryAgain();
       return;
@@ -44,6 +78,17 @@ export default function QuizQuestion({ data, onAnswer, showTryAgain, onTryAgain 
     if (!hasChecked) {
       if (!selectionReady) return;
       setHasChecked(true);
+
+      try {
+        if (isCorrect) {
+          await correctSound?.replayAsync();
+        } else {
+          await wrongSound?.replayAsync();
+        }
+      } catch (error) {
+        console.error('Error playing sound:', error);
+      }
+
     } else {
       onAnswer(isCorrect);
     }
