@@ -95,7 +95,7 @@ const BadgesScreen = ({ userId, refreshBadges }) => {
 
   const renderItem = useCallback(({ item }) => {
     const imageUrl = item.badge_image_url
-      ? `${URI_URL}/${item.badge_image_url}`
+      ? `${URI_URL}/${item.badge_image_url}?v=${Date.now()}`
       : 'https://via.placeholder.com/60x60.png?text=Badge';
 
     return (
@@ -144,7 +144,7 @@ const BadgesScreen = ({ userId, refreshBadges }) => {
       showsVerticalScrollIndicator={true}
       vertical={true}
       showsHorizontalScrollIndicator={false}
-      style={{ height: 400 }}
+      style={{ height: 390 }}
     >
       <View style={styles.infoBox}>
         <Text style={styles.infoBoxText}>
