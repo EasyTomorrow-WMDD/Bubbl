@@ -32,7 +32,7 @@ export default function QuizQuestion({ data, onAnswer, showTryAgain, onTryAgain 
         correct = correctLoaded;
 
         const { sound: wrongLoaded } = await Audio.Sound.createAsync(
-          require('../../assets/sounds/wrong.mp3')
+          require('../../assets/sounds/wrong.wav')
         );
         wrong = wrongLoaded;
 
