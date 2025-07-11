@@ -192,7 +192,11 @@ export default function TemporaryMainContainer() {
   }
 
   const handleTopicPress = (topic) => {
-    navigation.navigate('TopicScreen', { topicId: topic.topic_id });
+    navigation.navigate('TopicScreen', {
+      topicId: topic.topic_id,
+      childProfileId: userId
+    });
+    ;
   };
 
   return (
