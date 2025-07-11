@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import LottieView from 'lottie-react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Audio } from 'expo-av'; 
 
 const { width, height } = Dimensions.get('window');
 
@@ -10,6 +11,7 @@ const EvolutionScreen = ({ route }) => {
   const { animationType } = route.params;
   const animationRef = useRef(null);
   const [text, setText] = useState('');
+  const soundRef = useRef(null); 
 
   const animationMap = {
     evolution1: {
@@ -31,8 +33,23 @@ const EvolutionScreen = ({ route }) => {
 
   const { file, initial, final } = animationMap[animationType] || animationMap.evolution1;
 
+  
+  const playSound = async () => {
+    try {
+      const { sound } = await Audio.Sound.createAsync(
+        require('../assets/sounds/Evolution.mp3')
+      );
+      soundRef.current = sound;
+      await sound.playAsync();
+    } catch (error) {
+      console.error('Error playing sound:', error);
+    }
+  };
+
   useEffect(() => {
     setText(initial);
+    playSound(); 
+
     const duration = 3500;
     const timeout = setTimeout(() => {
       setText(final);
@@ -40,7 +57,13 @@ const EvolutionScreen = ({ route }) => {
         navigation.navigate('Modules');
       }, 2500);
     }, duration);
-    return () => clearTimeout(timeout);
+
+    return () => {
+      clearTimeout(timeout);
+      if (soundRef.current) {
+        soundRef.current.unloadAsync(); 
+      }
+    };
   }, [animationType]);
 
   return (
