@@ -224,8 +224,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 50,
-    height: 50,
+    width: 41,
+    height: 48,
   },
   locked: {
     opacity: 0.2,

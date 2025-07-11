@@ -7,8 +7,6 @@ import { BASE_URL } from '../../utils/config';
 import EnergyBarContainer from './EnergyBarContainer';
 import { useFocusEffect } from '@react-navigation/native';
 
-const FOUR_IN_A_ROW_BADGE_ID = 'e80e94c4-9fb1-4984-b401-783a5bcca719';
-
 export default function TopicContainer({ route, navigation }) {
   const { topicId, childProfileId } = route.params;
 
@@ -23,6 +21,17 @@ export default function TopicContainer({ route, navigation }) {
   const [isLoadingTopic, setIsLoadingTopic] = useState(true);
   const [isLoadingEnergy, setIsLoadingEnergy] = useState(true);
   const [showTryAgain, setShowTryAgain] = useState(false);
+
+  const BADGE_RULES = [
+    { 
+      name: 'Bright Hero', 
+      check: ({ streak }) => streak >= 4 
+    },
+    // { 
+    //   name: 'Quiz Finisher', 
+    //   check: ({ remainingQuestions }) => remainingQuestions === 0 
+    // }
+  ];
 
   useEffect(() => {
     if (topicId) {
@@ -114,25 +123,23 @@ export default function TopicContainer({ route, navigation }) {
     }
   };
 
-  const awardBadge = async () => {
+  const awardBadge = async (badgeName) => {
     try {
       await axios.post(`${BASE_URL}/api/users/${childProfileId}/badges`, {
-        badge_id: FOUR_IN_A_ROW_BADGE_ID,
-        user_badge_active: true
+        badge_name: badgeName
       });
     } catch (error) {
-      console.error('[TopicContainer] Error awarding badge:', error);
+      console.error(`[TopicContainer] Error awarding badge (${badgeName}):`, error);
     }
   };
 
-  const checkIfBadgeAlreadyEarned = async () => {
+  const checkIfBadgeAlreadyEarned = async (badgeName) => {
     try {
       const res = await axios.get(`${BASE_URL}/api/users/${childProfileId}/badges`);
       const badges = res.data;
-      const alreadyEarned = badges.find(
-        (b) => b.badge_id === FOUR_IN_A_ROW_BADGE_ID && b.badge_active === true
+      return badges.some(
+        (b) => b.badge_name === badgeName && b.badge_active === true
       );
-      return !!alreadyEarned;
     } catch (error) {
       console.error('[TopicContainer] Error checking badge:', error);
       return false;
@@ -171,21 +178,24 @@ export default function TopicContainer({ route, navigation }) {
       const newStreak = correctStreak + 1;
       setCorrectStreak(newStreak);
 
-      if (newStreak >= 4) {
-        const alreadyHasBadge = await checkIfBadgeAlreadyEarned();
-        if (!alreadyHasBadge) {
-          await awardBadge();
-          setCorrectStreak(0);
-          navigation.navigate('Streak');
-          return;
-        } else {
-          console.log('Badge already earned. Not showing Streak screen again.');
-        }
-        setCorrectStreak(0);
-      }
-
       const updated = [...questions];
       updated.splice(currentIndex, 1);
+      const remainingQuestions = updated.length;
+
+      for (const badge of BADGE_RULES) {
+        let conditionMet = badge.check({ streak: newStreak, remainingQuestions });
+        if (conditionMet) {
+          const alreadyHasBadge = await checkIfBadgeAlreadyEarned(badge.name);
+          if (!alreadyHasBadge) {
+            await awardBadge(badge.name);
+            if (badge.name === '4 in a row') {
+              setCorrectStreak(0);
+              navigation.navigate('Streak');
+              return;
+            }
+          }
+        }
+      }
 
       const key = `correctAnswers_${childProfileId}_${topic.topic_id}`;
       try {
@@ -197,7 +207,7 @@ export default function TopicContainer({ route, navigation }) {
         console.error('[TopicContainer] Error saving correct answer:', err);
       }
 
-      if (updated.length === 0) {
+      if (remainingQuestions === 0) {
         try {
           const response = await axios.post(`${BASE_URL}/api/childProgress/saveProgress`, {
             user_id: childProfileId,
