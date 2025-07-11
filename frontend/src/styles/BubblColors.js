@@ -116,9 +116,9 @@ export const getTopicBg = (moduleNumber) => {
     case 2:
       return '#FFFAEB';
     case 3:
-      return '#FCD0FE';
+      return '#FFF4FF';
     default:
-      return '#97F8EE';
+      return '#F0FDFB';
   }
 }
 
