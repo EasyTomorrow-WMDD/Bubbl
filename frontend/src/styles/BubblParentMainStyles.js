@@ -6,6 +6,14 @@ import BubblColors from './BubblColors';
 
 export const parentStyles = StyleSheet.create({
   // --------------------------------------------
+  // Loading container:
+    loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  // --------------------------------------------
   // Parent Layout:
   // Safe area:
   parentLayoutTopSafeArea: { backgroundColor: BubblColors.BubblPurple500 },
@@ -205,6 +213,7 @@ export const parentStyles = StyleSheet.create({
   parentOtherStoriesSectionHeading: {
     marginTop: 30,
     marginBottom: 12,
+    letterSpacing: -0.5, // I need this to make the text fit in one line on iPhone 16.. 
     color: BubblColors.BubblOrange950,
   },
   bubblSearchBox: {
@@ -363,6 +372,216 @@ export const parentStyles = StyleSheet.create({
     marginBottom: 80, 
   },
 
-  // --------------------------------------------
 
+});
+
+
+
+// ============================================================================
+// Styles for Bubbl app parent other stories
+export const parentOtherStoryStyles = StyleSheet.create({
+  // --------------------------------------------
+  // Parent Story Other Articles 
+  parentOtherStoryLayoutContainer: {
+    padding: 0, 
+    flex: 1,  // Mandatory for the FlatList used in the sub-components. 
+    backgroundColor: BubblColors.BubblOrange50,
+  },
+  parentOtherStoryLayoutTopSafeArea: { 
+    backgroundColor: BubblColors.BubblOrange500,
+    margin: 0,
+    padding: 0,
+  },
+  parentOtherStoryLayoutBottomSafeArea: { 
+    backgroundColor: BubblColors.BubblOrange50,
+  },
+  parentOtherStoryLayoutMainContainer: {
+    padding: 0,
+  },
+  parentOtherStoryLayoutBackground: {
+    position: 'absolute',
+    width: '100%',
+    height: 500,
+    backgroundColor: BubblColors.BubblOrange500,
+  },
+  parentOtherStoryHeader: {
+    backgroundColor: BubblColors.BubblOrange500,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    paddingHorizontal: 16,
+  },
+  parentOtherStoryHeaderText: {
+    color: BubblColors.BubblWhite,
+  },
+  parentOtherStoryCloseButton: {
+    position: 'absolute',
+    right: 16,
+    top: 18,
+  },
+  scrollContent: {
+    paddingTop: 16,
+    paddingBottom: 40,
+  },
+  articleContent: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 20,
+    backgroundColor: BubblColors.BubblOrange50,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+  },
+  sectionDivider: {
+    height: 1,
+    backgroundColor: BubblColors.BubblOrange950,
+    marginTop: 24,
+  },
+  // Related articles section
+  relatedContainer: {
+    padding: 16,
+    backgroundColor: BubblColors.BubblOrange50,
+    alignItems: 'center',
+    paddingBottom: 200,
+  },
+  relatedHeading: {
+    marginBottom: 12,
+    color: BubblColors.BubblOrange950,
+  },
+  // Essentials navigation - not used for "other stories"
+  essentialsNavContainer: {
+    padding: 16,
+    backgroundColor: '#f8f8f8',
+  },
+  essentialsNavHeading: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  essentialsNavButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  navButton: {
+    flex: 1,
+    backgroundColor: '#1e90ff',
+    paddingVertical: 12,
+    marginHorizontal: 4,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  navButtonDisabled: {
+    backgroundColor: '#ccc',
+  },
+  navButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+});
+
+// ============================================================================
+// Styles for Bubbl app parent other stories
+export const parentEssentialStoryStyles = StyleSheet.create({
+  // --------------------------------------------
+  // Parent Story Other Articles 
+  parentOtherStoryLayoutContainer: {
+    padding: 0, 
+    flex: 1,  // Mandatory for the FlatList used in the sub-components. 
+    backgroundColor: BubblColors.BubblPurple50,
+  },
+  parentOtherStoryLayoutTopSafeArea: { 
+    backgroundColor: BubblColors.BubblPurple500,
+    margin: 0,
+    padding: 0,
+  },
+  parentOtherStoryLayoutBottomSafeArea: { 
+    backgroundColor: BubblColors.BubblPurple50,
+  },
+  parentOtherStoryLayoutMainContainer: {
+    padding: 0,
+  },
+  parentOtherStoryLayoutBackground: {
+    position: 'absolute',
+    width: '100%',
+    height: 500,
+    backgroundColor: BubblColors.BubblPurple500,
+  },
+  parentOtherStoryHeader: {
+    backgroundColor: BubblColors.BubblPurple500,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    paddingHorizontal: 16,
+  },
+  parentOtherStoryHeaderText: {
+    color: BubblColors.BubblWhite,
+  },
+  parentOtherStoryCloseButton: {
+    position: 'absolute',
+    right: 16,
+    top: 18,
+  },
+  scrollContent: {
+    paddingTop: 16,
+    paddingBottom: 40,
+  },
+  articleContent: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 20,
+    backgroundColor: BubblColors.BubblPurple50,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+  },
+  sectionDivider: {
+    height: 1,
+    backgroundColor: BubblColors.BubblPurple950,
+    marginTop: 24,
+  },
+  // Related articles section
+  relatedContainer: {
+    padding: 16,
+    backgroundColor: BubblColors.BubblPurple50,
+    alignItems: 'center',
+    paddingBottom: 200,
+  },
+  relatedHeading: {
+    marginBottom: 12,
+    color: BubblColors.BubblPurple950,
+  },
+  // Essentials navigation - not used for "other stories"
+  essentialsNavContainer: {
+    padding: 16,
+    backgroundColor: BubblColors.BubblPurple50,
+    paddingBottom: 150,
+  },
+  essentialsNavHeading: {
+    color: BubblColors.BubblPurple950,
+    marginBottom: 32,
+    textAlign: 'center',
+  },
+  essentialsNavButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  navButton: {
+    flex: 1,
+    width: 124,
+    backgroundColor: BubblColors.BubblPurple300,
+    paddingVertical: 16,
+    marginHorizontal: 6,
+    borderRadius: 8,
+    borderWidth: 1.5,
+    borderColor: BubblColors.BubblPurple400,
+    alignItems: 'center',
+  },
+  navButtonDisabled: {
+    backgroundColor: BubblColors.BubblPurple50,
+  },
+  navButtonText: {
+    color: BubblColors.BubblPurple900,
+  },
 });

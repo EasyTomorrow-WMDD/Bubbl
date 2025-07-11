@@ -460,6 +460,8 @@ exports.getChildUserStats = async (req, res) => {
     const { data: badges, error: badgeError } = await supabase.rpc('get_user_active_badges', { uid: userId });
     if (badgeError) throw badgeError;
 
+    console.log('[DEBUG] /getChildUserStats - user:', user);
+
     // Step 4: Return the user stats along with avatar assets and badges
     res.json({
       success: true,
