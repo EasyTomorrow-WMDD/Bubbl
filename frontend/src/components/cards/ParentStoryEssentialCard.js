@@ -4,6 +4,7 @@ import placeholderImage from '../../assets/images/placeholder_parent_stories.png
 import { parentStyles } from '../../styles/BubblParentMainStyles';
 import { fontStyles } from '../../styles/BubblFontStyles';
 import BubblColors from '../../styles/BubblColors';
+import { ARTICLE_IMAGE_URL } from '../../config/BubblImageConfig';
 
 // ============================================================================
 // ParentEssentialStoryCard Component
@@ -13,7 +14,7 @@ const ParentStoryEssentialCard = ({ story, onPress }) => {
       <View style={parentStyles.parentEssentialCardWrapper}>
         {/* Image background with story's featured image or placeholder */}
         <ImageBackground
-          source={story.parent_story_featured_image_url ? { uri: story.parent_story_featured_image_url } : placeholderImage}
+          source={story.parent_story_featured_image_url ? { uri: `${ARTICLE_IMAGE_URL}${story.parent_story_featured_image_url}` } : placeholderImage}
           style={parentStyles.parentEssentialCardImage}
           imageStyle={parentStyles.parentEssentialCardImageStyle}
         >
