@@ -233,6 +233,7 @@ export const childProgressStyles = StyleSheet.create({
   activityLogCard: {
     backgroundColor: BubblColors.BubblNeutralWhite,
     padding: 12,
+    paddingRight: 64,
     borderRadius: 24,
     marginBottom: 16,
   },
@@ -241,6 +242,9 @@ export const childProgressStyles = StyleSheet.create({
     height: 60,
     marginRight: 12,
   },
+  activityLogCardTextContainer: {
+    marginRight: 20,
+  },  
   activityLogCardSummary: {
     marginBottom: 4,
   },

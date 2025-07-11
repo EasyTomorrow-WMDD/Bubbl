@@ -85,7 +85,8 @@ const ParentStoryArticlesList = ({ searchText, selectedType, userId, navigation 
     setIsLoading(true);
     fetchStories();
     // FOR BETA DEVELOPMENT: disabled external stories fetching to make sure we don't hit the rate limit of the external API
-    // fetchExternalStories();
+    // July 11: uncommenting to prepare for beta release. 
+    fetchExternalStories();
     setIsLoading(false);
   }, [searchText, selectedType]);
 
@@ -121,7 +122,7 @@ const ParentStoryArticlesList = ({ searchText, selectedType, userId, navigation 
         <ParentStoryCard
           key={story.parent_story_id}
           story={story}
-          onPress={() => navigation.navigate('ParentStory', { storyId: story.parent_story_id })}
+          onPress={() => navigation.navigate('ParentStory', { key: story.parent_story_id, storyId: story.parent_story_id })}
           showTypeTag={true}
         />
       ))}

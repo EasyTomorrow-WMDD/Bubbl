@@ -1,6 +1,7 @@
 import supabase from '../services/supabase';
 import axios from 'axios';
 import BubblConfig from '../config/BubblConfig';
+import { validClanKeys } from './ClanMappings';
 
 
 // Utility function to log child user activity
@@ -10,13 +11,20 @@ import BubblConfig from '../config/BubblConfig';
 // Sample usage:
 // import LogChildUserActivity from '../../utils/LogChildUserActivity';
 // ...
-// await LogChildUserActivity(childUserId, 'Completed a story', 'User completed story ID abc123 at level 2.');
+// await LogChildUserActivity(childUserId, 'Completed a story', 'User completed story ID abc123 at level 2.', 'clan06');
 
-export async function LogChildUserActivity(user_id, summary, details) {
+const LogChildUserActivity = async (user_id, summary, details, clan_key) => {
 
+  // Validate mandatory input parameters
   if (!user_id || !summary || !details) {
     console.warn('[WARNING][LogChildUserActivity] Missing arguments:', { user_id, summary, details });
     return;
+  }
+
+  // Validate clan_key - if not provided or invalid, default to 'clan06'
+  if (typeof clan_key !== 'string' || !validClanKeys.includes(clan_key)) {
+    console.warn(`Invalid clan_key "${clan_key}" provided. Defaulting to "clan06".`);
+    clan_key = 'clan06';
   }
 
   try {
@@ -31,10 +39,12 @@ export async function LogChildUserActivity(user_id, summary, details) {
     }
 
     // Step 3: Call the backend API
-    const response = await axios.post(`${BubblConfig.BACKEND_URL}/api/log/childActivityLog`, {
+    console.log(`${BubblConfig.BACKEND_URL}/api/logs/childActivityLog`);
+    const response = await axios.post(`${BubblConfig.BACKEND_URL}/api/logs/childActivityLog`, {
         user_id,
         summary,
         details,
+        clan_key,
       },
       {
         headers: {
@@ -51,3 +61,5 @@ export async function LogChildUserActivity(user_id, summary, details) {
     console.error('[ERROR][LogChildUserActivity] Error posting activity log:', err);
   }
 }
+
+export default LogChildUserActivity;
