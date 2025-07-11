@@ -126,7 +126,8 @@ const Skins = ({ userId, userLevel, userStars, onAssetEquipped, assets }) => {
   return (
 
     <View style={{ padding: 15, }}>
-      <Text style={[fontStyles.heading2, { fontSize: 30, paddingTop: 40 }]}>Skins</Text>
+      <Text style={[fontStyles.heading2, { fontSize: 30, paddingTop: 40 }]}>Appearance
+      </Text>
       <ScrollView horizontal={true}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ flexDirection: 'row', gap: 20 }}
@@ -174,7 +175,8 @@ const Skins = ({ userId, userLevel, userStars, onAssetEquipped, assets }) => {
             );
           })
         ) : (
-          <Text>No skins available</Text>
+          <Text>No appearance
+            available</Text>
         )}
       </ScrollView>
 
