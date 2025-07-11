@@ -24,13 +24,13 @@ export default function TopicContainer({ route, navigation }) {
 
   const BADGE_RULES = [
     { 
-      name: 'Bright Hero', 
+      id: '659ff7d3-f4c1-4de5-9dd2-49b7b853fdc1', 
       check: ({ streak }) => streak >= 4 
     },
-    // { 
-    //   name: 'Quiz Finisher', 
-    //   check: ({ remainingQuestions }) => remainingQuestions === 0 
-    // }
+    { 
+      id: 'b00a0ca3-cedc-4106-969d-592b64d8a0ec', 
+      check: ({ remainingQuestions }) => remainingQuestions === 0 
+    }
   ];
 
   useEffect(() => {
@@ -123,22 +123,23 @@ export default function TopicContainer({ route, navigation }) {
     }
   };
 
-  const awardBadge = async (badgeName) => {
+  const awardBadge = async (badgeId) => {
     try {
       await axios.post(`${BASE_URL}/api/users/${childProfileId}/badges`, {
-        badge_name: badgeName
+        badge_id: badgeId,
+        user_badge_active: false
       });
     } catch (error) {
-      console.error(`[TopicContainer] Error awarding badge (${badgeName}):`, error);
+      console.error(`[TopicContainer] Error awarding badge (${badgeId}):`, error);
     }
   };
 
-  const checkIfBadgeAlreadyEarned = async (badgeName) => {
+  const checkIfBadgeAlreadyEarned = async (badgeId) => {
     try {
       const res = await axios.get(`${BASE_URL}/api/users/${childProfileId}/badges`);
       const badges = res.data;
       return badges.some(
-        (b) => b.badge_name === badgeName && b.badge_active === true
+        (b) => b.badge_id === badgeId && b.badge_active === true
       );
     } catch (error) {
       console.error('[TopicContainer] Error checking badge:', error);
@@ -185,10 +186,10 @@ export default function TopicContainer({ route, navigation }) {
       for (const badge of BADGE_RULES) {
         let conditionMet = badge.check({ streak: newStreak, remainingQuestions });
         if (conditionMet) {
-          const alreadyHasBadge = await checkIfBadgeAlreadyEarned(badge.name);
+          const alreadyHasBadge = await checkIfBadgeAlreadyEarned(badge.id);
           if (!alreadyHasBadge) {
-            await awardBadge(badge.name);
-            if (badge.name === '4 in a row') {
+            await awardBadge(badge.id);
+            if (badge.id === '659ff7d3-f4c1-4de5-9dd2-49b7b853fdc1') {
               setCorrectStreak(0);
               navigation.navigate('Streak');
               return;
