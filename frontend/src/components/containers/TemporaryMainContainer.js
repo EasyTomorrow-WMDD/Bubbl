@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
     padding: 0,
-    margin: 0,
+    marginBottom: -20,
     transform: [{ translateY: -20 }]
   },
   container: {
