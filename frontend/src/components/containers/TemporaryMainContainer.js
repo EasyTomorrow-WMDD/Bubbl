@@ -283,6 +283,7 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
     color: 'white',
+    textAlign:'center'
   },
   subHeading: {
     fontSize: 20,
