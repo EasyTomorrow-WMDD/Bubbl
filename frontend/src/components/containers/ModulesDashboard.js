@@ -50,20 +50,24 @@ export default function Module({ modules, progress = [], onTopicPress, currentTo
                         if (!isLocked && onTopicPress) onTopicPress(topic);
                       }}
                     >
-                      <View style={{ marginRight: 40 }}>
+                      <View style={{ paddingRight:25 }}>
                         <CircularProgress topic_number={topic.topic_number} completed={isCompleted} moduleNumber={item.module_number} isCurrent={isCurrent} />
                       </View>
 
                       <View style={styles.textContainer}>
-                        <View style={{flexDirection:"row", alignItems:'center',}}>
-                          <Text style={[{ color: isCurrent ? 'white' : textColor(item.module_number) }, fontStyles.heading3]}>
-                            {topic.topic_title}
-                          </Text>
-                          <Text>Completed</Text>
+                        <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-between' }} >
+                          <View style={{ flex: 1,  }}>
+                            <Text style={[{ color: isCurrent ? 'white' : textColor(item.module_number), }, fontStyles.heading3]} numberOfLines={2}
+                              ellipsizeMode="tail">
+                              {topic.topic_title}
+                            </Text>
+                          </View>
+
+                          <Text style={[{ color: isCurrent ? 'white' : textColor(item.module_number), marginRight:10}, fontStyles.bodyDefault]}>{isCompleted ? 'Completed ✅' : null}</Text>
                         </View>
 
-                        <Text style={[{ color: isCurrent ? 'white' : textColor(item.module_number) }, fontStyles.bodyDefault]}>
-                          {isLocked ? topic.topic_description : topic.topic_description}
+                        <Text style={[{ color: isCurrent ? 'white' : textColor(item.module_number), marginTop:5 }, fontStyles.bodyMedium]} numberOfLines={2} ellipsizeMode="tail">
+                          {topic.topic_description}
                         </Text>
                       </View>
                     </Pressable>
@@ -90,7 +94,7 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 10,
     borderRadius: 25,
-    height: 90,
+    height: 101,
   },
 
   textContainer: {
