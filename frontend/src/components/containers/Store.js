@@ -8,6 +8,7 @@ import { fontStyles } from '../../styles/BubblFontStyles';
 import BubblColors from '../../styles/BubblColors';
 
 
+
 const Skins = ({ userId, userLevel, userStars, onAssetEquipped, assets }) => {
 
   // console.log('ASSETS BEIGN RECEIVED', assets)
@@ -125,7 +126,7 @@ const Skins = ({ userId, userLevel, userStars, onAssetEquipped, assets }) => {
   }, [userId]);
   return (
 
-    <View style={{ padding: 15, }}>
+    <View style={{ padding: 15, backgroundColor: 'white', borderTopLeftRadius:25, borderTopRightRadius:25, marginTop:24 }}>
       <Text style={[fontStyles.heading2, { fontSize: 30, paddingTop: 40 }]}>Appearance
       </Text>
       <ScrollView horizontal={true}

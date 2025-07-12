@@ -28,28 +28,28 @@ export default function TemporaryMainContainer() {
   const [assets, setAssets] = useState([]);
 
 
- // ================= Check onboarding status ====================
- useEffect(() => {
-  if (!userId) return;
+  // ================= Check onboarding status ====================
+  useEffect(() => {
+    if (!userId) return;
 
-  const checkOnboardingStatus = async () => {
-    try {
-      const res = await axios.get(`${BASE_URL}/api/onboarding/status`, {
-        headers: { 'x-user-id': userId }
-      });
+    const checkOnboardingStatus = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/api/onboarding/status`, {
+          headers: { 'x-user-id': userId }
+        });
 
-      console.log('ONBOARDING STATUS RESPONSE:', res.data);
+        console.log('ONBOARDING STATUS RESPONSE:', res.data);
 
-      if (res.data && res.data.completed === false) {
-        navigation.replace('OnboardingSlides');
+        if (res.data && res.data.completed === false) {
+          navigation.replace('OnboardingSlides');
+        }
+      } catch (error) {
+        console.error('Error checking onboarding status:', error);
       }
-    } catch (error) {
-      console.error('Error checking onboarding status:', error);
-    }
-  };
+    };
 
-  checkOnboardingStatus();
-}, [userId, navigation]);
+    checkOnboardingStatus();
+  }, [userId, navigation]);
   // console.log('USER ID:', userId);
 
   // ================= Load profile info from AsyncStorage ====================
@@ -213,12 +213,15 @@ export default function TemporaryMainContainer() {
               style={styles.background}>
               <View style={styles.backgroundOverlay} />
               <View style={styles.container}>
-                <Avatar userId={userId} userLevel={user ? user.user_level : null} skinSize={200} skinWidth={200} assets={assets} setAssets={setAssets} hatSize={130} top={-40} positionOverrides={{
-                  "Beannie": { top: 0, left: 170, width: 80, height: 80, transform: [{ rotate: "15deg" }] },
-                  "Bow": { top: 0, left: 190, height: 90, width: 80, transform: [{ rotate: "30deg" }] },
-                  "Confetti": { left: 200, top: -20, height: 90, width: 90, transform: [{ rotate: "15deg" }] },
-                  "Santa Hat": { left: 150, top: -12, height: 90, width: 80, transform: [{ rotate: "15deg" }] }
-                }} />
+                <View style={{ zIndex: 1 }}>
+                  <Avatar userId={userId} userLevel={user ? user.user_level : null} skinSize={200} skinWidth={200} assets={assets} setAssets={setAssets} hatSize={130} top={-40} positionOverrides={{
+                    "Beannie": { top: 0, left: 170, width: 80, height: 80, transform: [{ rotate: "15deg" }] },
+                    "Bow": { top: 0, left: 190, height: 90, width: 80, transform: [{ rotate: "30deg" }] },
+                    "Confetti": { left: 200, top: -20, height: 90, width: 90, transform: [{ rotate: "15deg" }] },
+                    "Santa Hat": { left: 150, top: -12, height: 90, width: 80, transform: [{ rotate: "15deg" }] }
+                  }} />
+                </View>
+                <Image source={require('../../assets/images/shadow.png')} style={{ position: 'absolute', bottom: 198, width: 164, height: 16, zIndex: 0 }} />
                 <Text style={[styles.title, fontStyles.display1]}>Hi, {user ? user.user_nickname : '...'}</Text>
                 <StatsPanel user={user} />
                 {user?.user_energy < 3 ? <EnergyTimer userId={userId} /> : null}
@@ -275,6 +278,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     paddingVertical: 20,
     gap: 10,
+    position: 'relative',
   },
   img: {
     height: 190,
@@ -283,7 +287,7 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
     color: 'white',
-    textAlign:'center'
+    textAlign: 'center'
   },
   subHeading: {
     fontSize: 20,
@@ -298,5 +302,19 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: 'white',
+  },
+  shadowContainer: {
+    alignItems: 'center',
+    position: 'relative',
+  },
+  shadow: {
+    position: 'absolute',
+    bottom: 10,
+    width: 180,
+    height: 30,
+    backgroundColor: '#3D207F',
+    borderRadius: 90,
+    opacity: 0.4,
+    zIndex: -1,
   },
 });
