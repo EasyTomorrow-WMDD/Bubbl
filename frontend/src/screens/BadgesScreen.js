@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, Alert, Pressable, Scro
 import { BASE_URL } from '../utils/config';
 import { URI_URL } from '../utils/config';
 import BubblColors from '../styles/BubblColors';
+import BubblFonts from '../styles/BubblFonts';
 
 const BadgesScreen = ({ userId, refreshBadges }) => {
   const [badges, setBadges] = useState([]);
@@ -199,10 +200,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   infoBoxText: {
-    fontSize: 16,
+    fontSize: BubblFonts.tagLine,
     color: BubblColors.BubblNeutralDark,
     textAlign: 'center',
-    fontWeight: '400',
+    fontFamily: BubblFonts.bodyTypeface,
   },
   grid: {
     flexDirection: 'row',
@@ -254,11 +255,12 @@ const styles = StyleSheet.create({
   },
   selectionText: {
     color: BubblColors.BubblNeutralWhite,
-    fontSize: 12,
-    fontWeight: 'bold',
+    fontSize: BubblFonts.sizes.bodySmall,
+    fontWeight: BubblFonts.bodyTypeface,
+    fontFamily: BubblFonts.headingTypeface,
   },
   label: {
-    fontSize: 12,
+    fontSize: BubblFonts.sizes.bodySmall,
     textAlign: 'center',
     marginTop: 4,
   },
@@ -279,7 +281,7 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     color: BubblColors.BubblNeutralDark,
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: BubblFonts.sizes.bodyLarge,
+    fontFamily: BubblFonts.headingTypeface
   },
 });

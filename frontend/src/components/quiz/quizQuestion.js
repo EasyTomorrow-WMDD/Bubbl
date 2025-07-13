@@ -4,6 +4,7 @@ import MultiCorrectQuiz from './MultiCorrectQuiz';
 //import ChooseImageQuiz from './ChooseImageQuiz';
 import BubblColors from '../../styles/BubblColors';
 import { Audio } from 'expo-av';
+import BubblFonts from '../../styles/BubblFonts';
 
 export default function QuizQuestion({ data, onAnswer, showTryAgain, onTryAgain }) {
   if (!data || !data.quiz) {
@@ -276,9 +277,13 @@ const styles = StyleSheet.create({
   },
   fixedBottomCorrect: {
     backgroundColor: BubblColors.BubblCyan200,
+    fontSize: BubblFonts.sizes.bodyMedium,
+    fontFamily: BubblFonts.bodyTypeface,
   },
   fixedBottomWrong: {
     backgroundColor: BubblColors.BubblOrange400,
+    fontSize: BubblFonts.sizes.bodyMedium,
+    fontFamily: BubblFonts.bodyTypeface,
   },
   feedbackContainer: {
     width: '100%',
@@ -301,24 +306,28 @@ const styles = StyleSheet.create({
   },
   feedbackText: {
     color: BubblColors.BubblBlack,
+    fontSize: BubblFonts.sizes.bodyMedium,
+    fontFamily: BubblFonts.bodyTypeface,
     fontSize: 14,
     fontWeight: '400',
     textAlign: 'left',
     flexShrink: 1,
   },
   subHeading: {
-    fontSize: 18,
+    fontSize: BubblFonts.sizes.heading2,
+    fontFamily: BubblFonts.headingTypeface,
     fontWeight: 'bold',
     color: BubblColors.BubblBlack,
     textAlign: 'left',
     marginBottom: 8,
   },
   question: {
-    fontSize: 18,
     fontWeight: '400',
     textAlign: 'left',
     marginBottom: 12,
     color: BubblColors.BubblBlack,
+    fontSize: BubblFonts.sizes.bodyLarge,
+    fontFamily: BubblFonts.bodyTypeface,
   },
   img: {
     width: '100%',
@@ -366,19 +375,28 @@ const styles = StyleSheet.create({
   },
   optionButtonSelected: {
     backgroundColor: BubblColors.BubblPurple300,
+    fontFamily: BubblFonts.bodyTypeface,
+    fontSize: BubblFonts.sizes.bodyMedium
   },
   optionButtonCorrect: {
     backgroundColor: BubblColors.BubblCyan300,
+    fontFamily: BubblFonts.bodyTypeface,
+    fontSize: BubblFonts.sizes.bodyMedium
   },
   optionButtonWrong: {
     backgroundColor: BubblColors.BubblOrange300,
+    fontFamily: BubblFonts.bodyTypeface,
+    fontSize: BubblFonts.sizes.bodyMedium
   },
   optionText: {
-    fontSize: 16,
+    fontSize: BubblFonts.sizes.bodyMedium,
     color: BubblColors.BubblBlack,
+    fontFamily: BubblFonts.bodyTypeface,
+
   },
   optionTextChecked: {
     fontWeight: '400',
+    fontFamily: BubblFonts.bodyTypeface,
   },
   checkButton: {
     borderRadius: 12,
@@ -391,24 +409,34 @@ const styles = StyleSheet.create({
   },
   checkButtonDisabled: {
     backgroundColor: '#ccc',
+    fontFamily: BubblFonts.bodyTypeface,
   },
   checkButtonActive: {
     backgroundColor: BubblColors.BubblPurple500,
+    fontFamily: BubblFonts.bodyTypeface,
+    fontSize: BubblFonts.sizes.bodyMedium
   },
   continueCorrect: {
     backgroundColor: BubblColors.BubblCyan900,
+    fontFamily: BubblFonts.bodyTypeface,
+    fontSize: BubblFonts.sizes.bodyMedium
   },
   continueWrong: {
     backgroundColor: BubblColors.BubblOrange600,
+    fontFamily: BubblFonts.bodyTypeface,
+    fontSize: BubblFonts.sizes.bodyMedium
   },
   checkButtonText: {
-    color: 'white',
+    color: BubblColors.BubblWhite,
+    fontFamily: BubblFonts.bodyTypeface,
+    fontSize: BubblFonts.sizes.bodyMedium,
     fontWeight: '400',
-    fontSize: 16,
   },
   emptyText: {
     textAlign: 'center',
     color: '#999',
     fontStyle: 'italic',
+    fontFamily: BubblFonts.bodyTypeface,
+    fontSize: BubblFonts.sizes.bodyMedium
   },
 });
