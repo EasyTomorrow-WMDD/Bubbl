@@ -77,15 +77,27 @@ export default function TopicContainer({ route, navigation }) {
       setTimeToNext(timeRemaining);
 
       if (userEnergy === 0) {
-        startCountdown(timeRemaining);
+       
+        navigation.navigate('EnergyZeroScreen', {
+          timeToNextMs: timeRemaining,
+          childId: childProfileId
+        });
+        return; 
       } else {
         await loadQuestions();
+        setIsLoadingEnergy(false);
       }
     } catch (err) {
-      navigation.goBack();
-    } finally {
       setIsLoadingEnergy(false);
+      navigation.goBack();
     }
+  };
+
+  const formatCountdown = (ms) => {
+    if (!ms || ms <= 0) return null;
+    const minutes = Math.floor(ms / 60000);
+    const seconds = Math.floor((ms % 60000) / 1000);
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   };
 
   const startCountdown = (ms) => {
@@ -157,8 +169,12 @@ export default function TopicContainer({ route, navigation }) {
       setEnergy(newEnergy);
 
       if (newEnergy === 0) {
+       
         setTimeout(() => {
-          navigation.goBack();
+          navigation.navigate('EnergyZeroScreen', {
+            countdown: formatCountdown(timeToNext),
+            childId: childProfileId
+          });
         }, 500);
       } else {
         if (questions.length === 1) {
@@ -266,7 +282,15 @@ export default function TopicContainer({ route, navigation }) {
     await loadQuestions();
   };
 
-  if (isLoadingTopic || isLoadingEnergy || !topic) {
+  if (isLoadingTopic || (!topic)) {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  if (isLoadingEnergy && energy !== 0) {
     return (
       <View style={styles.loaderContainer}>
         <ActivityIndicator size="large" />
@@ -275,15 +299,7 @@ export default function TopicContainer({ route, navigation }) {
   }
 
   if (energy === 0) {
-    return (
-      <View style={styles.loaderContainer}>
-        <Text style={styles.energyZero}>Energy: 0</Text>
-        <Text style={styles.countdownText}>
-          {countdown ? `You will regain 1 energy in ${countdown}` : 'Please wait...'}
-        </Text>
-        <Button title="Go Back" onPress={() => navigation.goBack()} />
-      </View>
-    );
+    return null;
   }
 
   if (showRestart || questions.length === 0) {
@@ -299,7 +315,7 @@ export default function TopicContainer({ route, navigation }) {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ paddingTop: 40, paddingHorizontal: 20 }}>
+      <View style={{ paddingTop: 55, paddingHorizontal: 20 }}>
         <EnergyBarContainer energy={energy} maxEnergy={3} />
       </View>
 
