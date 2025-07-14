@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Image} from 'react-native';
+import BubblColors from '../styles/BubblColors';
+import BubblFonts from '../styles/BubblFonts';
 
 export default function EnergyZeroScreen({ route, navigation }) {
   const { timeToNextMs, childId } = route.params || {};
@@ -31,18 +33,122 @@ export default function EnergyZeroScreen({ route, navigation }) {
   }, [timeToNextMs]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.energyZero}>Energy: 0</Text>
-      <Text style={styles.countdownText}>
-        {countdown ? `You will regain 1 energy in ${countdown}` : 'Please wait...'}
-      </Text>
-      <Button title="Go Back" onPress={() => navigation.navigate('Modules')} />
+    <View style={styles.screenContainer}>
+      <ImageBackground
+        source={require('../assets/images/Background_Purple.png')}
+        style={styles.background}
+      >
+        <View style={styles.container}>
+          {/* Contenido principal */}
+          <View style={styles.mainContent}>
+            <Text style={styles.titleText}>Opps! No HP Left</Text>
+            
+            <View style={styles.countdownBox}>
+                
+            <View>
+            <Image 
+            source={require('../assets/icons/heart.png')}
+            style={styles.imageHeart}
+            />
+          </View>
+
+
+
+              <Text style={styles.countdownText}>
+                {countdown ? `+1 HP in: ${countdown} Mins` : 'Please wait...'}
+              </Text>
+              <TouchableOpacity style={styles.goBackButton} onPress={() => navigation.navigate('Modules')}>
+                <Text style={styles.goBackButtonText}>Back To Home</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+         
+          <View style={styles.bottomContainer}>
+            <Image
+              source={require('../assets/images/Asset.png')}
+              style={styles.bottomImage}
+            />
+          </View>
+        </View>
+      </ImageBackground>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  energyZero: { fontSize: 20, color: 'red', textAlign: 'center', marginBottom: 10 },
-  countdownText: { fontSize: 16, textAlign: 'center', color: '#555' },
+  screenContainer: {
+    flex: 1,
+  },
+  background: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    marginBottom: -40
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  mainContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  titleText: {
+    fontSize: BubblFonts.sizes.display3,
+    color: BubblColors.BubblWhite,
+    fontFamily: BubblFonts.headingTypeface,
+    fontWeight: 'bold',
+    marginBottom: 80,
+  },
+  countdownBox: {
+    paddingVertical: 50,
+    paddingHorizontal: 30,
+    borderWidth: 6,
+    borderColor: BubblColors.BubblOrange300,
+    borderRadius: 12,
+    backgroundColor: BubblColors.BubblWhite,
+    alignItems: 'center',
+    marginBottom: -150
+  },
+  countdownText: {
+    fontSize: BubblFonts.sizes.heading2,
+    fontFamily: BubblFonts.headingTypeface,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: BubblColors.BubblBlack,
+    marginBottom: 12,
+  },
+  goBackButton: {
+    marginTop: 12,
+    marginBottom: -10,
+    paddingVertical: 20,
+    paddingHorizontal: 80,
+    borderRadius: 8,
+    backgroundColor: BubblColors.BubblPurple800,
+    alignItems: 'center',
+  },
+  goBackButtonText: {
+    color: BubblColors.BubblWhite,
+    fontSize: BubblFonts.sizes.bodyLarge,
+    fontFamily: BubblFonts.bodyTypeface,
+    fontWeight: 'bold'
+  },
+  bottomContainer: {
+    alignItems: 'center',
+    alignSelf: 'stretch', 
+  },
+  bottomImage: {
+    width: 300, 
+    height: 300, 
+  },
+  imageHeart:{
+    position: 'absolute',
+    alignSelf: 'center',
+    top: -100,
+    width: 100,
+    height: 100
+  }
 });
