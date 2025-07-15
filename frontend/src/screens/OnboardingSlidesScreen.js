@@ -97,7 +97,7 @@ const slides = [
     key: '1',
     title: 'Meet Your Mascot Friend!',
     text: 'Your mascot friend is there to help and guide you while you learn. Customize it to your liking and keep him happy by using the app.',
-    animation: require('../assets/animations/Mascot_Animation.json'),
+    animation: require('../assets/animations/Mascot_Animation_On.json'),
     backgroundColor: BubblColors.BubblOrange500,
     imageStyle: {
       width: width * 1.3,
@@ -127,11 +127,12 @@ const slides = [
     key: '2',
     title: 'Fun Activities. Real Life Skills!',
     text: 'Learn about boundaries, safe touch, emotions, and more. All through playful challenges and game-like lessons.',
-    animation: require('../assets/animations/Activities_Animation.json'),
+    animation: require('../assets/animations/Onboarding1.json'),
     backgroundColor: '#EE47EB',
     imageStyle: {
-      width: width * 1.2 ,
+      width: width  ,
       height: height ,
+      marginBottom: -50
     },
     bottomCardStyle: {
       backgroundColor: '#FFF4FF',
@@ -186,11 +187,12 @@ const slides = [
     key: '4',
     title: 'Get to Know Your Resources!',
     text: ' Use HP to play the activities. Earn XP and stars by completing them, help your mascot grow, and unlock new accessories for cool looks.',
-    animation: require('../assets/animations/Resources_Animation.json'),
+    animation: require('../assets/animations/Onboarding2.json'),
     backgroundColor: BubblColors.BubblPurple500,
     imageStyle: {
-      width: width * 1.0,
-      height: height * 1.0,
+      width: width * 0.5,
+      height: height * 0.5,
+      marginBottom: -50
     },
     bottomCardStyle: {
       backgroundColor: '#F0FDFF',
