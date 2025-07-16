@@ -1,4 +1,4 @@
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'; // ✅ usa el hook
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'; 
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
 import { useState, useEffect } from 'react';
