@@ -164,18 +164,22 @@ export default function TopicContainer({ route, navigation }) {
       const res = await axios.post(`${BASE_URL}/api/energy/reduce`, {
         user_id: childProfileId,
       });
-
+  
       const newEnergy = res.data.user_energy;
       setEnergy(newEnergy);
-
+  
       if (newEnergy === 0) {
-       
-        setTimeout(() => {
-          navigation.navigate('EnergyZeroScreen', {
-            countdown: formatCountdown(timeToNext),
-            childId: childProfileId
-          });
-        }, 500);
+        const statusRes = await axios.get(`${BASE_URL}/api/energy/status`, {
+          params: { user_id: childProfileId }
+        });
+  
+        const timeToNext = statusRes.data.time_to_next_recharge_ms;
+  
+        navigation.navigate('EnergyZeroScreen', {
+          timeToNextMs: timeToNext,
+          childId: childProfileId
+        });
+  
       } else {
         if (questions.length === 1) {
           setShowTryAgain(true);
@@ -187,8 +191,10 @@ export default function TopicContainer({ route, navigation }) {
           setCurrentIndex(0);
         }
       }
-    } catch {}
-  };
+    } catch (err) {
+      console.error('Error reducing energy:', err);
+    }
+  };  
 
   const handleAnswer = async (isCorrect) => {
     if (isCorrect) {
