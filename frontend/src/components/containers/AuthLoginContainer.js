@@ -66,7 +66,7 @@ const AuthLoginContainer = ({ navigation }) => {
   // ==========================================================================
   const handleGoogleLogin = async () => {
     const redirectUri = AuthSession.makeRedirectUri({
-      scheme: 'authpoc',
+      scheme: 'bubbl',
       path: 'login-callback',
     });
 
