@@ -67,11 +67,7 @@ const AuthLoginContainer = ({ navigation }) => {
   const handleGoogleLogin = async () => {
 
     const redirectUri = AuthSession.makeRedirectUri({
-      scheme: 'bubbl',
       path: 'login-callback',
-      preferLocalhost: true,
-      isTripleSlashed: true,
-      useProxy: true,
     });
     // const redirectUri = 'bubbl://login-callback/';
 

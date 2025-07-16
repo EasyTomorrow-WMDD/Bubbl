@@ -2,7 +2,6 @@
   "expo": {
     "name": "Bubbl-App",
     "slug": "Bubbl-App",
-    "scheme": "bubbl",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,33 +20,13 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
-      "intentFilters": [
-        {
-          "action": "VIEW",
-          "data": {
-            "scheme": "bubbl"
-          },
-          "category": ["BROWSABLE", "DEFAULT"]
-        }
-      ]
+      "edgeToEdgeEnabled": true
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "assets": [
       "./assets/fonts/"
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "162f5751-016c-468a-b1c2-b38218ba6fc9"
-      }
-    },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
-    "updates": {
-      "url": "https://u.expo.dev/162f5751-016c-468a-b1c2-b38218ba6fc9"
-    }
-  }
+    ]
+   }
 }
