@@ -7,15 +7,14 @@
       "developmentClient": true,
       "distribution": "internal"
     },
+    "beta": {
+      "distribution": "internal"
+    },
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
-  },
-  "submit": {
-    "production": {}
-  },
-  "update": {
-    "branch": "alpha"
+    "production": {
+      "distribution": "store"
+    }
   }
 }
