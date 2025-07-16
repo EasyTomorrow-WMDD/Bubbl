@@ -5,12 +5,14 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import StatsPanel from '../components/containers/StatCards';
 import Module from '../components/containers/ModulesDashboard';
+import { useTab } from '../utils/TabContext';
 
 export default function ChildHome() {
   const [user, setUser] = useState(null);
   const [modules, setModules] = useState([]);
   const [nickname, setNickname] = useState('');
   const [userId, setUserId] = useState('');
+  const { setActiveTab } = useTab();;
 
   // ================= Load profile info from AsyncStorage ====================
   useEffect(() => {
@@ -47,6 +49,12 @@ export default function ChildHome() {
       .then((response) => setModules(response.data))
       .catch((error) => console.error('Error fetching modules:', error));
   }, [userId]);
+
+
+// ================= forces navbar to update correctly ====================
+useEffect(() => {
+  setActiveTab('activities'); 
+}, []);
 
   return (
     <View>
