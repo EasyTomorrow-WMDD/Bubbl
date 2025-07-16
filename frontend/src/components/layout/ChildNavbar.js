@@ -9,17 +9,17 @@ const ChildNavbar = ({ navigation, childProfileId }) => {
   // Fix: Handle case sensitivity for the paint icon.. 
   // I'm tired of the issues with case sensitivity appearing over and over, so let's try to load the icon in a more robust way.
   // This will attempt to load the icon in both 'Paint.png' and 'paint.png
-  let paintIcon;
-  try {
-    paintIcon = require('../../assets/icons/Paint.png');
-  } catch (err1) {
-    try {
-      paintIcon = require('../../assets/icons/paint.png');
-    } catch (err2) {
-      console.warn('Paint icon not found.');
-      paintIcon = require('../../assets/icons/activities.png'); // Should never reach here.. but in the worst case scenario, 'activities' icon will be used.
-    }
-  }
+  // let paintIcon;
+  // try {
+  //   paintIcon = require('../../assets/icons/paint.png');
+  // } catch (err1) {
+  //   try {
+  //     paintIcon = require('../../assets/icons/paint.png');
+  //   } catch (err2) {
+  //     console.warn('Paint icon not found.');
+  //     paintIcon = require('../../assets/icons/activities.png'); // Should never reach here.. but in the worst case scenario, 'activities' icon will be used.
+  //   }
+  // }
 
   return (
     <View style={styles.navbar}>
@@ -51,7 +51,7 @@ const ChildNavbar = ({ navigation, childProfileId }) => {
       >
         <View style={[activeTab === 'mood draw' ? styles.iconWrapperActive : styles.iconWrapper]}>
           <Image
-            source={paintIcon}
+            source={require('../../assets/icons/paint.png')}
             style={styles.navIcon}
             resizeMode="contain"
           />

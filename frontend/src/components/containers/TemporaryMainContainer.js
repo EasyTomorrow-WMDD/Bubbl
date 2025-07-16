@@ -76,18 +76,18 @@ export default function TemporaryMainContainer() {
   }, [userId]);
     // ================= Fetch ref level data ====================
 
-  useEffect(() => {
-    if (!userId) return;
-    const fetchLevels = async () => {
-      try {  
-        const response = await axios.get(`${BASE_URL}/api/childProgress/levels`);
-        setLevel(response.data);
-      } catch (error) {
-        console.error('Error fetching levels data:', error);
-      }
-    };
-    fetchLevels();
-  }, []);
+  // useEffect(() => {
+  //   const fetchLevels = async () => {
+  //     try {  
+  //       const response = await axios.get(`${BASE_URL}/api/childProgress/levels`);
+  //       setLevel(response.data);
+  //       console.log('Levels data fetched:', response.data);
+  //     } catch (error) {
+  //       console.error('Error fetching levels data:', error);
+  //     }
+  //   };
+  //   fetchLevels();
+  // }, []);
 
   // ================= Fetch modules data ====================
   useEffect(() => {
@@ -232,7 +232,7 @@ export default function TemporaryMainContainer() {
                     positionOverrides={positionOverrides}
                   />
                 </View>
-                <Image source={require('../../assets/images/shadow.png')} style={{ position: 'absolute', bottom: 198, width: 164, height: 16, zIndex: 0 }} />
+                <Image source={require('../../assets/images/shadow.png')} style={{ position: 'absolute', bottom: 258, width: 164, height: 16, zIndex: 0 }} />
                 <Text style={[styles.title, fontStyles.display1]}>Hi, {user ? user.user_nickname : '...'}</Text>
                 <StatsPanel user={user} />
                 {user?.user_energy < 3 ? <EnergyTimer userId={userId} /> : null}
