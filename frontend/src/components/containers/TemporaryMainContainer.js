@@ -14,7 +14,7 @@ import EnergyTimer from './Timer';
 import { fontStyles } from '../../styles/BubblFontStyles';
 import BubblColors from '../../styles/BubblColors';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import { assetPositionMap } from '../../styles/assetPositionMain';
 
 export default function TemporaryMainContainer() {
   const [user, setUser] = useState(null);
@@ -27,19 +27,14 @@ export default function TemporaryMainContainer() {
   const [nextRechargeTime, setNextReachargeTime] = useState(null);
   const [assets, setAssets] = useState([]);
 
-
   // ================= Check onboarding status ====================
   useEffect(() => {
     if (!userId) return;
-
     const checkOnboardingStatus = async () => {
       try {
         const res = await axios.get(`${BASE_URL}/api/onboarding/status`, {
           headers: { 'x-user-id': userId }
         });
-
-        console.log('ONBOARDING STATUS RESPONSE:', res.data);
-
         if (res.data && res.data.completed === false) {
           navigation.replace('OnboardingSlides');
         }
@@ -47,10 +42,8 @@ export default function TemporaryMainContainer() {
         console.error('Error checking onboarding status:', error);
       }
     };
-
     checkOnboardingStatus();
   }, [userId, navigation]);
-  // console.log('USER ID:', userId);
 
   // ================= Load profile info from AsyncStorage ====================
   useEffect(() => {
@@ -64,14 +57,12 @@ export default function TemporaryMainContainer() {
         console.error('Error loading profile info:', error);
       }
     };
-
     loadProfileInfo();
   }, []);
 
   // ================= Fetch user data from backend ====================
   useEffect(() => {
     if (!userId) return;
-
     const fetchUser = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/api/childProgress/dashboard/${userId}`);
@@ -80,14 +71,12 @@ export default function TemporaryMainContainer() {
         console.error('Error fetching user data:', error);
       }
     };
-
     fetchUser();
   }, [userId]);
 
   // ================= Fetch modules data ====================
   useEffect(() => {
     if (!userId) return;
-
     axios
       .get(`${BASE_URL}/api/childProgress/modules?userId=${userId}`)
       .then((response) => setModules(response.data))
@@ -97,7 +86,6 @@ export default function TemporaryMainContainer() {
   // ================= Fetch progress ====================
   useEffect(() => {
     if (!userId) return;
-
     const fetchChildProgress = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/api/childProgress/userProgress/${userId}`);
@@ -106,7 +94,6 @@ export default function TemporaryMainContainer() {
         console.error('Error fetching child progress:', error);
       }
     };
-
     fetchChildProgress();
   }, [userId]);
 
@@ -115,65 +102,45 @@ export default function TemporaryMainContainer() {
     const fetchEnergyStatus = async () => {
       try {
         if (!userId) return;
-
         const res = await axios.get(`${BASE_URL}/api/energy/status`, {
           params: { user_id: userId }
         });
-
         const data = res.data;
-
         setUserEnergy(data.user_energy);
-
         if (data.time_to_next_recharge_ms !== null) {
           setNextReachargeTime(Date.now() + data.time_to_next_recharge_ms);
         } else {
           setNextReachargeTime(null);
         }
-
         setUser(prev => prev ? { ...prev, user_energy: data.user_energy } : prev);
-
       } catch (err) {
         console.error('Error fetching energy status:', err);
       }
     };
-
     fetchEnergyStatus();
   }, [userId]);
 
   // =============== Energy Polling =======================
   useEffect(() => {
     if (!userId) return;
-
     const interval = setInterval(async () => {
       try {
-        if (!userId) {
-          console.warn('Skipping polling: userId is undefined');
-          return;
-        }
-
         const res = await axios.get(`${BASE_URL}/api/energy/status`, {
           params: { user_id: userId }
         });
-
         const data = res.data;
-
         if (data && data.user_energy !== undefined) {
-          // console.log('Polled energy status:', data.user_energy);
-
           setUser(prev => prev ? { ...prev, user_energy: data.user_energy } : prev);
-
           if (data.time_to_next_recharge_ms !== null) {
             setNextReachargeTime(Date.now() + data.time_to_next_recharge_ms);
           } else {
             setNextReachargeTime(null);
           }
         }
-
       } catch (err) {
         console.error('Error polling energy status:', err);
       }
     }, 30000);
-
     return () => clearInterval(interval);
   }, [userId]);
 
@@ -196,8 +163,32 @@ export default function TemporaryMainContainer() {
       topicId: topic.topic_id,
       childProfileId: userId
     });
-    ;
   };
+
+  // ============ Build positionOverrides dynamically ============
+  let currentSkinName = null;
+  const positionOverrides = {};
+
+  assets.forEach((asset) => {
+    const type = asset.ref_asset.asset_type;
+    const assetName = asset.ref_asset_variation.asset_variation_name;
+
+    if (type === 'skin') {
+      currentSkinName = assetName;
+    }
+  });
+
+  assets.forEach((asset) => {
+    const type = asset.ref_asset.asset_type;
+    const assetName = asset.ref_asset_variation.asset_variation_name;
+
+    if (type !== 'skin' && currentSkinName) {
+      const map = assetPositionMap[assetName];
+      if (map && map[currentSkinName]) {
+        positionOverrides[assetName] = map[currentSkinName];
+      }
+    }
+  });
 
   return (
     <>
@@ -214,12 +205,17 @@ export default function TemporaryMainContainer() {
               <View style={styles.backgroundOverlay} />
               <View style={styles.container}>
                 <View style={{ zIndex: 1 }}>
-                  <Avatar userId={userId} userLevel={user ? user.user_level : null} skinSize={200} skinWidth={200} assets={assets} setAssets={setAssets} hatSize={130} top={-40} positionOverrides={{
-                    "Beannie": { top: 0, left: 170, width: 80, height: 80, transform: [{ rotate: "15deg" }] },
-                    "Bow": { top: 0, left: 190, height: 90, width: 80, transform: [{ rotate: "30deg" }] },
-                    "Confetti": { left: 200, top: -20, height: 90, width: 90, transform: [{ rotate: "15deg" }] },
-                    "Santa Hat": { left: 150, top: -12, height: 90, width: 80, transform: [{ rotate: "15deg" }] }
-                  }} />
+                  <Avatar
+                    userId={userId}
+                    userLevel={user ? user.user_level : null}
+                    skinSize={200}
+                    skinWidth={200}
+                    assets={assets}
+                    setAssets={setAssets}
+                    hatSize={130}
+                    top={-40}
+                    positionOverrides={positionOverrides}
+                  />
                 </View>
                 <Image source={require('../../assets/images/shadow.png')} style={{ position: 'absolute', bottom: 198, width: 164, height: 16, zIndex: 0 }} />
                 <Text style={[styles.title, fontStyles.display1]}>Hi, {user ? user.user_nickname : '...'}</Text>
@@ -280,41 +276,9 @@ const styles = StyleSheet.create({
     gap: 10,
     position: 'relative',
   },
-  img: {
-    height: 190,
-    width: 140,
-  },
   title: {
     fontWeight: 'bold',
     color: 'white',
     textAlign: 'center'
-  },
-  subHeading: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  cardContainer: {
-    width: '100%',
-    flexDirection: 'column',
-    gap: 10,
-    alignItems: 'flex-start',
-  },
-  text: {
-    fontSize: 16,
-    color: 'white',
-  },
-  shadowContainer: {
-    alignItems: 'center',
-    position: 'relative',
-  },
-  shadow: {
-    position: 'absolute',
-    bottom: 10,
-    width: 180,
-    height: 30,
-    backgroundColor: '#3D207F',
-    borderRadius: 90,
-    opacity: 0.4,
-    zIndex: -1,
   },
 });
