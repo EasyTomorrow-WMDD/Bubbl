@@ -9,6 +9,7 @@ router.get('/userProgress/:userId', controller.getChildProgress);
 router.post('/saveProgress', controller.saveProgress);
 router.get('/userAvatar/:userId', controller.getChildAvatar);
 router.post('/saveDrawingProgress', controller.saveDrawingProgress);
+router.post('/levels', controller.getRefLevel);
 // router.post('/updateUserLevel', controller.updateUserLevel);
 
 

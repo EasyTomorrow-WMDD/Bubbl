@@ -26,11 +26,29 @@ exports.getDashboard = async (req, res) => {
     };
 
     res.json(userWithBadges); 
+    
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to fetch users' });
   }
 };
+
+exports.getRefLevel = async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('ref_level')
+      .select('level_value, level_xp_to_next_level')
+      .order('level_value', { ascending: true });
+
+      if (error) throw error;
+
+    res.json(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch reference levels' });
+  }
+};
+
 
 exports.getAllModulesAndTopics = async (req, res) => {
   try {
