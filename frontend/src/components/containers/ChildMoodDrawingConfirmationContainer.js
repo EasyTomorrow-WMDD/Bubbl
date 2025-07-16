@@ -13,12 +13,14 @@ import ChildNavbar from '../layout/ChildNavbar';
 import supabase from '../../services/supabase';
 import BubblConfig from '../../config/BubblConfig';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTab } from '../../utils/TabContext';
 
 const { height } = Dimensions.get('window');
 
 export default function ChildMoodDrawingConfirmationContainer({ navigation, route }) {
   const { childProfileId } = route.params || {};
   const insets = useSafeAreaInsets();
+  const { setActiveTab } = useTab(); // ✅ Make sure to call this
 
   useEffect(() => {
     const addStars = async () => {
@@ -41,7 +43,7 @@ export default function ChildMoodDrawingConfirmationContainer({ navigation, rout
 
         const text = await response.text();
         try {
-          JSON.parse(text); // just log parsing for debug
+          JSON.parse(text);
         } catch (err) {
           console.error('[addStars] JSON Parse Error:', err.message);
         }
@@ -80,9 +82,12 @@ export default function ChildMoodDrawingConfirmationContainer({ navigation, rout
 
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate('ChildMain')}
+              onPress={() => {
+                setActiveTab('activities'); // ✅ This works now
+                navigation.navigate('ChildMain');
+              }}
             >
-              <Text style={styles.buttonText}>Back to journey</Text>
+              <Text style={styles.buttonText}>Claim Rewards</Text>
             </TouchableOpacity>
           </View>
 
@@ -130,7 +135,9 @@ const styles = StyleSheet.create({
   starsAnimation: {
     width: 154,
     height: 154,
-    marginBottom: 10,
+    paddingBottom: 100,
+    marginTop: -15,
+    transform: [{ scale: 1.8 }],
   },
   title: {
     fontSize: 28,
@@ -138,29 +145,30 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     color: '#2E195C',
     textAlign: 'center',
+    marginTop: -80,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 25,
+    fontWeight: 'bold',
+    marginBottom: 45,
     color: '#2E195C',
-    marginBottom: 18,
     textAlign: 'center',
   },
   button: {
-    backgroundColor: '#8361E4',
-    paddingVertical: 12,
-    paddingHorizontal: 40,
+    backgroundColor: '#5931A6',
+    paddingVertical: 20,
+    paddingHorizontal: 65,
     borderRadius: 10,
   },
   buttonText: {
     color: 'white',
-    fontWeight: '600',
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   happyAnimation: {
     width: 200,
     height: 200,
-    marginTop: 20,
-    marginBottom: 40,
+    marginTop: 75,
     zIndex: 1,
   },
 });

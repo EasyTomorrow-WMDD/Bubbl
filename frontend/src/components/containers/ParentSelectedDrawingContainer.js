@@ -13,11 +13,12 @@ const ParentSelectedDrawingContainer = ({ navigation, route }) => {
   const { drawing } = route.params;
   const [childNickname, setChildNickname] = useState('');
 
-  const formattedDate = new Date(drawing.created_at).toLocaleDateString('en-GB', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
+const dateObj = new Date(drawing.created_at);
+const formattedDate = dateObj.toLocaleDateString('en-US', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
 
   const moodKey = drawing.mood?.charAt(0).toUpperCase() + drawing.mood?.slice(1).toLowerCase();
 

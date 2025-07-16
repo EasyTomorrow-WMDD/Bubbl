@@ -198,6 +198,7 @@ const styles = StyleSheet.create({
   },
   moodsPyramid: {
     alignItems: 'center',
+    marginTop: -15,
   },
   moodsRow: {
     flexDirection: 'row',
@@ -258,7 +259,7 @@ const styles = StyleSheet.create({
   },
   animationContainer: {
     position: 'absolute',
-    bottom: 19,
+    bottom: 35,
     width: '100%',
     alignItems: 'center',
   },
