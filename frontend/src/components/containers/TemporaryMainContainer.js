@@ -26,6 +26,7 @@ export default function TemporaryMainContainer() {
   const [userEnergy, setUserEnergy] = useState(null);
   const [nextRechargeTime, setNextReachargeTime] = useState(null);
   const [assets, setAssets] = useState([]);
+  const [level, setLevel] = useState(null);
 
   // ================= Check onboarding status ====================
   useEffect(() => {
@@ -73,6 +74,20 @@ export default function TemporaryMainContainer() {
     };
     fetchUser();
   }, [userId]);
+    // ================= Fetch ref level data ====================
+
+  useEffect(() => {
+    if (!userId) return;
+    const fetchLevels = async () => {
+      try {  
+        const response = await axios.get(`${BASE_URL}/api/childProgress/levels`);
+        setLevel(response.data);
+      } catch (error) {
+        console.error('Error fetching levels data:', error);
+      }
+    };
+    fetchLevels();
+  }, []);
 
   // ================= Fetch modules data ====================
   useEffect(() => {
