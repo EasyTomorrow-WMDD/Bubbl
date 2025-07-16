@@ -65,12 +65,17 @@ const AuthLoginContainer = ({ navigation }) => {
 
   // ==========================================================================
   const handleGoogleLogin = async () => {
+
     const redirectUri = AuthSession.makeRedirectUri({
       scheme: 'bubbl',
       path: 'login-callback',
+      preferLocalhost: true,
+      isTripleSlashed: true,
+      useProxy: true,
     });
+    // const redirectUri = 'bubbl://login-callback/';
 
-    // console.log('[INFO][Login with Google] Redirect URI:', redirectUri);
+    console.log('[INFO][Login with Google] Redirect URI:', redirectUri);
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
