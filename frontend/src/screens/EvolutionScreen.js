@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ImageBackground } from 'react-native';
 import LottieView from 'lottie-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Audio } from 'expo-av'; 
@@ -79,6 +79,14 @@ const EvolutionScreen = ({ route }) => {
         <Text style={styles.text}>{text[0]}</Text>
         <Text style={styles.text}>{text[1]}</Text>
       </View>
+
+
+<ImageBackground
+          source={require('../assets/images/DrawingCanvas/Done_Background.png')}
+          style={styles.backgroundImage}
+          imageStyle={styles.imageBackground}
+        ></ImageBackground>
+
     </View>
   );
 };
@@ -89,21 +97,36 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#8361E4',
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
   },
   animation: {
-    width: width * 0.9,
-    height: height * 0.5,
+    width: 450,
+    height: 450,
+    marginTop: 250,
+        justifyContent: 'center',
+    alignItems: 'center',
+    paddingRight: 40,
+        // zIndex: 1,
   },
   textBox: {
     marginTop: 24,
     alignItems: 'center',
+    marginTop: -450,
   },
   text: {
     color: '#fff',
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
+    
+  },
+    backgroundImage: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  imageBackground: {
+    resizeMode: 'auto',
   },
 });
