@@ -11,7 +11,6 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import supabase from '../../services/supabase';
 import BubblConfig from '../../config/BubblConfig';
-import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import BubblYearMonthPicker from '../forms/BubblYearMonthPicker';
@@ -30,10 +29,8 @@ const moodIcons = {
 
 const ParentChildMoodCanvasContainer = () => {
   const navigation = useNavigation();
-
   const [drawings, setDrawings] = useState([]);
   const [loading, setLoading] = useState(false);
-
   const [calendarVisible, setCalendarVisible] = useState(false);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
@@ -44,7 +41,6 @@ const ParentChildMoodCanvasContainer = () => {
 
     try {
       setLoading(true);
-
       const { data: { session } } = await supabase.auth.getSession();
 
       const response = await fetch(
@@ -61,9 +57,10 @@ const ParentChildMoodCanvasContainer = () => {
 
       if (response.ok && Array.isArray(result)) {
         const signedDrawings = await Promise.all(result.map(async (item) => {
+          const filePath = item.drawing_url;
           const { data: signedUrlData, error } = await supabase.storage
             .from('drawings')
-            .createSignedUrl(item.drawing_url, 60 * 60);
+            .createSignedUrl(filePath, 60 * 60);
 
           if (error) {
             console.error('[Signed URL error]', error.message);
@@ -101,18 +98,14 @@ const ParentChildMoodCanvasContainer = () => {
 
   const renderDrawingCard = ({ item }) => {
     const moodKey = item.mood?.charAt(0).toUpperCase() + item.mood?.slice(1).toLowerCase();
-const date = new Date(item.created_at);
-const formattedDate = date.toLocaleDateString('en-US', {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric',
-});
+    const date = new Date(item.created_at);
+    const formattedDate = `${date.toLocaleString('en-US', { month: 'long' })} ${date.getDate()} ${date.getFullYear()}`;
 
     return (
       <TouchableOpacity style={styles.card} onPress={() => handleDrawingPress(item)}>
         <View style={styles.purpleBox}>
           <Image
-            source={{ uri: item.signedUrl }}
+            source={item.signedUrl ? { uri: item.signedUrl } : require('../../assets/images/placeholder_parent_stories.png')}
             style={styles.drawingImage}
             onError={(e) => console.log('[Image Load error]', e.nativeEvent.error)}
           />
@@ -129,11 +122,10 @@ const formattedDate = date.toLocaleDateString('en-US', {
     );
   };
 
-  const insets = useSafeAreaInsets(); // Get safe area insets for top and bottom padding
+  const insets = useSafeAreaInsets();
 
   return (
     <View style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <Text style={[fontStyles.heading1, styles.headerTitle]}>Mood Canvas</Text>
         <TouchableOpacity onPress={() => setCalendarVisible(true)}>
@@ -144,28 +136,18 @@ const formattedDate = date.toLocaleDateString('en-US', {
         </TouchableOpacity>
       </View>
 
-      {/* Drawings list */}
       <View style={styles.flatListContainer}>
         <FlatList
           data={drawings}
           keyExtractor={(item, index) => index.toString()}
           numColumns={2}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={[
-            styles.listContent, 
-            { justifyContent: 'center', 
-              alignItems: 'center', 
-              paddingBottom: 100 }]}
+          contentContainerStyle={[styles.listContent, { justifyContent: 'center', alignItems: 'center', paddingBottom: 100 }]}
           renderItem={renderDrawingCard}
-          ListEmptyComponent={
-            !loading && (
-              <ParentChildProgressNotFoundCard />
-            )
-          }
+          ListEmptyComponent={!loading && <ParentChildProgressNotFoundCard />}
         />
       </View>
 
-      {/* Calendar modal */}
       <BubblYearMonthPicker
         visible={calendarVisible}
         selectedYear={selectedYear}
@@ -176,21 +158,17 @@ const formattedDate = date.toLocaleDateString('en-US', {
         onClose={() => setCalendarVisible(false)}
       />
 
-      {/* Safe area for bottom navigation */}
       <SafeAreaView edges={['bottom']} style={childProgressStyles.childProgressLayoutBottomSafeArea} />
-  
     </View>
   );
 };
 
 export default ParentChildMoodCanvasContainer;
 
-
 const styles = StyleSheet.create({
   container: {
     backgroundColor: BubblColors.BubblPurple200,
     padding: 12,
-    // flex: 1,
   },
   header: {
     flexDirection: 'row',
@@ -219,9 +197,8 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     paddingTop: 12,
     paddingHorizontal: 12,
-    paddingBottom: 8,
-    position: 'relative',
     paddingBottom: 12,
+    position: 'relative',
   },
   drawingImage: {
     width: '100%',
@@ -248,7 +225,6 @@ const styles = StyleSheet.create({
     marginTop: 13,
     color: '#fff',
     fontSize: 14,
-    // alignSelf: 'flex-start',
     marginLeft: 4,
   },
   emptyContainer: {
