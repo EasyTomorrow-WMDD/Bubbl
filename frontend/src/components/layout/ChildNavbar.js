@@ -69,7 +69,7 @@ const ChildNavbar = ({ navigation, childProfileId }) => {
       >
         <View style={[activeTab === 'shop' ? styles.iconWrapperActive : styles.iconWrapper]}>
           <Image
-            source={require('../../assets/icons/store.png')}
+            source={require('../../assets/icons/shop.png')}
             style={styles.navIcon}
             resizeMode="contain"
           />
