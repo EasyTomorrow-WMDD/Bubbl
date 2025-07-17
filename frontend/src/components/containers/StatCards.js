@@ -8,7 +8,7 @@ import { fontStyles } from '../../styles/BubblFontStyles';
 const StatCard = ({ label, icon, value, extra, bgHeader, bgColor }) => (
   <View style={{ backgroundColor: bgHeader, borderRadius: 20 }}>
     <View style={[styles.cardHeader, { backgroundColor: bgHeader }]}>
-      <Text style={[fontStyles.bodyDefault, {color: 'white'}]}>{label}</Text>
+      <Text style={[fontStyles.bodyDefault, { color: 'white' }]}>{label}</Text>
     </View>
     <View style={[styles.card, { backgroundColor: bgColor }]}>
       <Image source={icon} style={styles.icon} />
@@ -17,15 +17,24 @@ const StatCard = ({ label, icon, value, extra, bgHeader, bgColor }) => (
   </View>
 );
 
-export default function StatsPanel({ user }) {
+export default function StatsPanel({ user, level }) {
   if (!user) return null;
-  console.log(user);
+
+  const nextLevel = user.user_level === 4 ? user.user_level : user.user_level + 1;
+  console.log('NEXT LEVEL', nextLevel);
+  const currentLevel = level.find(l => l.level_value === nextLevel);
+  console.log('CURRENT LEVEL', currentLevel);
 
   return (
     <View style={styles.container}>
       <StatCard label="Total HP" icon={require('../../assets/icons/heart.png')} value={user.user_energy} bgHeader={'#EE47EB'} bgColor={'#FDE8FF'} />
       <StatCard label="Total Stars" icon={require('../../assets/icons/star.png')} value={user.user_star} bgHeader={'#F99707'} bgColor={'#FFF2C6'} />
-      <StatCard label="XP" icon={require('../../assets/icons/flash.png')} value={user.user_xp} bgHeader={'#11BBB8'} bgColor={'#CBFCF6'} />
+      <StatCard label={`Level ${user?.user_level}`} icon={require('../../assets/icons/flash.png')} value={
+        currentLevel.level_value !== 4
+          ? `${user?.user_xp} / ${currentLevel?.level_xp_to_next_level}`
+          : `${user?.user_xp}`
+      } bgHeader={'#11BBB8'} bgColor={'#CBFCF6'} />
+
     </View>
   );
 }
@@ -36,11 +45,11 @@ export function StatsInventory({ user, badges, section }) {
   return (
     <View>
       <View style={styles.container}>
-        <StatCard label="Total Stars" icon={require('../../assets/icons/star.png')} value={user.user_star} bgHeader={'#F99707'} bgColor={'#FFF2C6'}/>
-        <StatCard label="Badges" icon={require('../../assets/icons/badge.png')} value={user.user_badge ?? 0} bgHeader={'#25A249'} bgColor={'#D3ECDB'}/>
+        <StatCard label="Total Stars" icon={require('../../assets/icons/star.png')} value={user.user_star} bgHeader={'#F99707'} bgColor={'#FFF2C6'} />
+        <StatCard label="Badges" icon={require('../../assets/icons/badge.png')} value={user.user_badge ?? 0} bgHeader={'#25A249'} bgColor={'#D3ECDB'} />
       </View>
-      {section === 'badges' ? <FavoriteBadgesDisplay badges={badges} /> : null }
-      
+      {section === 'badges' ? <FavoriteBadgesDisplay badges={badges} /> : null}
+
     </View>
   )
 }
