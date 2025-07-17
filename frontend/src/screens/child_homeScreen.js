@@ -12,9 +12,9 @@ export default function ChildHome() {
   const [modules, setModules] = useState([]);
   const [nickname, setNickname] = useState('');
   const [userId, setUserId] = useState('');
-  const { setActiveTab } = useTab();;
+  const { setActiveTab } = useTab();
 
-  // ================= Load profile info from AsyncStorage ====================
+  // Load nickname and userId from AsyncStorage
   useEffect(() => {
     const loadProfileInfo = async () => {
       try {
@@ -30,7 +30,7 @@ export default function ChildHome() {
     loadProfileInfo();
   }, []);
 
-  // ================= Fetch user data from backend ====================
+  // Fetch user profile data from backend
   useEffect(() => {
     if (!userId) return;
 
@@ -40,7 +40,7 @@ export default function ChildHome() {
       .catch((error) => console.error('Error fetching user data:', error));
   }, [userId]);
 
-  // ================= Fetch modules data ====================
+  // Fetch modules data
   useEffect(() => {
     if (!userId) return;
 
@@ -50,11 +50,10 @@ export default function ChildHome() {
       .catch((error) => console.error('Error fetching modules:', error));
   }, [userId]);
 
-
-// ================= forces navbar to update correctly ====================
-useEffect(() => {
-  setActiveTab('activities'); 
-}, []);
+  // Force navbar to highlight "Activities"
+  useEffect(() => {
+    setActiveTab('activities');
+  }, []);
 
   return (
     <View>
@@ -79,6 +78,7 @@ useEffect(() => {
           </View>
         </View>
       </ScrollView>
+
       <View style={styles.playTopic}>
         <Text>Keep Playing</Text>
       </View>

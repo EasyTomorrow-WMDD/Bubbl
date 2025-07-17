@@ -20,7 +20,7 @@ const { height } = Dimensions.get('window');
 export default function ChildMoodDrawingConfirmationContainer({ navigation, route }) {
   const { childProfileId } = route.params || {};
   const insets = useSafeAreaInsets();
-  const { setActiveTab } = useTab(); // ✅ Make sure to call this
+  const { setActiveTab } = useTab();
 
   useEffect(() => {
     const addStars = async () => {
@@ -58,7 +58,6 @@ export default function ChildMoodDrawingConfirmationContainer({ navigation, rout
 
   return (
     <>
-      {/* Safe area with Header */}
       <SafeAreaView edges={['top']} style={{ backgroundColor: '#8361E4' }}>
         <Header title="Mood" />
       </SafeAreaView>
@@ -69,21 +68,23 @@ export default function ChildMoodDrawingConfirmationContainer({ navigation, rout
           style={styles.backgroundImage}
           imageStyle={styles.imageBackground}
         >
-          <View style={styles.card}>
-            <LottieView
-              source={require('../../assets/animations/DoneStars.json')}
-              autoPlay
-              loop={false}
-              style={styles.starsAnimation}
-            />
+      
+          <LottieView
+            source={require('../../assets/animations/DoneStars.json')}
+            autoPlay
+            loop={false}
+            style={styles.starsAnimation}
+          />
 
+          {/* Card */}
+          <View style={styles.card}>
             <Text style={styles.title}>Awesome Drawing!</Text>
             <Text style={styles.subtitle}>You got 3 stars today.</Text>
 
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-                setActiveTab('activities'); // ✅ This works now
+                setActiveTab('activities');
                 navigation.navigate('ChildMain');
               }}
             >
@@ -112,6 +113,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#8361E4',
+    // marginTop: -60,
   },
   backgroundImage: {
     flex: 1,
@@ -121,23 +123,26 @@ const styles = StyleSheet.create({
   imageBackground: {
     resizeMode: 'cover',
   },
+  starsAnimation: {
+    width: 154,
+    height: 154,
+    position: 'absolute',
+    top: -9,
+    alignSelf: 'center',
+    zIndex: 10,
+    transform: [{ scale: 1.8 }],
+  },
   card: {
     backgroundColor: 'white',
     borderWidth: 3,
     borderColor: '#FFC670',
     borderRadius: 20,
     padding: 20,
-    marginTop: 30,
+    paddingTop: 60,
+    marginTop: 80, // enough room for stars above
     alignItems: 'center',
     width: '85%',
     zIndex: 2,
-  },
-  starsAnimation: {
-    width: 154,
-    height: 154,
-    paddingBottom: 100,
-    marginTop: -15,
-    transform: [{ scale: 1.8 }],
   },
   title: {
     fontSize: 28,
@@ -145,7 +150,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     color: '#2E195C',
     textAlign: 'center',
-    marginTop: -80,
+    marginTop: 10,
   },
   subtitle: {
     fontSize: 25,
@@ -166,9 +171,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   happyAnimation: {
+    position: 'absolute',
+    bottom: 95,
+    alignSelf: 'center',
     width: 200,
     height: 200,
-    marginTop: 75,
-    zIndex: 1,
   },
 });
