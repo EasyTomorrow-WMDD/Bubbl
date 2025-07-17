@@ -11,7 +11,7 @@ const ChildNavbar = ({ navigation, childProfileId }) => {
   // This will attempt to load the icon in both 'Paint.png' and 'paint.png
   // let paintIcon;
   // try {
-  //   paintIcon = require('../../assets/icons/paint.png');
+  //   paintIcon = require('../../assets/icons/Paint.png');
   // } catch (err1) {
   //   try {
   //     paintIcon = require('../../assets/icons/paint.png');
