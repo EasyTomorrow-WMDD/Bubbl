@@ -35,7 +35,7 @@ app.use('/api/modules', modulesRoutes);
 // Activity log
 app.use('/api/logs', logRoutes);
 ///////////////Badges/////////////////
-app.use('/api', badgeRoutes); 
+// app.use('/api', badgeRoutes); 
 ////////////Oboarding////////////
 app.use('/api/onboarding', onboardingRoutes);
 
