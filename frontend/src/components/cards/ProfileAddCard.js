@@ -2,6 +2,7 @@ import React from 'react';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { globalStyles } from '../../styles/BubblStyles';
 import { profileStyles } from '../../styles/ProfileStyles';
+import { fontStyles } from '../../styles/BubblFontStyles';
 
 const ProfileAddCard = ({ type, navigation }) => {
   // Label for the add profile card based on type
@@ -17,7 +18,7 @@ const ProfileAddCard = ({ type, navigation }) => {
       onPress={() => navigation.navigate('AddProfile', { profile_type: type })}
     >
       <View style={cardStyle}>
-        <Text style={profileStyles.nickname}>{label}</Text>
+        <Text style={[fontStyles.bodyMedium, profileStyles.nickname]}>{label}</Text>
       </View>
     </TouchableOpacity>
   );
