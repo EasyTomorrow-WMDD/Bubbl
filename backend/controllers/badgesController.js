@@ -96,25 +96,13 @@ exports.saveUserBadges = async (req, res) => {
 
 exports.awardBadgeToUser = async (req, res) => {
   const { userId } = req.params;
-  const { badge_name } = req.body;
+  const { badge_id } = req.body;
 
-  if (!badge_name) {
-    return res.status(400).json({ error: 'badge_name is required' });
+  if (!badge_id) {
+    return res.status(400).json({ error: 'badge_id is required' });
   }
 
   try {
-    const { data: badgeData, error: badgeError } = await supabase
-      .from('ref_badge')
-      .select('badge_id')
-      .eq('badge_name', badge_name)
-      .single();
-
-    if (badgeError || !badgeData) {
-      return res.status(404).json({ error: 'Badge not found' });
-    }
-
-    const badge_id = badgeData.badge_id;
-
     const { data: existing, error: selectError } = await supabase
       .from('user_badge')
       .select('*')
