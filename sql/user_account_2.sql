@@ -25,14 +25,14 @@ as $$
     us.user_nickname, 
     us.user_level, 
     us.user_xp,
+    next.level_xp_to_next_level,
     curr.level_xp_to_next_level,
-    prev.level_xp_to_next_level,
     us.user_day_streak,
     us.user_star,
     (select count(*) from user_badge where user_id = uid) as badge_count
   from public.user us
+  join ref_level next on us.user_level + 1 = next.level_value
   join ref_level curr on us.user_level = curr.level_value
-  join ref_level prev on us.user_level - 1 = prev.level_value
   where us.user_id = uid
 $$;
 
