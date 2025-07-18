@@ -93,7 +93,7 @@ const ParentSettingsContainer = ( {navigation} ) => {
         <Text style={[fontStyles.bodyDefault, parentStyles.parentChildSelectionSubHeading, {marginBottom:12}]}>Add account</Text>
 
         {/* Profile Lists (Parents) */}
-        <Text style={[profileStyles.subheading, {textAlign:'center'}]}>Parents (Guardians)</Text>
+        <Text style={[fontStyles.display3, profileStyles.subheading, {textAlign:'center'}]}>Parents (Guardians)</Text>
         <ProfileList 
           profiles={parentProfiles} 
           type="parent" 
@@ -102,20 +102,12 @@ const ParentSettingsContainer = ( {navigation} ) => {
         />
 
         {/* Profile Lists (Children) */}
-        <Text style={[profileStyles.subheading, {textAlign:'center'}]}>Child(ren)</Text>
+        <Text style={[fontStyles.display3, profileStyles.subheading, {textAlign:'center'}]}>Child(ren)</Text>
         <ProfileList 
           profiles={childProfiles} 
           type="kid" 
           navigation={navigation} 
           showAddCard={true}
-        />
-
-        {/* Logout */}
-        <Text style={[fontStyles.display2, parentStyles.parentChildSelectionHeader]}>Logout</Text>
-        <BubblButton 
-          label="Logout" 
-          onPress={handleLogout}
-          style={{ marginTop: 12, backgroundColor: BubblColors.BubblPink500, alignSelf: 'center' }}
         />
 
       </View>
