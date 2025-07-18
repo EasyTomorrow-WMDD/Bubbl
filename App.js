@@ -33,6 +33,7 @@ import PurchaseSuccess from './frontend/src/screens/PurchaseSucess';
 import StreakScreen from './frontend/src/screens/StreakScreen';
 import EvolutionScreen from './frontend/src/screens/EvolutionScreen';
 import OnboardingSlidesScreen from './frontend/src/screens/OnboardingSlidesScreen';
+import EnergyZeroScreen from './frontend/src/screens/EnergyZeroScreen';
 
 // SplashScreen.preventAutoHideAsync(); // Keep splash screen until fonts are loaded
 
@@ -90,6 +91,7 @@ export default function App() {
               <Stack.Screen name="PurchaseSuccess" component={PurchaseSuccess} />
               <Stack.Screen name="Streak" component={StreakScreen} />
               <Stack.Screen name="EvolutionScreen" component={EvolutionScreen} />
+              <Stack.Screen name="EnergyZeroScreen" component={EnergyZeroScreen} /> 
             </Stack.Navigator>
           </NavigationContainer>
         </TabProvider>
