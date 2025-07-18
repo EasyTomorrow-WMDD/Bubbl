@@ -97,8 +97,6 @@ const AuthOnboardingContainer = ({ navigation }) => {
 
       {/* Status bar */}
       <StatusBar barStyle="dark-content" backgroundColor={BubblColors.BubblPurple950} />
-      {/* Safe area for parent main contents */}
-      <SafeAreaView edges={['top']} style={profileStyles.OnboardingLayoutTopSafeArea} />
 
       {/* Main area for parent page */}
       <ScrollView contentContainerStyle={globalStyles.scrollContainer}>
