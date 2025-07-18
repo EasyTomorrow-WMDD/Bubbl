@@ -28,7 +28,7 @@ const ParentChildProgressStatsContainer = ({ userId }) => {
         // Step 1: Get the current user's session to retrieve access token
         const { data: { session } } = await supabase.auth.getSession();
 
-        console.log('[INFO][ChildStats] Fetching stats for userId:', userId);
+        // console.log('[INFO][ChildStats] Fetching stats for userId:', userId);
 
         // Step 2: Call the backend API to get stats for the specified user
         const response = await axios.get(`${BubblConfig.BACKEND_URL}/api/users/${userId}/stats`, {
@@ -79,8 +79,9 @@ const ParentChildProgressStatsContainer = ({ userId }) => {
   // Render the stats UI
   const { user, avatar_assets, badges } = stats;
   const avatarSource = avatarImages[user.avatar_id] || avatarImages['avatar01']; 
-  const progress = user.user_xp / user.xp_to_next_level;
+  const progress = (user.user_xp - user.xp_to_current_level) / (user.xp_to_next_level - user.xp_to_current_level); // Calculate progress as a fraction
   // console.log('[DEBUG][ChildStats] User current xp:', user.user_xp);
+  // console.log('[DEBUG][ChildStats] User xp to current level:', user.xp_to_current_level);
   // console.log('[DEBUG][ChildStats] User xp to next level:', user.xp_to_next_level);
   // console.log('[DEBUG][ChildStats] User progress:', progress);
 
