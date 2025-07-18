@@ -1,7 +1,10 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Alert, TouchableOpacity, ScrollView, StatusBar, SafeAreaView } from 'react-native';
 import supabase from '../../services/supabase'; 
 import { globalStyles } from '../../styles/BubblStyles';
+import { fontStyles } from '../../styles/BubblFontStyles';
+import { profileStyles } from '../../styles/ProfileStyles';
+import BubblColors from '../../styles/BubblColors';
 // Import components
 import PageHeading from '../layout/PageHeading';
 import BubblTextInput from '../forms/BubblTextInput';
@@ -74,8 +77,9 @@ const AuthSignupScreen = ({ navigation }) => {
       {/* Heading Row */}
       <PageHeading title="Create account" onBackPress={() => navigation.replace('Welcome')} />
 
-      {/* Form area */}
-      <View style={globalStyles.formContainer}>
+      {/* Main area */}
+      <ScrollView style={globalStyles.formContainer}>
+      {/* <View style={globalStyles.formContainer}> */}
 
         {/* User Name */}
         <BubblTextInput
@@ -89,7 +93,7 @@ const AuthSignupScreen = ({ navigation }) => {
         {/* Email */}
         <BubblTextInput
           label="Email"
-          placeholder="Enter your email, e.g., email123@bubbl.com"
+          placeholder="Enter your email"
           value={email}
           onChangeText={setEmail}
           autoCapitalize="none"
@@ -107,7 +111,7 @@ const AuthSignupScreen = ({ navigation }) => {
         />
 
         {/* Notes on the password */}
-        <Text style={globalStyles.passwordNote}>
+        <Text style={[fontStyles.bodyDefault, globalStyles.passwordNote]}>
           Your password must have the following: {'\n'}
           {'\u2022'} 6 character minimum{'\n'}
           {'\u2022'} 1 uppercase letter{'\n'}
@@ -131,11 +135,11 @@ const AuthSignupScreen = ({ navigation }) => {
         />
 
         {/* Disclaimer */}
-        <Text style={globalStyles.disclaimer}>
+        <Text style={[fontStyles.bodyDefault, globalStyles.disclaimer]}>
           By continuing, you agree to our Privacy & Cookie Policy and Terms & Conditions
         </Text>
 
-      </View>
+      </ScrollView>
     </View>
   );
 }
