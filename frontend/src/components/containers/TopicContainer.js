@@ -77,15 +77,27 @@ export default function TopicContainer({ route, navigation }) {
       setTimeToNext(timeRemaining);
 
       if (userEnergy === 0) {
-        startCountdown(timeRemaining);
+       
+        navigation.navigate('EnergyZeroScreen', {
+          timeToNextMs: timeRemaining,
+          childId: childProfileId
+        });
+        return; 
       } else {
         await loadQuestions();
+        setIsLoadingEnergy(false);
       }
     } catch (err) {
-      navigation.goBack();
-    } finally {
       setIsLoadingEnergy(false);
+      navigation.goBack();
     }
+  };
+
+  const formatCountdown = (ms) => {
+    if (!ms || ms <= 0) return null;
+    const minutes = Math.floor(ms / 60000);
+    const seconds = Math.floor((ms % 60000) / 1000);
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   };
 
   const startCountdown = (ms) => {
@@ -152,14 +164,22 @@ export default function TopicContainer({ route, navigation }) {
       const res = await axios.post(`${BASE_URL}/api/energy/reduce`, {
         user_id: childProfileId,
       });
-
+  
       const newEnergy = res.data.user_energy;
       setEnergy(newEnergy);
-
+  
       if (newEnergy === 0) {
-        setTimeout(() => {
-          navigation.goBack();
-        }, 500);
+        const statusRes = await axios.get(`${BASE_URL}/api/energy/status`, {
+          params: { user_id: childProfileId }
+        });
+  
+        const timeToNext = statusRes.data.time_to_next_recharge_ms;
+  
+        navigation.navigate('EnergyZeroScreen', {
+          timeToNextMs: timeToNext,
+          childId: childProfileId
+        });
+  
       } else {
         if (questions.length === 1) {
           setShowTryAgain(true);
@@ -171,8 +191,10 @@ export default function TopicContainer({ route, navigation }) {
           setCurrentIndex(0);
         }
       }
-    } catch {}
-  };
+    } catch (err) {
+      console.error('Error reducing energy:', err);
+    }
+  };  
 
   const handleAnswer = async (isCorrect) => {
     if (isCorrect) {
@@ -266,7 +288,15 @@ export default function TopicContainer({ route, navigation }) {
     await loadQuestions();
   };
 
-  if (isLoadingTopic || isLoadingEnergy || !topic) {
+  if (isLoadingTopic || (!topic)) {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  if (isLoadingEnergy && energy !== 0) {
     return (
       <View style={styles.loaderContainer}>
         <ActivityIndicator size="large" />
@@ -275,15 +305,7 @@ export default function TopicContainer({ route, navigation }) {
   }
 
   if (energy === 0) {
-    return (
-      <View style={styles.loaderContainer}>
-        <Text style={styles.energyZero}>Energy: 0</Text>
-        <Text style={styles.countdownText}>
-          {countdown ? `You will regain 1 energy in ${countdown}` : 'Please wait...'}
-        </Text>
-        <Button title="Go Back" onPress={() => navigation.goBack()} />
-      </View>
-    );
+    return null;
   }
 
   if (showRestart || questions.length === 0) {
@@ -299,7 +321,7 @@ export default function TopicContainer({ route, navigation }) {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ paddingTop: 40, paddingHorizontal: 20 }}>
+      <View style={{ paddingTop: 55, paddingHorizontal: 20 }}>
         <EnergyBarContainer energy={energy} maxEnergy={3} />
       </View>
 
