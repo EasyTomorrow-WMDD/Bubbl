@@ -289,6 +289,45 @@ exports.addProfile = async (req, res) => {
       return res.status(500).json({ error: error.message });
     }
 
+    // EZ-272 - default mascot and stars for kid users - START
+    if (user_type === 'kid') {
+      const newUserId = data[0].user_id;  // Get the newly created user's ID
+
+      // Get the constants for default mascot and stars
+      const {
+        DEFAULT_ASSET_ID,
+        DEFAULT_ASSET_VARIATION_ID,
+        DEFAULT_ASSET_VARIATION_LEVEL_ID,
+        DEFAULT_STARS,
+      } = require('../constants/bubblConstants');
+
+      // Step 3.1: Assign default mascot asset
+      const { error: insertAssetError } = await supabase
+        .from('user_asset')
+        .insert([{
+          user_id: newUserId,
+          asset_id: DEFAULT_ASSET_ID,
+          asset_variation_id: DEFAULT_ASSET_VARIATION_ID,
+          ref_asset_variation_level_id: DEFAULT_ASSET_VARIATION_LEVEL_ID,
+          user_asset_active: true,
+        }]);
+
+      if (insertAssetError) {
+        console.error('[ERROR][addProfile] Failed to assign mascot asset:', insertAssetError.message);
+      }
+
+      // Step 3.2: Set default stars
+      const { error: updateStarError } = await supabase
+        .from('user')
+        .update({ user_star: DEFAULT_STARS })
+        .eq('user_id', newUserId);
+
+      if (updateStarError) {
+        console.error('[ERROR][addProfile] Failed to assign default stars:', updateStarError.message);
+      }
+    }
+    // EZ-272 - default mascot and stars for kid users - END
+
     return res.status(200).json({ user: data[0] });
   } catch (err) {
     console.error('Unexpected error in addProfile:', err.message);
