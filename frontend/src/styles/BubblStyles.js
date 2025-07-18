@@ -177,13 +177,12 @@ export const globalStyles = StyleSheet.create({
   // Login page specific styles -- START
   passwordNote: {
     marginTop: 10,
-    fontSize: 12,
     color: '#333',
-    fontStyle: 'italic'
+    fontStyle: 'italic',
+    marginBottom: 20,
   },
   disclaimer: {
     marginTop: 20,
-    fontSize: 12,
     color: '#555',
     textAlign: 'center'
   },

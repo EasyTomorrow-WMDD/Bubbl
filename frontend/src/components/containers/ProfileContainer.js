@@ -99,14 +99,14 @@ const ProfileContainer = ({ navigation }) => {
       padding: 20,
     }}
   >
-    <Text style={profileStyles.subheading}>Parents (Guardians)</Text>
+    <Text style={[fontStyles.display3, profileStyles.subheading]}>Parents (Guardians)</Text>
     <ProfileList
       profiles={parentProfiles}
       type="parent"
       navigation={navigation}
       showAddCard={false}
     />
-    <Text style={profileStyles.subheading}>Child(ren)</Text>
+    <Text style={[fontStyles.display3, profileStyles.subheading]}>Child(ren)</Text>
     <ProfileList
       profiles={childProfiles}
       type="kid"

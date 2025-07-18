@@ -86,7 +86,7 @@ const ProfileAddContainer = () => {
       {/* Heading Row */}
       <PageHeading
         title={profile_type === 'parent' ? 'Add parent profile' : 'Add child profile'} 
-        onBackPress={() => navigation.replace('Profile')} 
+        onBackPress={() => navigation.goBack()} 
       />
 
       {/* Form area */}
