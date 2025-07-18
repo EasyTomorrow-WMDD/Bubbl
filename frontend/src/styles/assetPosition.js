@@ -2,7 +2,7 @@
 
 export const assetPositionMap = {
     "Bow": {
-        "Gotie": { top: 0, left: 105, width: 190, height: 170 },
+        "Gotie": { top: 0, left: 125, width: 190, height: 170 },
         "Sunsetegg": { top: 0, left: 105, width: 190, height: 170 },
         "Rainbowegg": { top: 0, left: 105, width: 190, height: 170 },
         "Emmei": { top: 0, left: 105, width: 190, height: 170 },
@@ -89,4 +89,26 @@ export const assetPositionMap = {
         "Rainbow": { top: 5, left: 220, width: 120, height: 120, transform: [{ rotate: '20deg' }] },
         "Sunset": { top: 5, left: 220, width: 120, height: 120, transform: [{ rotate: '20deg' }] },
     },
+    "Crown" : {
+        "Gotie": { top: -10, left: 150, width: 130, height: 130, transform: [{ rotate: '0deg' }]  },
+        "Sunsetegg": { top: -10, left: 150, width: 130, height: 130, transform: [{ rotate: '0deg' }]  },
+        "Rainbowegg": { top: -10, left: 150, width: 130, height: 130, transform: [{ rotate: '0deg' }]  },
+        "Emmei": { top: -10, left: 150, width: 130, height: 130, transform: [{ rotate: '0deg' }]  },
+        "Pinkie": { top: -10, left: 150, width: 130, height: 130, transform: [{ rotate: '0deg' }]  },
+        "Gotie Gold": { top: -5, left: 175, width: 90, height: 90, transform: [{ rotate: '0deg' }] },
+        "Gotiebow": { top: -5, left: 175, width: 90, height: 90, transform: [{ rotate: '0deg' }] },
+        "Gotiestripes": { top: -5, left: 175, width: 90, height: 90, transform: [{ rotate: '0deg' }] },
+        "Gotie Pink": { top: -5, left: 175, width: 90, height: 90, transform: [{ rotate: '0deg' }] },
+        "Gotie Blue": { top: -5, left: 175, width: 90, height: 90, transform: [{ rotate: '0deg' }] },
+        "Youngbow": { top: -15, left:225, width: 120, height: 120, transform: [{ rotate: '0deg' }] },
+        "Youngstr": { top: -15, left:225, width: 120, height: 120, transform: [{ rotate: '0deg' }] },
+        "Youngpi": { top: -15, left:225, width: 120, height: 120, transform: [{ rotate: '0deg' }] },
+        "Youngie": { top: -15, left:225, width: 120, height: 120, transform: [{ rotate: '0deg' }] },
+        "Youngemi": { top: -15, left:225, width: 120, height: 120, transform: [{ rotate: '0deg' }] },
+        "Bubblgam": { top: 15, left: 180, width: 80, height: 80, transform: [{ rotate: '0deg' }] },
+        "Bubblgum": { top: 15, left: 180, width: 80, height: 80, transform: [{ rotate: '0deg' }] },
+        "Bubblgom": { top: 15, left: 180, width: 80, height: 80, transform: [{ rotate: '0deg' }] },
+        "Rainbow": { top: 15, left: 180, width: 80, height: 80, transform: [{ rotate: '0deg' }] },
+        "Sunset": { top: 15, left: 180, width: 80, height: 80, transform: [{ rotate: '0deg' }] },
+    }
 };

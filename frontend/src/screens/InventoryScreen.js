@@ -3,8 +3,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
-  ImageBackground,
   ScrollView,
   Pressable
 } from 'react-native';
@@ -21,6 +19,7 @@ import { fontStyles } from '../styles/BubblFontStyles';
 import BubblColors from '../styles/BubblColors';
 import { useTab } from '../utils/TabContext';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { assetPositionSummary } from '../styles/assetInventoryScreen'
 
 const InventoryScreen = ({ navigation, route }) => {
   const { childProfileId } = route.params || {};
@@ -67,6 +66,29 @@ const InventoryScreen = ({ navigation, route }) => {
       .catch(err => console.error('Failed to refresh badges', err));
   };
 
+  // ============ Build positionOverrides dynamically ============
+  let currentSkinName = null;
+  const positionOverrides = {};
+
+  assets.forEach((asset) => {
+    const type = asset.ref_asset.asset_type;
+    const assetName = asset.ref_asset_variation.asset_variation_name;
+    if (type === 'skin') {
+      currentSkinName = assetName;
+    }
+  });
+
+  assets.forEach((asset) => {
+    const type = asset.ref_asset.asset_type;
+    const assetName = asset.ref_asset_variation.asset_variation_name;
+    if (type !== 'skin' && currentSkinName) {
+      const map = assetPositionSummary[assetName];
+      if (map && map[currentSkinName]) {
+        positionOverrides[assetName] = map[currentSkinName];
+      }
+    }
+  });
+
   if (!user) return <Text>Loading...</Text>;
 
   return (
@@ -75,11 +97,7 @@ const InventoryScreen = ({ navigation, route }) => {
 
       <View style={{ flex: 1, backgroundColor: BubblColors.BubblPurple500 }}>
         <Header title={'Shop'} />
-        <ScrollView
-          contentContainerStyle={{
-            paddingBottom: insets.bottom + 50,
-          }}
-        >
+        <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 50 }}>
           <View style={{ backgroundColor: BubblColors.BubblPurple500 }}>
             <View style={{ backgroundColor: 'white', borderTopRightRadius: 50, borderTopLeftRadius: 50 }}>
               <View style={{ alignItems: 'center', marginVertical: 20 }}>
@@ -114,12 +132,7 @@ const InventoryScreen = ({ navigation, route }) => {
                       setAssets={setAssets}
                       hatSize={165}
                       top={-80}
-                      positionOverrides={{
-                        "Beannie": { top: -40, left: 190, width: 120, height: 120, transform: [{ rotate: "25deg" }] },
-                        "Bow": { top: -45, left: 205, width: 120, height: 120, transform: [{ rotate: "25deg" }] },
-                        "Confetti": { left: 200, top: -60, width: 120, height: 120, transform: [{ rotate: "25deg" }] },
-                        "Santa Hat": { left: 200, top: -50, width: 120, height: 120, transform: [{ rotate: "25deg" }] }
-                      }}
+                      positionOverrides={positionOverrides}
                     />
                   </View>
                   <Store
@@ -170,6 +183,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#A997EE',
   },
+  activeText: {
+    color: 'white',
+    fontWeight: 'bold'
+  }
 });
 
 export default InventoryScreen;
