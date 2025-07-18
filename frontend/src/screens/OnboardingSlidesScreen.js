@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     padding: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: -120
+    marginBottom: -140
   },
   title: {
     marginTop: -50,
