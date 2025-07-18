@@ -79,7 +79,10 @@ const ParentChildProgressStatsContainer = ({ userId }) => {
   // Render the stats UI
   const { user, avatar_assets, badges } = stats;
   const avatarSource = avatarImages[user.avatar_id] || avatarImages['avatar01']; 
-  const progress = (user.user_xp - user.xp_to_current_level) / (user.xp_to_next_level - user.xp_to_current_level);
+  const progress = user.user_xp / user.xp_to_next_level;
+  // console.log('[DEBUG][ChildStats] User current xp:', user.user_xp);
+  // console.log('[DEBUG][ChildStats] User xp to next level:', user.xp_to_next_level);
+  // console.log('[DEBUG][ChildStats] User progress:', progress);
 
   return (
     <View style={childProgressStyles.childProgressStatsContainer}>
