@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_URL } from '../../utils/config';
 import EnergyBarContainer from './EnergyBarContainer';
 import { useFocusEffect } from '@react-navigation/native';
+import LogChildMilestone from '../../utils/LogChildMilestone';
 
 export default function TopicContainer({ route, navigation }) {
   const { topicId, childProfileId } = route.params;
@@ -238,6 +239,17 @@ export default function TopicContainer({ route, navigation }) {
           });
 
           const { levelChanged, newLevel } = response.data;
+
+          const milestoneMap = {
+            '48b355b6-85bf-4c32-ac99-0b920cf1dbcb': 1,
+            '61ad4167-84a7-4865-b5bf-29a915a4d503': 2,
+            '6493b507-bdce-4984-a4d8-9649be3d8bed': 3,
+            'e36fc032-ca9d-4405-b7cc-9ab6b22cf1f5': 4
+          };
+
+          if (milestoneMap[topic.topic_id]) {
+            await LogChildMilestone(childProfileId, 'Child', milestoneMap[topic.topic_id]);
+          }
 
           if (levelChanged) {
             let animationType;
