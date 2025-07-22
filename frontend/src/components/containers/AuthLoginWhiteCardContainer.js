@@ -5,13 +5,16 @@ import BubblButton from '../forms/BubblButton';
 import DividerWithText from '../layout/DividerWithText';
 import BubblButtonLogin from '../forms/BubblButtonLogin';
 import BubblButtonLoginOutline from '../forms/BubblButtonLoginOutline';
+import { fontStyles } from '../../styles/BubblFontStyles';
 
 export default function AuthLoginWhiteCard({ navigation }) {
   return (
     <View style={globalStyles.loginWrapper}>
       <View style={globalStyles.loginCard}>
-        <Text style={globalStyles.title}>Bubbl is happy to see you!</Text>
-        <Text style={globalStyles.subtitle}>
+        <Text style={[fontStyles.display1, { textAlign: 'center', marginTop: -30, marginBottom: 10 }]}>
+          Bubbl is happy to see you!
+        </Text>
+        <Text style={[fontStyles.bodyMedium, { textAlign: 'center', marginBottom: 10 }]}>
           Let's go on a fun adventure to learn how to stay safe!
         </Text>
 
