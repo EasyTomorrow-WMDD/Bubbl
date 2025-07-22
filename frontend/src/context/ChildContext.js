@@ -34,7 +34,19 @@ export const ChildProvider = ({ children }) => {
           return;
         }
 
-        const token = JSON.parse(session).access_token;
+        const sessionData = JSON.parse(session);
+        const token = sessionData.access_token;
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const now = Math.floor(Date.now() / 100000);
+
+        if (payload.exp && now >= payload.exp) {
+          console.log('[ChildContext] Token expired. Clearing session.');
+          await AsyncStorage.removeItem('supabaseSession');
+          await AsyncStorage.removeItem('currentChild');
+          setIsLoadingChild(false);
+          return;
+        }
+
         console.log('[ChildContext] Using token:', token);
 
         const res = await axios.get(`${BASE_URL}/api/users/profiles`, {
@@ -99,6 +111,5 @@ export const ChildProvider = ({ children }) => {
     </ChildContext.Provider>
   );
 };
-
 
 export const useCurrentChild = () => useContext(ChildContext);
