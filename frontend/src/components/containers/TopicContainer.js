@@ -160,6 +160,26 @@ export default function TopicContainer({ route, navigation }) {
     }
   };
 
+  const checkIfStreakScreenShown = async () => {
+    try {
+      const key = `streakScreenShown_${childProfileId}`;
+      const shown = await AsyncStorage.getItem(key);
+      return shown === 'true';
+    } catch (error) {
+      console.error('[TopicContainer] Error checking streak screen status:', error);
+      return false;
+    }
+  };
+
+  const markStreakScreenAsShown = async () => {
+    try {
+      const key = `streakScreenShown_${childProfileId}`;
+      await AsyncStorage.setItem(key, 'true');
+    } catch (error) {
+      console.error('[TopicContainer] Error marking streak screen as shown:', error);
+    }
+  };
+
   const handleWrongAnswer = async () => {
     try {
       const res = await axios.post(`${BASE_URL}/api/energy/reduce`, {
@@ -212,10 +232,19 @@ export default function TopicContainer({ route, navigation }) {
           const alreadyHasBadge = await checkIfBadgeAlreadyEarned(badge.id);
           if (!alreadyHasBadge) {
             await awardBadge(badge.id);
+            
             if (badge.id === '659ff7d3-f4c1-4de5-9dd2-49b7b853fdc1') {
-              setCorrectStreak(0);
-              navigation.navigate('Streak');
-              return;
+        
+              const streakScreenAlreadyShown = await checkIfStreakScreenShown();
+              
+              if (!streakScreenAlreadyShown) {
+                await markStreakScreenAsShown();
+                setCorrectStreak(0);
+                navigation.navigate('Streak');
+                return;
+              } else {
+                setCorrectStreak(0);
+              }
             }
           }
         }
