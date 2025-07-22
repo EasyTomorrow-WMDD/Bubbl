@@ -277,7 +277,9 @@ export default function TopicContainer({ route, navigation }) {
           };
 
           if (milestoneMap[topic.topic_id]) {
-            await LogChildMilestone(childProfileId, 'Child', milestoneMap[topic.topic_id]);
+            const nickname = await AsyncStorage.getItem('selected_user_nickname');
+            await LogChildMilestone(childProfileId, nickname || 'Child', milestoneMap[topic.topic_id]);
+
           }
 
           if (levelChanged) {
