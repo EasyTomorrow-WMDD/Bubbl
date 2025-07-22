@@ -232,7 +232,7 @@ export default function TemporaryMainContainer() {
                     positionOverrides={positionOverrides}
                   />
                 </View>
-                <Image source={require('../../assets/images/shadow.png')} style={{ position: 'relative', bottom: 35, width: 164, height: 16, zIndex: 0 }} />
+                <Image source={require('../../assets/images/shadow.png')} style={{ position: 'relative', bottom: 45, width: 178, height: 18, zIndex: 0 }} />
                 <Text style={[styles.title, fontStyles.display1]}>Hi, {user ? user.user_nickname : '...'}</Text>
                 <StatsPanel user={user} level={level} />
                 {user?.user_energy < 3 ? <EnergyTimer userId={userId} /> : null}
@@ -261,7 +261,6 @@ export default function TemporaryMainContainer() {
                 <Image source={require('../../assets/icons/play_icon.png')} style={{ height: 20, width: 20 }} />
               </Pressable>
             </ImageBackground>
-
             <View>
               <Module modules={modules} progress={progress} onTopicPress={handleTopicPress} currentTopicId={currentTopicId} />
             </View>
@@ -281,7 +280,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
     padding: 0,
-    marginBottom: -20,
+    marginBottom: -30,
     transform: [{ translateY: -20 }]
   },
   container: {
