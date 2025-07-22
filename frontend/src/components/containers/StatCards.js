@@ -18,19 +18,25 @@ const StatCard = ({ label, icon, value, extra, bgHeader, bgColor }) => (
 );
 
 export default function StatsPanel({ user, level }) {
-  if (!user) return null;
+  if (!user || !level
+  ) return null;
 
-  const nextLevel = user.user_level === 4 ? user.user_level : user.user_level + 1;
-  console.log('NEXT LEVEL', nextLevel);
+
+  const nextLevel = user.user_level === 5 ? user.user_level : user.user_level + 1;
+  // console.log('NEXT LEVEL', nextLevel);
   const currentLevel = level.find(l => l.level_value === nextLevel);
-  console.log('CURRENT LEVEL', currentLevel);
+useEffect(() => {
+    console.log('USER LEVEL:', user.user_level);
+    console.log('CURRENT LEVEL:', currentLevel);
+  }, [user.user_level, currentLevel]);
+
 
   return (
     <View style={styles.container}>
       <StatCard label="Total HP" icon={require('../../assets/icons/heart.png')} value={user.user_energy} bgHeader={'#EE47EB'} bgColor={'#FDE8FF'} />
       <StatCard label="Total Stars" icon={require('../../assets/icons/star.png')} value={user.user_star} bgHeader={'#F99707'} bgColor={'#FFF2C6'} />
       <StatCard label={`Level ${user?.user_level}`} icon={require('../../assets/icons/flash.png')} value={
-        currentLevel.level_value !== 4
+        currentLevel.level_value !== 5
           ? `${user?.user_xp} / ${currentLevel?.level_xp_to_next_level}`
           : `${user?.user_xp}`
       } bgHeader={'#11BBB8'} bgColor={'#CBFCF6'} />

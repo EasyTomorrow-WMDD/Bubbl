@@ -81,7 +81,7 @@ export default function TemporaryMainContainer() {
       try {  
         const response = await axios.get(`${BASE_URL}/api/childProgress/levels`);
         setLevel(response.data);
-        // console.log('Levels data fetched:', response.data);
+        console.log('Levels data fetched:', response.data);
       } catch (error) {
         console.error('Error fetching levels data:', error);
       }
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
     width: '100%',
     overflow: 'hidden',
     borderBottomLeftRadius: 40,
-    borderBottomRightRadius: 40,
+    borderBottomRightRadius: 30,
     padding: 0,
     marginBottom: -30,
     transform: [{ translateY: -20 }]
