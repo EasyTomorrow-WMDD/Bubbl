@@ -92,7 +92,7 @@ moodIconWrapper: {
   top: '81%',
   left: '49%',
   transform: [{ translateX: -32 }],
-  backgroundColor: '#2E195C',
+  backgroundColor: '#8361E4',
   padding: 11,
   borderRadius: 50,
   zIndex: 10,
@@ -103,7 +103,7 @@ moodIconWrapper: {
     resizeMode: 'contain',
   },
   infoBox: {
-    backgroundColor: '#2E195C',
+    backgroundColor: '#8361E4',
     borderTopLeftRadius: 31,
     borderTopRightRadius: 31,
     paddingVertical: 24,
