@@ -14,6 +14,7 @@ import supabase from '../../services/supabase';
 import BubblConfig from '../../config/BubblConfig';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTab } from '../../utils/TabContext';
+import { fontStyles } from '../../styles/BubblFontStyles';
 
 const { height } = Dimensions.get('window');
 
@@ -78,8 +79,8 @@ export default function ChildMoodDrawingConfirmationContainer({ navigation, rout
 
           {/* Card */}
           <View style={styles.card}>
-            <Text style={styles.title}>Awesome Drawing!</Text>
-            <Text style={styles.subtitle}>You got 3 stars today.</Text>
+               <Text style={[fontStyles.heading1, { textAlign: 'center'}]}>Awesome Drawing!</Text>
+            <Text style={[fontStyles.heading1, { textAlign: 'center', marginBottom: 30}]}>You got 3 stars today.</Text>
 
             <TouchableOpacity
               style={styles.button}
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: 'white',
-    borderWidth: 3,
+    borderWidth: 5,
     borderColor: '#FFC670',
     borderRadius: 20,
     padding: 20,
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
   },
   happyAnimation: {
     position: 'absolute',
-    bottom: 95,
+    bottom: 100,
     alignSelf: 'center',
     width: 200,
     height: 200,

@@ -11,6 +11,7 @@ import ChildNavbar from '../layout/ChildNavbar';
 import LottieView from 'lottie-react-native';
 import Header from '../layout/Header';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { fontStyles } from '../../styles/BubblFontStyles';
 
 const moods = {
   happy: {
@@ -18,7 +19,7 @@ const moods = {
     animation: require('../../assets/animations/Happy_Mood.json'),
     label: 'Happy',
     messageLine1: 'Yay!',
-    messageLine2: "You're feeling happy.",
+    messageLine2: "You're feeling happy",
   },
   sad: {
     icon: require('../../assets/icons/Moods/Sad.png'),
@@ -32,7 +33,7 @@ const moods = {
     animation: require('../../assets/animations/Mad_Mood.json'),
     label: 'Mad',
     messageLine1: "It's okay",
-    messageLine2: 'to feel angry.',
+    messageLine2: 'to feel angry',
   },
 };
 
@@ -66,12 +67,11 @@ export default function ChildMoodContainer({ navigation, childProfileId }) {
           {!selected && (
             <>
               <View style={styles.feelTodayContainer}>
-                <Text style={styles.feelTodayLine1}>How do you</Text>
-                <Text style={styles.feelTodayLine2}>feel today?</Text>
+                <Text style={[fontStyles.display1, { textAlign: 'center', color: 'white' }]}>How do you</Text>
+                <Text style={[fontStyles.display1, { textAlign: 'center', color: 'white' }]}>feel today?</Text>
               </View>
 
               <View style={styles.moodsPyramid}>
-                {/* Happy */}
                 <View style={{ alignItems: 'center', marginTop: 20 }}>
                   <TouchableOpacity onPress={() => setSelected('happy')}>
                     <Image source={moods.happy.icon} style={styles.moodIcon} />
@@ -82,7 +82,6 @@ export default function ChildMoodContainer({ navigation, childProfileId }) {
                 </View>
 
                 <View style={styles.moodsRow}>
-                  {/* Mad */}
                   <View style={{ alignItems: 'center', marginLeft: -80 }}>
                     <TouchableOpacity onPress={() => setSelected('mad')}>
                       <Image source={moods.mad.icon} style={styles.moodIcon} />
@@ -92,7 +91,6 @@ export default function ChildMoodContainer({ navigation, childProfileId }) {
                     </View>
                   </View>
 
-                  {/* Sad */}
                   <View style={{ alignItems: 'center', marginRight: -80 }}>
                     <TouchableOpacity onPress={() => setSelected('sad')}>
                       <Image source={moods.sad.icon} style={styles.moodIcon} />
@@ -110,16 +108,16 @@ export default function ChildMoodContainer({ navigation, childProfileId }) {
             <View style={styles.messageBox}>
               {!showDrawPrompt && (
                 <>
+                <Text style={[fontStyles.display1, { textAlign: 'center', color: 'white' }]}>{moods[selected].messageLine1}</Text>
+                  <Text style={[fontStyles.display1, { textAlign: 'center', color: 'white', marginBottom: 12 }]}>{moods[selected].messageLine2}</Text>
                   <Image source={moods[selected].icon} style={styles.moodIconSelected} />
-                  <Text style={styles.messageLine1}>{moods[selected].messageLine1}</Text>
-                  <Text style={styles.messageLine2}>{moods[selected].messageLine2}</Text>
                 </>
               )}
 
               {showDrawPrompt && (
                 <>
-                  <Text style={styles.messageLine1}>Draw how your</Text>
-                  <Text style={styles.messageLine2}>day feels!</Text>
+                  <Text style={[fontStyles.display1, { textAlign: 'center', color: 'white' }]}>Draw how your</Text>
+                  <Text style={[fontStyles.display1, { textAlign: 'center', color: 'white' }]}>day feels!</Text>
                   <TouchableOpacity
                     style={styles.drawButton}
                     onPress={() =>
@@ -136,7 +134,6 @@ export default function ChildMoodContainer({ navigation, childProfileId }) {
             </View>
           )}
 
-          {/* Animation */}
           <View style={styles.animationContainer}>
             <LottieView
               source={
@@ -182,19 +179,9 @@ const styles = StyleSheet.create({
     left: 0,
   },
   feelTodayContainer: {
-    marginTop: -10,
+    marginTop: -25,
     marginBottom: 20,
     alignItems: 'center',
-  },
-  feelTodayLine1: {
-    fontSize: 30,
-    fontWeight: '600',
-    color: 'white',
-  },
-  feelTodayLine2: {
-    fontSize: 30,
-    fontWeight: '600',
-    color: 'white',
   },
   moodsPyramid: {
     alignItems: 'center',
@@ -233,28 +220,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 20,
   },
-  messageLine1: {
-    fontSize: 26,
-    fontWeight: '600',
-    color: 'white',
-    textAlign: 'center',
-  },
-  messageLine2: {
-    fontSize: 22,
-    color: 'white',
-    marginBottom: 12,
-    textAlign: 'center',
-  },
   drawButton: {
     backgroundColor: '#FFC670',
-    paddingHorizontal: 24,
-    paddingVertical: 12,
+    paddingHorizontal: 40,
+    paddingVertical: 18,
     borderRadius: 25,
-    marginTop: 10,
+    marginTop: 40,
   },
   drawButtonText: {
     color: '#2E195C',
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   animationContainer: {
