@@ -99,8 +99,7 @@ const ParentChildMoodCanvasContainer = () => {
   const renderDrawingCard = ({ item }) => {
     const moodKey = item.mood?.charAt(0).toUpperCase() + item.mood?.slice(1).toLowerCase();
     const date = new Date(item.created_at);
-    const formattedDate = `${date.toLocaleString('en-US', { month: 'long' })} ${date.getDate()} ${date.getFullYear()}`;
-
+    const formattedDate = `${date.getDate()} ${date.toLocaleString('en-US', { month: 'long' })} ${date.getFullYear()}`;
     return (
       <TouchableOpacity style={styles.card} onPress={() => handleDrawingPress(item)}>
         <View style={styles.purpleBox}>
@@ -213,12 +212,12 @@ const styles = StyleSheet.create({
     backgroundColor: BubblColors.BubblPurple800,
     borderRadius: 50,
     padding: 4,
-    borderWidth: 2,
+    borderWidth: 4,
     borderColor: BubblColors.BubblPurple800,
   },
   moodIcon: {
-    width: 40,
-    height: 40,
+    width: 45,
+    height: 45,
     resizeMode: 'contain',
   },
   dateText: {
