@@ -74,11 +74,11 @@ export default function TemporaryMainContainer() {
     };
     fetchUser();
   }, [userId]);
-    // ================= Fetch ref level data ====================
+  // ================= Fetch ref level data ====================
 
   useEffect(() => {
     const fetchLevels = async () => {
-      try {  
+      try {
         const response = await axios.get(`${BASE_URL}/api/childProgress/levels`);
         setLevel(response.data);
         console.log('Levels data fetched:', response.data);
@@ -216,8 +216,8 @@ export default function TemporaryMainContainer() {
             <ImageBackground
               source={require('../../assets/images/Background_Purple.png')}
               resizeMode="cover"
-              style={styles.background}>
-              <View style={styles.backgroundOverlay} />
+              style={[styles.background, {flexGrow:1, }]}>
+              <View />
               <View style={styles.container}>
                 <View style={{ zIndex: 1 }}>
                   <Avatar
@@ -232,10 +232,11 @@ export default function TemporaryMainContainer() {
                     positionOverrides={positionOverrides}
                   />
                 </View>
-                <Image source={require('../../assets/images/shadow.png')} style={{ position: 'relative', bottom: 45, width: 178, height: 18, zIndex: 0 }} />
+                <Image source={require('../../assets/images/shadow.png')} style={{ position: 'relative', bottom: 40, width: 178, height: 18, zIndex: 0 }} />
                 <Text style={[styles.title, fontStyles.display1]}>Hi, {user ? user.user_nickname : '...'}</Text>
                 <StatsPanel user={user} level={level} />
-                {user?.user_energy < 3 ? <EnergyTimer userId={userId} /> : null}
+                <View>{user?.user_energy < 3 ? <EnergyTimer userId={userId} /> : <Text style={{marginTop:-10}}></Text>}</View>
+
               </View>
 
               <Pressable
@@ -246,7 +247,8 @@ export default function TemporaryMainContainer() {
                   justifyContent: 'center',
                   gap: 5,
                   marginHorizontal: 20,
-                  marginBottom: 50,
+                  marginBottom: 40,
+                  marginTop: 20,
                   padding: 20,
                   borderRadius: 15,
                   borderWidth: 2,
@@ -278,21 +280,23 @@ const styles = StyleSheet.create({
     width: '100%',
     overflow: 'hidden',
     borderBottomLeftRadius: 40,
-    borderBottomRightRadius: 30,
+    borderBottomRightRadius: 40,
     padding: 0,
-    marginBottom: -30,
-    transform: [{ translateY: -20 }]
+    marginBottom: -20,
+    transform: [{ translateY: -20 }],
+
   },
   container: {
     alignItems: 'center',
     paddingHorizontal: 30,
-    paddingVertical: 20,
-    gap: 10,
-    position: 'relative',
+    // paddingVertical: 20,
+    // marginBottom:0,
+    // gap: 10,
+    // position: 'relative',
   },
   title: {
-    fontWeight: 'bold',
     color: 'white',
-    textAlign: 'center'
+    textAlign: 'center',
+    marginBottom: 5
   },
 });

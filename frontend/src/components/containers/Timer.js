@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, Text } from 'react-native';
 import axios from 'axios';
 import { BASE_URL } from '../../utils/config';
+import { fontStyles } from '../../styles/BubblFontStyles';
 
 const MAX_ENERGY = 3;
 
@@ -65,15 +66,13 @@ export default function EnergyTimer({ userId }) {
 
   if (!userId) return;
   return (
-    <View>
+    <View style={{marginTop:10}}>
       {energy < MAX_ENERGY && typeof timeLeft === 'number' && timeLeft > 0 ? (
-        <View>
-          <Text style={{color: 'white', fontSize: 20}}>Next refill in: </Text>
-          <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold', textAlign:'center'}}>{formatTime(timeLeft)}</Text>
+        <View style={{flexDirection:'row', gap:4, alignItems:'center'}}>
+          <Text style={[fontStyles.bodyMedium, {color: 'white', textAlign:'center'}]}>Next HP refill in: </Text>
+          <Text style={[fontStyles.heading3, {color: 'white'}]}>{formatTime(timeLeft)}</Text>
         </View>
-
       ) : null}
-
     </View>
   );
 }
