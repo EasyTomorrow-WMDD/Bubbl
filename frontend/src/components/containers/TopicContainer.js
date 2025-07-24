@@ -151,34 +151,12 @@ export default function TopicContainer({ route, navigation }) {
     try {
       const res = await axios.get(`${BASE_URL}/api/users/${childProfileId}/badges`);
       const badges = res.data;
-      return badges.some(
-        (b) => b.badge_id === badgeId && b.badge_active === true
-      );
+      return badges.some((b) => b.badge_id === badgeId && b.has_earned);
     } catch (error) {
       console.error('[TopicContainer] Error checking badge:', error);
       return false;
     }
-  };
-
-  const checkIfStreakScreenShown = async () => {
-    try {
-      const key = `streakScreenShown_${childProfileId}`;
-      const shown = await AsyncStorage.getItem(key);
-      return shown === 'true';
-    } catch (error) {
-      console.error('[TopicContainer] Error checking streak screen status:', error);
-      return false;
-    }
-  };
-
-  const markStreakScreenAsShown = async () => {
-    try {
-      const key = `streakScreenShown_${childProfileId}`;
-      await AsyncStorage.setItem(key, 'true');
-    } catch (error) {
-      console.error('[TopicContainer] Error marking streak screen as shown:', error);
-    }
-  };
+  };  
 
   const handleWrongAnswer = async () => {
     try {
@@ -229,22 +207,20 @@ export default function TopicContainer({ route, navigation }) {
       for (const badge of BADGE_RULES) {
         let conditionMet = badge.check({ streak: newStreak, remainingQuestions });
         if (conditionMet) {
-          const alreadyHasBadge = await checkIfBadgeAlreadyEarned(badge.id);
-          if (!alreadyHasBadge) {
-            await awardBadge(badge.id);
-            
-            if (badge.id === '659ff7d3-f4c1-4de5-9dd2-49b7b853fdc1') {
-        
-              const streakScreenAlreadyShown = await checkIfStreakScreenShown();
-              
-              if (!streakScreenAlreadyShown) {
-                await markStreakScreenAsShown();
-                setCorrectStreak(0);
-                navigation.navigate('Streak');
-                return;
-              } else {
-                setCorrectStreak(0);
-              }
+          if (badge.id === '659ff7d3-f4c1-4de5-9dd2-49b7b853fdc1') {
+            const alreadyHasBadge = await checkIfBadgeAlreadyEarned(badge.id);
+            if (!alreadyHasBadge) {
+              await awardBadge(badge.id);
+              setCorrectStreak(0);
+              navigation.navigate('Streak');
+              return;
+            } else {
+              setCorrectStreak(0);
+            }
+          } else {
+            const alreadyHasBadge = await checkIfBadgeAlreadyEarned(badge.id);
+            if (!alreadyHasBadge) {
+              await awardBadge(badge.id);
             }
           }
         }
