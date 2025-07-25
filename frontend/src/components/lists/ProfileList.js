@@ -27,8 +27,8 @@ const ProfileList = ({ profiles, type, navigation, onCardPress, showAddCard = tr
           navigation={navigation}
         />
       ))}
-      {/* Conditionally render the add card if showAddCard is true */}
-      {showAddCard && (
+      {/* Conditionally render the add card if showAddCard is true AND there is no profile */}
+      {showAddCard && profiles.length === 0 && (
         <ProfileAddCard type={type} navigation={navigation} />
       )}
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Image, Text, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator, StatusBar, SafeAreaView } from 'react-native';
+import { View, Image, Text, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator, StatusBar } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons'; // For "X" icon
 import { useNavigation, useRoute } from '@react-navigation/native';
 import LoadProfileInfo from '../../utils/LoadProfileInfo'; 
@@ -255,7 +256,7 @@ const ParentStoryContainer = () => {
           {/* Section 3: Essentials navigation */}
           {storyData.parent_story_type === 'essentials' && (
             <View style={mainStyles.essentialsNavContainer}>
-              <Text style={[fontStyles.heading1, mainStyles.essentialsNavHeading]}>Want to go on a reading streak?</Text>
+              <Text style={[fontStyles.heading1, mainStyles.essentialsNavHeading]}>Want to go on a reading streak???</Text>
               <View style={mainStyles.essentialsNavButtons}>
                 <TouchableOpacity
                   style={[mainStyles.navButton, !storyData.previous_story_id && mainStyles.navButtonDisabled]}
