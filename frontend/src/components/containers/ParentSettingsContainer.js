@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet, ActivityIndicator, Dimensions } from 'react-native';
+import { View, Text, Button, StyleSheet, ActivityIndicator, Dimensions, Image, TouchableOpacity } from 'react-native';
 import supabase from '../../services/supabase';
 import axios from 'axios';
 import BubblConfig from '../../config/BubblConfig';
@@ -11,6 +11,8 @@ import { profileStyles } from '../../styles/ProfileStyles';
 import { parentStyles } from '../../styles/BubblParentMainStyles';
 import { fontStyles } from '../../styles/BubblFontStyles';
 import BubblColors from '../../styles/BubblColors';
+import addButtonIcon from '../../assets/icons/add_button.png';
+
 
 // ============================================================================
 // ParentSettingsContainer Component
@@ -93,16 +95,26 @@ const ParentSettingsContainer = ( {navigation} ) => {
         <Text style={[fontStyles.bodyDefault, parentStyles.parentChildSelectionSubHeading, {marginBottom:12}]}>Add account</Text>
 
         {/* Profile Lists (Parents) */}
-        <Text style={[fontStyles.display3, profileStyles.subheading, {textAlign:'center'}]}>Parents (Guardians)</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16 }}>
+          <Text style={[fontStyles.heading1, profileStyles.subheading]}>Parents (Guardians)</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('AddProfile', { profile_type: 'parent' })}>
+            <Image source={addButtonIcon} style={profileStyles.addIcon} resizeMode="contain" />
+          </TouchableOpacity>
+        </View>
         <ProfileList 
           profiles={parentProfiles} 
           type="parent" 
           navigation={navigation} 
-          showAddCard={true} 
+          showAddCard={false} 
         />
 
         {/* Profile Lists (Children) */}
-        <Text style={[fontStyles.display3, profileStyles.subheading, {textAlign:'center'}]}>Child(ren)</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16 }}>
+          <Text style={[fontStyles.heading1, profileStyles.subheading, {textAlign:'center'}]}>Child(ren)</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('AddProfile', { profile_type: 'kid' })}>
+            <Image source={addButtonIcon} style={profileStyles.addIcon} resizeMode="contain" />
+          </TouchableOpacity>
+        </View>
         <ProfileList 
           profiles={childProfiles} 
           type="kid" 

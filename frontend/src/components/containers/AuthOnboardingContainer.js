@@ -124,11 +124,11 @@ const AuthOnboardingContainer = ({ navigation }) => {
           />
 
           {/* Date of Birth */}
-          <BubblDatePicker
+          {/* <BubblDatePicker
             label="Your birth date"
             value={dob}
             onChange={setDob}
-          />
+          /> */}
 
           {/* User Type */}
           {/* <BubblPicker
