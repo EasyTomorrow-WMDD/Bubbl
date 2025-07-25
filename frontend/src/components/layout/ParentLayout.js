@@ -57,7 +57,7 @@ const ParentLayout = ({ navigation, initialTab = 'Stories' }) => {
         {/* Workaround to get the white background layer to prevent purple leak at bottom */}
         <View style={{
           ...StyleSheet.absoluteFillObject,
-          backgroundColor: BubblColors.BubblPurple50,
+          backgroundColor: activeTab === 'Stories' ? BubblColors.BubblOrange50 : BubblColors.BubblPurple50,
           marginTop: screenHeight * 0.5, // Basically this is taking up the bottom half of the screen..
         }} />
         

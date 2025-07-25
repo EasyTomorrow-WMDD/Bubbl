@@ -17,10 +17,8 @@ export const profileStyles = StyleSheet.create({
   },
   // subheading for profile sections
   subheading: {
-    fontSize: 20,
-    fontWeight: '600',
     marginTop: 24,
-    marginBottom: 12,
+    marginBottom: 24,
     textAlign: 'left',
   },  
   // --------------------------------------------
@@ -54,6 +52,11 @@ export const profileStyles = StyleSheet.create({
     marginTop: 8,
     textAlign: 'center',
   },
+  // Add icon in the card
+  addIcon: {
+    width: 36,
+    height: 36,
+  },
   // New card for adding a parent profile
   newParentCard: {
     width: 133,
@@ -63,6 +66,7 @@ export const profileStyles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 24,
     justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 20,
   },
   // New card for adding a child profile
@@ -74,6 +78,7 @@ export const profileStyles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 24,
     justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 20,
   },
 

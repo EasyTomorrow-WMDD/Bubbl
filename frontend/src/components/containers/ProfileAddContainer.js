@@ -109,11 +109,11 @@ const ProfileAddContainer = () => {
         />
 
         {/* Date of Birth */}
-        <BubblDatePicker
+        {/* <BubblDatePicker
           label="Your birth date"
           value={dob}
           onChange={setDob}
-        />
+        /> */}
 
         {/* Button to proceed with profile creation */}
         <BubblButton
