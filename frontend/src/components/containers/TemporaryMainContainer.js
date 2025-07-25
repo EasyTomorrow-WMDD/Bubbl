@@ -219,7 +219,7 @@ export default function TemporaryMainContainer() {
               style={[styles.background, {flexGrow:1, }]}>
               <View />
               <View style={styles.container}>
-                <View style={{ zIndex: 1 }}>
+                <View style={{ zIndex: 1, marginTop:20, }}>
                   <Avatar
                     userId={userId}
                     userLevel={user ? user.user_level : null}
