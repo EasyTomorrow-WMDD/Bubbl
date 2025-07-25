@@ -63,7 +63,7 @@ export default function Module({ modules, progress = [], onTopicPress, currentTo
                             </Text>
                           </View>
 
-                          <Text style={[{ color: isCurrent ? 'white' : textColor(item.module_number), marginRight:10}, fontStyles.bodyDefault]}>{isCompleted ? 'Completed ✅' : null}</Text>
+                          <Text style={[{ color: isCurrent ? 'white' : textColor(item.module_number), marginRight:5, alignSelf:'flex-end' }, fontStyles.bodySmall]}>{isCompleted ? 'Completed ✅' : null}</Text>
                         </View>
 
                         <Text style={[{ color: isCurrent ? 'white' : textColor(item.module_number), marginTop:5 }, fontStyles.bodyMedium]} numberOfLines={2} ellipsizeMode="tail">
@@ -94,7 +94,8 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 10,
     borderRadius: 25,
-    height: 101,
+    minHeight: 101,
+    flexWrap: 'wrap',
   },
 
   textContainer: {
