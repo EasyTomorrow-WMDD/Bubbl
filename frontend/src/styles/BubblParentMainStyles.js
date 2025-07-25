@@ -95,6 +95,7 @@ export const parentStyles = StyleSheet.create({
     backgroundColor: BubblColors.BubblPurple50,
     padding: 0,
     margin: 0,
+    marginBottom: -150,
   },
   parentStoriesHeaderContainer: {
     backgroundColor: BubblColors.BubblPurple500,
