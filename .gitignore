@@ -48,3 +48,5 @@ android/
 # internal files
 BubblConfig.js.local
 config.js.local
+.env
+.env
