@@ -9,6 +9,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import supabase from '../../services/supabase';
 import { Ionicons } from '@expo/vector-icons';
 import BubblConfig from '../../config/BubblConfig';
+import { StatusBar } from 'react-native';
+import { fontStyles } from '../../styles/BubblFontStyles';
+import BubblColors from '../../styles/BubblColors';
 
 const COLORS = [
   '#FFCE48', '#4FC3F7', '#F75C4C', '#7ED957', '#B39DDB', 'black'
@@ -106,7 +109,10 @@ export default function ChildMoodDrawingContainer({ navigation, route }) {
       <SafeAreaView style={styles.safeTopArea}>
         <View style={styles.topControls}>
           <TouchableOpacity onPress={handleGoBack}>
-            <Ionicons name="arrow-back" size={28} color="black" />
+            <Image
+              source={require('../../assets/icons/Left_Arrow.png')}
+              style={styles.backIcon}
+            />
           </TouchableOpacity>
           <TouchableOpacity onPress={saveDrawing} style={styles.doneButton}>
             <Text style={styles.doneText}>Done</Text>
@@ -160,21 +166,21 @@ export default function ChildMoodDrawingContainer({ navigation, route }) {
         </View>
       </View>
 
-      <Modal visible={showExitModal} transparent animationType="fade">
-        <View style={styles.modalContainer}>
-          <View style={styles.modalBox}>
-            <Text style={styles.modalText}>Leave this drawing?</Text>
-            <View style={styles.modalButtons}>
-              <TouchableOpacity onPress={() => setShowExitModal(false)} style={styles.modalBtn}>
-                <Text style={styles.modalBtnText}>Stay here</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={confirmExit} style={styles.modalBtn}>
-                <Text style={styles.modalBtnText}>Go back</Text>
-              </TouchableOpacity>
-            </View>
+        <Modal visible={showExitModal} transparent animationType="fade">
+      <View style={styles.modalContainer}>
+        <View style={styles.modalBox}>
+          <Text style={styles.modalTitle}>Leave this drawing?</Text>
+          <View style={styles.modalButtons}>
+            <TouchableOpacity onPress={() => setShowExitModal(false)} style={styles.stayBtn}>
+              <Text style={[fontStyles.bodyMedium, styles.modalBtnText]}>Stay here</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={confirmExit} style={styles.exitBtn}>
+              <Text style={[fontStyles.bodyMedium, styles.modalBtnText]}>Go back</Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </Modal>
+      </View>
+    </Modal>
     </SafeAreaView>
   );
 }
@@ -193,9 +199,9 @@ const styles = StyleSheet.create({
   },
   doneButton: {
     backgroundColor: '#FFCE48',
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-    borderRadius: 8,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    borderRadius: 12,
   },
   doneText: {
     color: 'black',
@@ -279,25 +285,48 @@ const styles = StyleSheet.create({
   modalBox: {
     backgroundColor: 'white',
     padding: 20,
-    borderRadius: 10,
-    width: 260,
+    borderRadius: 24,
+    width: 314,
+    height: 219,
+    alignItems: 'center',
   },
-  modalText: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 15,
+  modalTitle: {
+    ...fontStyles.heading1,
     textAlign: 'center',
+    marginTop: 30,
   },
   modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+  flexDirection: 'row',
+  justifyContent: 'center',
+  gap: 40, // spacing between buttons
+  marginTop: 30,
   },
-  modalBtn: {
-    backgroundColor: '#eee',
-    padding: 10,
-    borderRadius: 6,
+  stayBtn: {
+  // width: 113,
+  paddingVertical: 16,
+  paddingHorizontal: 24,
+  borderRadius: 12,
+  borderWidth: 1.5,
+  borderColor: BubblColors.BubblPurple400,
+  backgroundColor: 'white',
+  alignItems: 'center',
+  },
+  exitBtn: {
+  // width: 113,
+  paddingVertical: 16,
+  paddingHorizontal: 24,
+  borderRadius: 12,
+  borderWidth: 1.5,
+  borderColor: BubblColors.BubblPurple400,
+  backgroundColor: BubblColors.BubblPurple300,
+  alignItems: 'center',
   },
   modalBtnText: {
-    fontWeight: '600',
-  },
+  color: BubblColors.BubblPurple900,
+},
+backIcon: {
+  width: 42,
+  height: 42,
+  resizeMode: 'contain',
+},
 });

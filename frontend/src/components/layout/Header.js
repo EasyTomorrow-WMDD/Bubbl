@@ -8,7 +8,7 @@ const Header = ({ title }) => {
   const navigation = useNavigation();
   return (
       <View style={styles.header}>
-        <Text style={[fontStyles.heading3, { color: 'white', fontSize: 30, paddingVertical: 20 }]}>{title}</Text>
+        <Text style={[fontStyles.heading3, { color: 'white', fontSize: 26, paddingVertical: 20 }]}>{title}</Text>
         <Pressable style={styles.icons} onPress={() => navigation.navigate('Profile')}>
           <Image source={require('../../assets/icons/happy-beaming.png')} style={styles.icon} />
         </Pressable>
