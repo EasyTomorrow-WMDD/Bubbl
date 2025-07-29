@@ -14,6 +14,7 @@ import BubblColors from '../../styles/BubblColors';
 // ParentChildSelectionContainer Component
 const ParentChildSelectionContainer = ({ navigation }) => {
   const [childProfiles, setChildProfiles] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const screenHeight = Dimensions.get('window').height; // Get the screen height
 
@@ -41,6 +42,8 @@ const ParentChildSelectionContainer = ({ navigation }) => {
 
       } catch (error) {
         console.error('[ERROR][ParentChildSelectionContainer] Failed to fetch child profiles:', error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchProfiles();
@@ -87,6 +90,7 @@ const ParentChildSelectionContainer = ({ navigation }) => {
           userType="kid"
           onCardPress={onCardPress}
           showAddCard={false}
+          loading={loading}
         />
       </View>
       

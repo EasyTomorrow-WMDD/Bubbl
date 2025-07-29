@@ -73,7 +73,8 @@ const ParentChildProgressStatsContainer = ({ userId }) => {
 
   // ----------------------------------------------------------------
   // Loading state handling
-  if (loading || !stats) return <ActivityIndicator size="large" color="#000" />;
+  if (loading || !stats) 
+    return <ActivityIndicator size="large" color={BubblColors.BubblPurple800} />;
 
   // ----------------------------------------------------------------
   // Render the stats UI

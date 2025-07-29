@@ -365,11 +365,13 @@ export const parentStyles = StyleSheet.create({
   },
   parentChildSelectionHeader: { 
     textAlign: 'center', 
+    color: BubblColors.BubblPurple950,
     marginTop: 24,
     marginBottom: 16,
   },
   parentChildSelectionSubHeading: { 
     textAlign: 'center',
+    color: BubblColors.BubblPurple950,
     marginBottom: 80, 
   },
 

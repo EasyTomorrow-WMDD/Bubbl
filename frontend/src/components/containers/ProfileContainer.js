@@ -62,7 +62,7 @@ const ProfileContainer = ({ navigation }) => {
     loadProfiles();
   }, []);
 
-  if (loading) return <ActivityIndicator size="large" />;
+  // if (loading) return <ActivityIndicator size="large" />;
 
 
   // ----------------------------------------------------------------
@@ -105,6 +105,7 @@ const ProfileContainer = ({ navigation }) => {
       type="parent"
       navigation={navigation}
       showAddCard={false}
+      loading={loading}
     />
     <Text style={[fontStyles.display3, profileStyles.subheading]}>Child(ren)</Text>
     <ProfileList
@@ -112,6 +113,7 @@ const ProfileContainer = ({ navigation }) => {
       type="kid"
       navigation={navigation}
       showAddCard={false}
+      loading={loading}
     />
   </ScrollView>
   <SignOutModal

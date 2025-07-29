@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Linking } from 'react-native';
+import { View, Text, Image, StyleSheet, Linking, Pressable } from 'react-native';
 import placeholderImage from '../../assets/images/placeholder_parent_stories.png'; // placeholder image for stories if featured image is not available
 import BubblColors from '../../styles/BubblColors';
 import { fontStyles } from '../../styles/BubblFontStyles';
@@ -20,7 +20,7 @@ const ParentExternalStoryCard = ({ article }) => {
   // ----------------------------------------------------------------
   // Render the external story card
   return (
-    <TouchableOpacity style={parentStyles.parentStoryOtherCardContainer} onPress={onPress}>
+    <Pressable style={parentStyles.parentStoryOtherCardContainer} onPress={onPress}>
 
       {/* Card image & tag */}
       <View style={parentStyles.parentStoryOtherCardImageContainer}>
@@ -42,7 +42,7 @@ const ParentExternalStoryCard = ({ article }) => {
         <Text style={[fontStyles.heading2, parentStyles.parentStoryOtherCardTitle]}>{article.title}</Text>
         <Text style={[fontStyles.bodyDefault, parentStyles.parentStoryOtherCardSummary]}>{article.description}</Text>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

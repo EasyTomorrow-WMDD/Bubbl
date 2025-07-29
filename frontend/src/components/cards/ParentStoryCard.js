@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 import placeholderImage from '../../assets/images/placeholder_parent_stories.png'; // placeholder image for stories if featured image is not available
 import { PARENT_STORY_TYPE_LABELS } from '../../constants/BubblConstants';
 import BubblColors from '../../styles/BubblColors';
@@ -16,7 +16,7 @@ const ParentStoryCard = ({ story, onPress, showTypeTag = false }) => {
   // ----------------------------------------------------------------
   // Render the ParentStoryCard component
   return (
-    <TouchableOpacity style={parentStyles.parentStoryOtherCardContainer} onPress={onPress}>
+    <Pressable style={parentStyles.parentStoryOtherCardContainer} onPress={onPress}>
 
       {/* Card image & tag */}
       <View style={parentStyles.parentStoryOtherCardImageContainer}>
@@ -45,7 +45,7 @@ const ParentStoryCard = ({ story, onPress, showTypeTag = false }) => {
         <Text style={[fontStyles.heading2, parentStyles.parentStoryOtherCardTitle]}>{story.parent_story_title}</Text>
         <Text style={[fontStyles.bodyDefault, parentStyles.parentStoryOtherCardSummary]}>{story.parent_story_summary}</Text>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
