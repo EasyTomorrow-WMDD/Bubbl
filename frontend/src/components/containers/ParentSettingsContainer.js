@@ -64,8 +64,6 @@ const ParentSettingsContainer = ( {navigation} ) => {
     loadProfiles();
   }, []);
 
-  if (loading) return <ActivityIndicator size="large" />;
-  
   // ----------------------------------------------------------------
   // Method to logout 
   const handleLogout = async () => {
@@ -106,6 +104,7 @@ const ParentSettingsContainer = ( {navigation} ) => {
           type="parent" 
           navigation={navigation} 
           showAddCard={false} 
+          loading={loading}
         />
 
         {/* Profile Lists (Children) */}
@@ -120,6 +119,7 @@ const ParentSettingsContainer = ( {navigation} ) => {
           type="kid" 
           navigation={navigation} 
           showAddCard={true}
+          loading={loading}
         />
 
       </View>

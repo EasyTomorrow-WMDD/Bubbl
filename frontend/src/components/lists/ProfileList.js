@@ -1,9 +1,10 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 import { globalStyles } from '../../styles/BubblStyles';
 import { profileStyles } from '../../styles/ProfileStyles';
 import ProfileCard from '../cards/ProfileCard';
 import ProfileAddCard from '../cards/ProfileAddCard';
+import BubblColors from '../../styles/BubblColors';
 
 // ==========================================================================
 // ProfileList component
@@ -14,7 +15,15 @@ import ProfileAddCard from '../cards/ProfileAddCard';
 // - navigation: Navigation object for navigating to profile details
 // - onCardPress: Function to handle custom card press events
 // - showAddCard: Boolean to conditionally show the add profile card
-const ProfileList = ({ profiles, type, navigation, onCardPress, showAddCard = true }) => {
+const ProfileList = ({ profiles, type, navigation, onCardPress, showAddCard = true, loading = false }) => {
+
+  // ----------------------------------------------------------------
+  // Loading state handling
+  if (loading || !profiles) 
+    return <ActivityIndicator size="large" color={BubblColors.BubblPurple800} />;
+
+  // ----------------------------------------------------------------
+  // Render the profile list
   return (
     // Render a list of profile cards
     <View style={profileStyles.cardRow}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, Image, StyleSheet, ImageBackground, Pressable } from 'react-native';
 import placeholderImage from '../../assets/images/placeholder_parent_stories.png'; // placeholder image for stories if featured image is not available
 import { parentStyles } from '../../styles/BubblParentMainStyles';
 import { fontStyles } from '../../styles/BubblFontStyles';
@@ -10,7 +10,7 @@ import { ARTICLE_IMAGE_URL } from '../../config/BubblImageConfig';
 // ParentEssentialStoryCard Component
 const ParentStoryEssentialCard = ({ story, onPress }) => {
   return (
-    <TouchableOpacity style={parentStyles.parentEssentialCard} onPress={onPress}>
+    <Pressable style={parentStyles.parentEssentialCard} onPress={onPress}>
       <View style={parentStyles.parentEssentialCardWrapper}>
         {/* Image background with story's featured image or placeholder */}
         <ImageBackground
@@ -31,7 +31,7 @@ const ParentStoryEssentialCard = ({ story, onPress }) => {
           </View>
         </ImageBackground>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

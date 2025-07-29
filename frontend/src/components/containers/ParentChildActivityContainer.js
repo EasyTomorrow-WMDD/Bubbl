@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, SafeAreaView, ActivityIndicator } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import supabase from '../../services/supabase';
@@ -29,6 +29,8 @@ const ParentChildActivityContainer = () => {
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [selectedYear, setSelectedYear] = useState(null);
   const [showPicker, setShowPicker] = useState(false);
+
+  const [loading, setLoading] = useState(true);
 
   // ----------------------------------------------------------------
   // Load child info and fetch activity logs on component mount
@@ -101,6 +103,8 @@ const ParentChildActivityContainer = () => {
       }
     } catch (err) {
       console.error('[ActivityLog] Error fetching logs:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -122,6 +126,11 @@ const ParentChildActivityContainer = () => {
   };
 
   const insets = useSafeAreaInsets(); // Get safe area insets for top and bottom padding
+
+  // ----------------------------------------------------------------
+  // Loading state handling
+  if (loading || !activityLogs) 
+    return <ActivityIndicator size="large" color={BubblColors.BubblPurple800} />;
 
   // ----------------------------------------------------------------
   // Render the main component
