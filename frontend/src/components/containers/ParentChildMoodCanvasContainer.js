@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import supabase from '../../services/supabase';
@@ -136,6 +137,9 @@ const ParentChildMoodCanvasContainer = () => {
       </View>
 
       <View style={styles.flatListContainer}>
+        {loading ? (
+          <ActivityIndicator size="large" color={BubblColors.BubblPurple800} />
+        ) : (
         <FlatList
           data={drawings}
           keyExtractor={(item, index) => index.toString()}
@@ -145,6 +149,7 @@ const ParentChildMoodCanvasContainer = () => {
           renderItem={renderDrawingCard}
           ListEmptyComponent={!loading && <ParentChildProgressNotFoundCard />}
         />
+        )}
       </View>
 
       <BubblYearMonthPicker
@@ -176,7 +181,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   headerTitle: {
-    fontSize: 22,
+    // fontSize: 22,
     color: BubblColors.BubblPurple950,
   },
   flatListContainer: {
