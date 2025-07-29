@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
 import supabase from '../../services/supabase';
@@ -19,6 +19,8 @@ const ParentStoryEssentialsList = ({ userId, navigation }) => {
   const [stories, setStories] = useState([]);
   const [completedCount, setCompletedCount] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
+
+  const [loading, setLoading] = useState(true);
 
   // ----------------------------------------------------------------
   // Function to fetch essential stories for the parent
@@ -51,6 +53,8 @@ const ParentStoryEssentialsList = ({ userId, navigation }) => {
       setTotalCount(response.data.totalCount);
     } catch (err) {
       console.error('[ERROR] Fetching essentials:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -68,6 +72,11 @@ const ParentStoryEssentialsList = ({ userId, navigation }) => {
       fetchData(); 
     }, [])
   );
+
+  // ----------------------------------------------------------------
+  // Loading state handling
+  if (loading || !stories) 
+    return <ActivityIndicator size="large" color={BubblColors.BubblPurple800} />;
 
   // ----------------------------------------------------------------
   // Render the list of essential stories

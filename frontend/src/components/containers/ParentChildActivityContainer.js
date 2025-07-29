@@ -129,8 +129,8 @@ const ParentChildActivityContainer = () => {
 
   // ----------------------------------------------------------------
   // Loading state handling
-  if (loading || !activityLogs) 
-    return <ActivityIndicator size="large" color={BubblColors.BubblPurple800} />;
+  // if (loading || !activityLogs) 
+  //   return <ActivityIndicator size="large" color={BubblColors.BubblPurple800} />;
 
   // ----------------------------------------------------------------
   // Render the main component
@@ -158,16 +158,18 @@ const ParentChildActivityContainer = () => {
 
       {/* Log List */}
       <View style={childProgressStyles.flatListContainer}>
-      {activityLogs.length === 0 ? (
-        <ParentChildProgressNotFoundCard/>
-      ) : (
+        {loading ? (
+            <ActivityIndicator size="large" color={BubblColors.BubblPurple800} />
+        ) : activityLogs.length === 0 ? (
+            <ParentChildProgressNotFoundCard />
+        ) : (
         <FlatList
           data={activityLogs}
           keyExtractor={(item, index) => `${item.log_timestamp}_${index}`}
           renderItem={({ item, index }) => renderItem({ item, index })}
           contentContainerStyle={{ paddingBottom: insets.bottom + 48 }}
         />
-      )}
+        )}
       </View>
 
       {/* Year & Month Picker */}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, FlatList, StyleSheet } from 'react-native';
+import { View, Text, Image, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import supabase from '../../services/supabase';
 import ParentStoryCard from '../cards/ParentStoryCard';
@@ -8,6 +8,7 @@ import BubblConfig from '../../config/BubblConfig';
 import { parentStyles } from '../../styles/BubblParentMainStyles';
 import { fontStyles } from '../../styles/BubblFontStyles';
 import BubblColors from '../../styles/BubblColors';
+import { fi } from 'date-fns/locale';
 
 const NOT_FOUND_ICON = require('../../assets/icons/emoji_slightly_frowning.png'); 
 
@@ -16,12 +17,13 @@ const NOT_FOUND_ICON = require('../../assets/icons/emoji_slightly_frowning.png')
 const ParentStoryArticlesList = ({ searchText, selectedType, userId, navigation }) => {
   const [stories, setStories] = useState([]);
   const [externalStories, setExternalStories] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [loadingExternal, setLoadingExternal] = useState(true);
 
   // ----------------------------------------------------------------
   // Fetch (internal) parent stories from the backend
   const fetchStories = async () => {
-
+    setLoading(true);
     try {
       const {
         data: { session },
@@ -46,13 +48,15 @@ const ParentStoryArticlesList = ({ searchText, selectedType, userId, navigation 
       setStories(response.data.stories);
     } catch (err) {
       console.error('[ERROR][ParentStoryArticleList] Searching parent stories:', err);
-    } 
+    } finally {
+      setLoading(false);
+    }
   };
 
   // ----------------------------------------------------------------
   // Fetch external stories from the backend
   const fetchExternalStories = async () => {
-
+    setLoadingExternal(true);
     try {
       // Step 1: Get the session to retrieve the access token
       const { data: { session }, } = await supabase.auth.getSession();
@@ -76,25 +80,25 @@ const ParentStoryArticlesList = ({ searchText, selectedType, userId, navigation 
       setExternalStories(response.data.articles);
     } catch (err) {
       console.error('[ERROR][ParentStoryArticleList] Searching external stories:', err);
+    } finally {
+      setLoadingExternal(false);
     } 
   };
 
   // ----------------------------------------------------------------
   // Fetch stories & external stories when search text or selected type changes
   useEffect(() => {
-    setIsLoading(true);
     fetchStories();
     // FOR BETA DEVELOPMENT: disabled external stories fetching to make sure we don't hit the rate limit of the external API
     // July 11: uncommenting to prepare for beta release. 
     fetchExternalStories();
-    setIsLoading(false);
   }, [searchText, selectedType]);
 
   // ----------------------------------------------------------------
-  // Render loading state
-  if (isLoading) {
-    return <Text style={parentStyles.statusText}>Loading...</Text>;
-  }
+  // Loading state handling
+  // ** Excluding external stories for now, as we might reach the rate limit of external API. 
+  if (loading || loadingExternal || !stories) 
+    return <ActivityIndicator size="large" color={BubblColors.BubblPurple800} />;
 
   // ----------------------------------------------------------------
   // Render empty state if no stories found
