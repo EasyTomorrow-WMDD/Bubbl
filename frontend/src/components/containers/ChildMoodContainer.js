@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
   moodsPyramid: {
     alignItems: 'center',
     marginTop: -15,
-    ...(Platform.OS === 'android' && { marginTop: 15 }),
+    ...(Platform.OS === 'android' && { marginTop:15 }),
   },
   moodsRow: {
     flexDirection: 'row',
