@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   ImageBackground,
+  Platform,
 } from 'react-native';
 import ChildNavbar from '../layout/ChildNavbar';
 import LottieView from 'lottie-react-native';
@@ -242,5 +243,6 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     transform: [{ scale: 0.8 }],
+     ...(Platform.OS === 'android' && { marginBottom: 15 }),
   },
 });
