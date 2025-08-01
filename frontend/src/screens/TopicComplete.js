@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'rea
 import { useNavigation } from '@react-navigation/native';
 import RewardsPanel from '../components/containers/RewardsPanel';
 import BubblColors from '../styles/BubblColors';
+import BubblFonts from '../styles/BubblFonts';
 
 export default function TopicComplete({ route }) {
   const navigation = useNavigation(); 
@@ -61,12 +62,14 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 20,
     fontWeight: 'bold',
+    fontFamily: BubblFonts.headingTypeface,
     color: BubblColors.BubblBlack,
     textAlign: 'center',
     marginBottom: 12,
   },
   message: {
     fontSize: 16,
+    fontFamily: BubblFonts.bodyTypeface,
     color: BubblColors.BubblBlack,
     textAlign: 'center',
     marginBottom: 20,
@@ -80,15 +83,16 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: BubblColors.BubblPurple500,
     paddingVertical: 14,
-    paddingHorizontal:20,
+    paddingHorizontal: 20,
     borderRadius: 12,
     alignItems: 'center',
-    marginBottom:28,
-    marginTop:-30
+    marginBottom: 28,
+    marginTop: -30,
   },
   buttonText: {
     fontSize: 18,
-    color: BubblColors.BubblNeutralWhite,
     fontWeight: '400',
+    fontFamily: BubblFonts.headingTypeface,
+    color: BubblColors.BubblNeutralWhite,
   },
 });

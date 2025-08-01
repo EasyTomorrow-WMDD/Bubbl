@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
     color: BubblColors.BubblBlack,
     fontSize: BubblFonts.sizes.bodyMedium,
     fontFamily: BubblFonts.bodyTypeface,
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '400',
     textAlign: 'left',
     flexShrink: 1,
