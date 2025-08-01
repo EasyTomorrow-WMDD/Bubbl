@@ -19,7 +19,7 @@ return (
   <Svg
     height={radius * 2}
     width={radius * 2}
-    style={Platform.OS === 'android' ? { marginTop: 13, marginLeft: 13 } : null}
+    // style={Platform.OS === 'android' ? { marginTop: 10, marginLeft: 10 } : null}
   >
     {completed > 0 && (
       <Circle
