@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Dimensions, ImageBackground } from 'react-nativ
 import LottieView from 'lottie-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Audio } from 'expo-av'; 
-import { fontStyles } from '../styles/BubblFontStyles'; // <-- make sure you import this
+import { fontStyles } from '../styles/BubblFontStyles';
 
 const { width, height } = Dimensions.get('window');
 
@@ -68,23 +68,27 @@ const EvolutionScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <LottieView
-        ref={animationRef}
-        source={file}
-        autoPlay
-        loop={false}
-        style={styles.animation}
-      />
-      <View style={styles.textBox}>
-        <Text style={[fontStyles.display1, { textAlign: 'center', color: 'white' }]}>{text[0]}</Text>
-        <Text style={[fontStyles.heading1, { textAlign: 'center', color: 'white' }]}>{text[1]}</Text>
-      </View>
-
       <ImageBackground
         source={require('../assets/images/DrawingCanvas/Done_Background.png')}
         style={styles.backgroundImage}
         imageStyle={styles.imageBackground}
-      />
+      >
+        {/* Centered animation */}
+        <View style={styles.animationWrapper}>
+          <LottieView
+            ref={animationRef}
+            source={file}
+            autoPlay
+            loop={false}
+            style={styles.animation}
+          />
+          {/* Overlay text above animation */}
+          <View style={styles.textBox}>
+            <Text style={[fontStyles.display1, { textAlign: 'center', color: 'white' }]}>{text[0]}</Text>
+            <Text style={[fontStyles.heading1, { textAlign: 'center', color: 'white' }]}>{text[1]}</Text>
+          </View>
+        </View>
+      </ImageBackground>
     </View>
   );
 };
@@ -96,28 +100,28 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#8361E4',
   },
-  animation: {
-    width: 450,
-    height: 450,
-    marginTop: 250,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingRight: 60,
-  },
-  textBox: {
-    marginTop: -450,
-    alignItems: 'center',
-  },
-  text: {
-    color: '#fff',
-    textAlign: 'center',
-  },
   backgroundImage: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
   },
   imageBackground: {
-    resizeMode: 'auto',
+    resizeMode: 'cover',
+  },
+  animationWrapper: {
+    flex: 1,
+    justifyContent: 'center', 
+    alignItems: 'center',
+    width: '100%',
+  },
+  animation: {
+    width: 450,
+    height: 450,
+  },
+  textBox: {
+    position: 'absolute',
+    top: '20%', 
+    width: '100%',
+    alignItems: 'center',
   },
 });
