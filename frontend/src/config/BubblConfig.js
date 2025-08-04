@@ -12,7 +12,8 @@ const BubblConfig = {
 
   // Supabase URL
   SUPABASE_URL: isDev
-    ? 'https://ogbfgllkkyehcurolhjf.supabase.co' // Dev Supabase URL #1
+    ? 'https://auth.bubbl-app.dev' // Dev Supabase URL 
+  // ? 'https://ogbfgllkkyehcurolhjf.supabase.co' // Dev Supabase URL #1
     // ? 'https://abdkngdxtrszvkwvqkmx.supabase.co' // Dev Supabase URL #2
     : 'https://ogbfgllkkyehcurolhjf.supabase.co', // Production Supabase URL
 
@@ -29,13 +30,13 @@ const BubblConfig = {
 
   // Dummy user credentials for development
   DUMMY_USER_EMAIL: isDev 
-    // ? ''
-    ? 'test6@bubbl.com' 
+    ? ''
+    // ? 'test6@bubbl.com' 
     // ? 'test5@bubbl.com' 
     : '',
   DUMMY_USER_PASSWORD: isDev 
-    // ? '' 
-    ? '123456' 
+    ? '' 
+    // ? '123456' 
     : '',
 
 };

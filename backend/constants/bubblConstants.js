@@ -10,7 +10,7 @@ const DEFAULT_ASSET_VARIATION_ID = '418fd365-cb6a-4c5e-8673-6cce9800b4d6';
 const DEFAULT_ASSET_VARIATION_LEVEL_ID = 'f66df45f-d1c6-40f4-a267-17639c8539d2';
 
 // Default number of stars for kid users.
-const DEFAULT_STARS = 40;
+const DEFAULT_STARS = 0;
 
 module.exports = {
   DEFAULT_ASSET_ID,
